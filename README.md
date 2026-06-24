@@ -4,7 +4,7 @@
 
 This repo contains the **materials** for the workshop. The **code** lives separately at [sunholo-data/ai-protocol-platform](https://github.com/sunholo-data/ai-protocol-platform).
 
-> 🤖 This repo is **regenerated** from the platform repo's [`docs/workshop/`](https://github.com/sunholo-data/ai-protocol-platform/tree/main/docs/workshop) by `scripts/refresh-workshop-materials.sh`. Don't edit files here directly — they'll be overwritten on the next sync. Edit the source in the platform repo instead.
+> 📝 This repo is the **source of truth** for the workshop materials — edit them here. (They were originally generated from the platform repo's `docs/workshop/`, but that one-way sync is retired.)
 
 ## Two repos, one workshop
 

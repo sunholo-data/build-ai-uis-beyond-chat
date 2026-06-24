@@ -1,0 +1,347 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Build AI UIs Beyond Chat — Presenter</title>
+<link rel="icon" type="image/svg+xml" href="images/logos/sunholo-logo.svg">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;700&family=Montserrat:wght@400;500;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+<style>
+*,*::before,*::after{margin:0;padding:0;box-sizing:border-box}
+:root{
+  --bg:#0f0f1a;--surface:#1a1a2e;--orange:#e73c17;
+  --orange-dim:rgba(231,60,23,.35);--green:#22c55e;
+  --text:#e2e8f0;--text-dim:#718096;--ghost:rgba(255,255,255,.12);
+  --bar-bg:rgba(15,15,26,.8);--bar-border:rgba(255,255,255,.06);
+  --mono:'JetBrains Mono',monospace;--sans:'Montserrat',sans-serif;
+}
+[data-theme="light"]{
+  --bg:#f5f5f0;--surface:#ffffff;--orange:#d4300f;
+  --orange-dim:rgba(212,48,15,.2);--green:#16a34a;
+  --text:#1a202c;--text-dim:#4a5568;--ghost:rgba(0,0,0,.1);
+  --bar-bg:rgba(255,255,255,.85);--bar-border:rgba(0,0,0,.08);
+}
+html,body{height:100%;overflow:hidden;background:var(--bg);color:var(--text);font-family:var(--sans)}
+
+#app{display:flex;flex-direction:column;height:100vh}
+
+/* ─── Top bar ─── */
+.top-bar{
+  display:flex;align-items:center;justify-content:space-between;
+  padding:8px 16px;border-bottom:1px solid var(--bar-border);
+  flex-shrink:0;background:var(--bar-bg);backdrop-filter:blur(8px);z-index:10;
+}
+.top-left{display:flex;align-items:center;gap:10px}
+.top-logo{height:20px;opacity:.7}
+.top-logo.ailang{height:24px}
+.presenter-title{font-size:12px;font-weight:600;color:var(--text-dim);letter-spacing:.02em}
+.presenter-title .accent{color:var(--orange)}
+
+/* ─── Deck tabs ─── */
+.deck-tabs{display:flex;gap:4px;align-items:center;flex-wrap:wrap;justify-content:center}
+.deck-tab{
+  padding:5px 12px;border-radius:16px;
+  font-size:11px;font-weight:600;letter-spacing:.02em;
+  cursor:pointer;border:1px solid var(--ghost);
+  background:transparent;color:var(--text-dim);
+  transition:all .25s;font-family:var(--mono);
+}
+.deck-tab:hover{border-color:rgba(255,255,255,.2);color:var(--text)}
+.deck-tab.active{background:var(--orange);border-color:var(--orange);color:#fff}
+[data-theme="light"] .deck-tab{border-color:rgba(0,0,0,.1);color:var(--text-dim)}
+[data-theme="light"] .deck-tab:hover{border-color:rgba(0,0,0,.25);color:var(--text)}
+[data-theme="light"] .deck-tab.active{color:#fff}
+
+.top-right{display:flex;align-items:center;gap:8px}
+.theme-toggle{
+  width:28px;height:28px;border-radius:50%;border:1px solid var(--ghost);
+  background:transparent;color:var(--text-dim);cursor:pointer;
+  font-size:12px;transition:all .25s;display:flex;align-items:center;justify-content:center;
+}
+.theme-toggle:hover{border-color:var(--orange);color:var(--orange)}
+
+/* ─── Clock & timer ─── */
+.clock{
+  font-family:var(--mono);font-size:11px;font-weight:600;
+  color:var(--text-dim);letter-spacing:.04em;
+  padding:4px 8px;border-radius:4px;border:1px solid transparent;
+  cursor:pointer;user-select:none;transition:all .2s;
+  display:flex;align-items:center;gap:6px;
+}
+.clock:hover{border-color:var(--ghost);color:var(--text)}
+.clock.running{color:var(--text)}
+.clock .dot{width:6px;height:6px;border-radius:50%;background:var(--text-dim);transition:background .2s}
+.clock.running .dot{background:var(--green);box-shadow:0 0 6px var(--green)}
+
+/* ─── Bottom bar timer block ─── */
+.timer-block{display:flex;align-items:center;gap:14px;font-family:var(--mono);font-size:11px;color:var(--text-dim)}
+.timer-deck{display:flex;align-items:center;gap:8px;min-width:180px}
+.timer-deck .label{font-size:9px;text-transform:uppercase;letter-spacing:.08em;opacity:.6}
+.timer-deck .vals{font-weight:700;color:var(--text);font-variant-numeric:tabular-nums}
+.timer-bar{position:relative;width:120px;height:4px;border-radius:2px;background:rgba(255,255,255,.08);overflow:hidden}
+[data-theme="light"] .timer-bar{background:rgba(0,0,0,.08)}
+.timer-bar .fill{position:absolute;inset:0;width:0;background:var(--green);transition:width .5s linear,background .3s}
+.timer-bar .fill.warn{background:#f59e0b}
+.timer-bar .fill.over{background:var(--orange)}
+.timer-delta{font-weight:700;font-variant-numeric:tabular-nums;padding:2px 7px;border-radius:10px;background:rgba(255,255,255,.05);border:1px solid var(--ghost)}
+.timer-delta.ahead{color:var(--green);border-color:rgba(34,197,94,.3)}
+.timer-delta.behind{color:var(--orange);border-color:var(--orange-dim)}
+
+/* ─── Iframe viewport ─── */
+.deck-viewport{flex:1;position:relative;overflow:hidden}
+.deck-frame{position:absolute;inset:0;width:100%;height:100%;border:none;opacity:0;transition:opacity .4s ease;pointer-events:none}
+.deck-frame.active{opacity:1;pointer-events:auto}
+
+/* ─── Bottom bar ─── */
+.bottom-bar{
+  display:flex;align-items:center;justify-content:space-between;
+  padding:6px 16px;border-top:1px solid var(--bar-border);
+  flex-shrink:0;background:var(--bar-bg);backdrop-filter:blur(8px);
+}
+.nav-info{font-family:var(--mono);font-size:11px;color:var(--text-dim)}
+.nav-info .current{color:var(--text);font-weight:700}
+.nav-hints{display:flex;align-items:center;gap:6px}
+.kbd{display:inline-block;padding:1px 5px;border-radius:3px;font-family:var(--mono);font-size:9px;background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.1);color:var(--text-dim)}
+[data-theme="light"] .kbd{background:rgba(0,0,0,.05);border-color:rgba(0,0,0,.1)}
+.hint-text{font-size:10px;color:var(--text-dim)}
+</style>
+</head>
+<body>
+<div id="app">
+
+  <div class="top-bar">
+    <div class="top-left">
+      <img src="images/logos/sunholo-logo.svg" alt="Sunholo" class="top-logo">
+      <img src="images/logos/ailang-logo.svg" alt="AILANG" class="top-logo ailang">
+      <span class="presenter-title">Build AI UIs <span class="accent">Beyond Chat</span> — Presenter</span>
+    </div>
+    <div class="deck-tabs" id="deckTabs"></div>
+    <div class="top-right">
+      <div class="clock" id="clock" title="Click: start/pause · Double-click: reset">
+        <span class="dot"></span>
+        <span id="clockTime">--:--</span>
+      </div>
+      <button class="theme-toggle" id="themeToggle" title="Toggle theme"><i class="fas fa-sun"></i></button>
+    </div>
+  </div>
+
+  <div class="deck-viewport" id="viewport"></div>
+
+  <div class="bottom-bar">
+    <div class="nav-info">Deck <span class="current" id="deckNum">1</span> / <span id="deckTotal">1</span></div>
+    <div class="timer-block">
+      <div class="timer-deck">
+        <span class="label">Block</span>
+        <span class="vals"><span id="deckElapsed">0:00</span> / <span id="deckBudget">0:00</span></span>
+        <div class="timer-bar"><div class="fill" id="deckFill"></div></div>
+      </div>
+      <div class="timer-deck">
+        <span class="label">Total</span>
+        <span class="vals"><span id="totalElapsed">0:00</span> / <span id="totalBudget">0:00</span></span>
+      </div>
+      <span class="timer-delta" id="schedDelta" title="Schedule delta — green: ahead, orange: behind">±0:00</span>
+    </div>
+    <div class="nav-hints">
+      <span class="kbd">←</span><span class="kbd">→</span><span class="hint-text">slides</span>
+      <span style="margin:0 6px;color:var(--ghost)">|</span>
+      <span class="kbd">↑</span><span class="kbd">↓</span><span class="hint-text">decks</span>
+    </div>
+  </div>
+
+</div>
+
+<script>
+(function(){
+
+  // ═══════════════════════════════════════════════════════════════
+  // PLAYLIST — edit to reorder / add / remove decks.
+  //   `minutes` = budgeted talk time for that deck (file-level).
+  //   Keep these in sync with outline.md (the source of truth for the
+  //   block → deck → minutes mapping). Block budgets are from agenda.md.
+  // ═══════════════════════════════════════════════════════════════
+  const PLAYLIST = [
+    { src: '00-welcome.html',                 label: 'Welcome',     minutes: 2  },
+    { src: 'about-mark/about-mark.html',      label: 'About Mark',  minutes: 2  },
+    { src: '01-chat-wall.html',               label: 'Chat Wall',   minutes: 10 },
+    { src: '02-quickstart.html',              label: 'Quick-start', minutes: 10 },
+    { src: '03-adk-agui.html',                label: 'ADK + AG-UI', minutes: 30 },
+    { src: '04-a2ui.html',                    label: 'A2UI',        minutes: 35 },
+    { src: '05-mcp-apps.html',                label: 'MCP Apps',    minutes: 30 },
+    { src: '06-build-skill.html',             label: 'Build skill', minutes: 55 },
+    { src: '07-a2a-close.html',               label: 'A2A + close', minutes: 10 },
+    { src: '08-built-on-this.html',           label: 'Built on it', minutes: 4  },
+    { src: 'contact-mark/contact-mark.html',  label: 'Contact',     minutes: 1  },
+  ];
+
+  // ═══════════════════════════════════════════════════════════════
+
+  let currentDeck = 0;
+  let frames = [];
+  const viewport = document.getElementById('viewport');
+  const tabsContainer = document.getElementById('deckTabs');
+  const deckNum = document.getElementById('deckNum');
+  const deckTotal = document.getElementById('deckTotal');
+  const themeToggle = document.getElementById('themeToggle');
+
+  deckTotal.textContent = PLAYLIST.length;
+
+  PLAYLIST.forEach((deck, i) => {
+    const iframe = document.createElement('iframe');
+    iframe.className = 'deck-frame' + (i === 0 ? ' active' : '');
+    iframe.src = deck.src;
+    iframe.setAttribute('allowfullscreen', '');
+    viewport.appendChild(iframe);
+    frames.push(iframe);
+
+    const tab = document.createElement('button');
+    tab.className = 'deck-tab' + (i === 0 ? ' active' : '');
+    tab.textContent = deck.label;
+    tab.addEventListener('click', () => switchDeck(i));
+    tabsContainer.appendChild(tab);
+  });
+
+  function switchDeck(n, goToEnd) {
+    if (n < 0 || n >= PLAYLIST.length) return;
+    frames[currentDeck].classList.remove('active');
+    currentDeck = n;
+    const frame = frames[currentDeck];
+    frame.classList.add('active');
+    frame.contentWindow.postMessage({ type: 'deck-command', action: goToEnd ? 'go-last' : 'go-first' }, '*');
+    deckNum.textContent = currentDeck + 1;
+    document.querySelectorAll('.deck-tab').forEach((t, i) => t.classList.toggle('active', i === currentDeck));
+    setTimeout(() => frame.contentWindow.focus(), 100);
+  }
+
+  window.addEventListener('message', e => {
+    if (e.data && e.data.type === 'deck-nav') {
+      if (e.data.dir === 'next') switchDeck(currentDeck + 1, false);
+      if (e.data.dir === 'prev') switchDeck(currentDeck - 1, true);
+    }
+    if (e.data && e.data.type === 'deck-theme') setTheme(e.data.theme, false);
+  });
+
+  document.addEventListener('keydown', e => {
+    if (e.key === 'ArrowDown') { e.preventDefault(); switchDeck(currentDeck + 1, false); }
+    if (e.key === 'ArrowUp') { e.preventDefault(); switchDeck(currentDeck - 1, true); }
+  });
+
+  viewport.addEventListener('click', () => {
+    const frame = frames[currentDeck];
+    if (frame) frame.contentWindow.focus();
+  });
+
+  function setTheme(theme, broadcast) {
+    document.documentElement.setAttribute('data-theme', theme);
+    themeToggle.innerHTML = theme === 'light' ? '<i class="fas fa-moon"></i>' : '<i class="fas fa-sun"></i>';
+    localStorage.setItem('presenter-theme', theme);
+    if (broadcast !== false) {
+      frames.forEach(f => f.contentWindow.postMessage({ type: 'deck-command', action: 'set-theme', theme: theme }, '*'));
+    }
+  }
+  themeToggle.addEventListener('click', () => {
+    const cur = document.documentElement.getAttribute('data-theme');
+    setTheme(cur === 'light' ? 'dark' : 'light', true);
+  });
+  const saved = localStorage.getItem('presenter-theme');
+  if (saved) setTheme(saved, true);
+
+  frames.forEach(f => {
+    f.addEventListener('load', () => {
+      const theme = document.documentElement.getAttribute('data-theme') || 'dark';
+      f.contentWindow.postMessage({ type: 'deck-command', action: 'set-theme', theme: theme }, '*');
+    });
+  });
+
+  // ═══════════════════════════════════════════════════════════════
+  // CLOCK + PER-DECK TIMER + SCHEDULE DELTA
+  // ═══════════════════════════════════════════════════════════════
+  const clockEl       = document.getElementById('clock');
+  const clockTimeEl   = document.getElementById('clockTime');
+  const deckElapsedEl = document.getElementById('deckElapsed');
+  const deckBudgetEl  = document.getElementById('deckBudget');
+  const deckFillEl    = document.getElementById('deckFill');
+  const totalElapsedEl= document.getElementById('totalElapsed');
+  const totalBudgetEl = document.getElementById('totalBudget');
+  const schedDeltaEl  = document.getElementById('schedDelta');
+
+  const TOTAL_BUDGET_SEC = PLAYLIST.reduce((s,d) => s + (d.minutes||0)*60, 0);
+  const deckSpent = PLAYLIST.map(() => 0);
+  let timerRunning = false;
+  let lastTick = null;
+  let activeDeck = 0;
+
+  function fmt(sec){ sec = Math.max(0, Math.round(sec)); return Math.floor(sec/60) + ':' + String(sec%60).padStart(2,'0'); }
+  function fmtSigned(sec){ return (sec < 0 ? '-' : '+') + fmt(Math.abs(sec)); }
+
+  function accumulate(){
+    if (!timerRunning) return;
+    const now = Date.now();
+    if (lastTick !== null) deckSpent[activeDeck] += (now - lastTick) / 1000;
+    lastTick = now;
+  }
+
+  function render(){
+    const d = new Date();
+    clockTimeEl.textContent = String(d.getHours()).padStart(2,'0') + ':' + String(d.getMinutes()).padStart(2,'0');
+
+    const budget = (PLAYLIST[currentDeck].minutes || 0) * 60;
+    const spent  = deckSpent[currentDeck];
+    deckElapsedEl.textContent = fmt(spent);
+    deckBudgetEl.textContent  = fmt(budget);
+    const ratio = budget > 0 ? spent / budget : 0;
+    deckFillEl.style.width = Math.min(100, ratio * 100) + '%';
+    deckFillEl.classList.toggle('warn', ratio >= 0.8 && ratio < 1);
+    deckFillEl.classList.toggle('over', ratio >= 1);
+
+    const totalSpent = deckSpent.reduce((a,b) => a + b, 0);
+    totalElapsedEl.textContent = fmt(totalSpent);
+    totalBudgetEl.textContent  = fmt(TOTAL_BUDGET_SEC);
+
+    let prevBudgets = 0;
+    for (let i = 0; i < currentDeck; i++) prevBudgets += (PLAYLIST[i].minutes || 0) * 60;
+    const expected = prevBudgets + Math.min(spent, budget);
+    const delta = totalSpent - expected;
+    schedDeltaEl.textContent = fmtSigned(delta);
+    schedDeltaEl.classList.toggle('behind', delta > 5);
+    schedDeltaEl.classList.toggle('ahead',  delta < -5);
+  }
+
+  function tick(){ accumulate(); render(); }
+  setInterval(tick, 500);
+  render();
+
+  let clickTimer = null;
+  clockEl.addEventListener('click', () => {
+    if (clickTimer) return;
+    clickTimer = setTimeout(() => {
+      clickTimer = null;
+      timerRunning = !timerRunning;
+      lastTick = timerRunning ? Date.now() : null;
+      activeDeck = currentDeck;
+      clockEl.classList.toggle('running', timerRunning);
+    }, 220);
+  });
+  clockEl.addEventListener('dblclick', () => {
+    if (clickTimer) { clearTimeout(clickTimer); clickTimer = null; }
+    if (!confirm('Reset all block timers?')) return;
+    for (let i = 0; i < deckSpent.length; i++) deckSpent[i] = 0;
+    timerRunning = false; lastTick = null;
+    clockEl.classList.remove('running');
+    render();
+  });
+
+  const _origSwitchDeck = switchDeck;
+  switchDeck = function(n, goToEnd){
+    if (timerRunning) { accumulate(); activeDeck = n; lastTick = Date.now(); }
+    _origSwitchDeck(n, goToEnd);
+    activeDeck = currentDeck;
+    render();
+  };
+
+})();
+</script>
+</body>
+</html>
