@@ -1,0 +1,94 @@
+# Build AI UIs Beyond Chat — Workshop Materials
+
+> The new agent UI protocols let AI generate real interfaces, not just text. Build with all three in one session: **MCP Apps**, **A2UI**, **AG-UI**.
+
+This repo contains the **materials** for the workshop. The **code** lives separately at [sunholo-data/ai-protocol-platform](https://github.com/sunholo-data/ai-protocol-platform).
+
+> 🤖 This repo is **regenerated** from the platform repo's [`docs/workshop/`](https://github.com/sunholo-data/ai-protocol-platform/tree/main/docs/workshop) by `scripts/refresh-workshop-materials.sh`. Don't edit files here directly — they'll be overwritten on the next sync. Edit the source in the platform repo instead.
+
+## Two repos, one workshop
+
+| Repo | What it contains |
+|---|---|
+| [sunholo-data/ai-protocol-platform](https://github.com/sunholo-data/ai-protocol-platform) | The platform code — clone this, run `make dev-local`, build skills on it. |
+| **This repo** | The workshop materials — agenda, code tour, skeleton skills, helper-agent design, slides. |
+
+You'll clone both for the workshop. The platform repo is the canonical source-of-truth code; this repo is the curriculum that wraps around it.
+
+## Workshop at a glance
+
+- **Format:** Half-day in-person, 3 hours
+- **Audience:** Developers with some Python + React familiarity
+- **Outcome:** A working multi-protocol skill running locally, on a clone of the platform you own
+
+| Block | What you'll do |
+|---|---|
+| The Chat Wall Problem | Why text-only AI hits a ceiling; the protocol-stack diagram |
+| ADK + AG-UI walkthrough | Watch the 16-event stream live in DevTools |
+| A2UI + multi-surface | Declarative UI from the agent, with the bidirectional surface-context loop |
+| MCP Apps + sandbox | Sandboxed iframe widgets, two RPC channels, separate-origin security |
+| Build your own skill ⭐ | 55 minutes hands-on — pick one of three paths |
+| A2A + close | Live `/.well-known/agent.json`; your skill is in the marketplace |
+
+Full schedule: [`agenda.md`](agenda.md).
+
+## Sessions
+
+- **First:** WebSummerCamp Croatia 2026 — [websummercamp.com](https://websummercamp.com/2026/news/super-early-sold-out-get-your-early-bird-now)
+- Tue 18 Aug 2026
+- Tue 17 Nov 2026
+- Tue 16 Feb 2027
+- + more TBA
+
+## Materials
+
+| Doc | Status |
+|---|---|
+| [`agenda.md`](agenda.md) | ✅ Instructor's running order |
+| [`code-tour.md`](code-tour.md) | ✅ 7-file ~1,900 LOC reading map for what you'll see |
+| [`protocol-gotchas.md`](protocol-gotchas.md) | ✅ 13 protocol bear traps (AG-UI, A2UI, MCP Apps, ADK) we hit at v6 bring-up — so you can route around them |
+| `pre-work.md` | TBD — 24–48h before-arrival checklist |
+| `skeleton-skill.md` | TBD — block 5 template |
+| `helper-agent-design.md` | TBD — the meta-demo agent that guides attendees |
+| `slides/` | TBD |
+
+## Ask the helper agent anything
+
+The workshop's **helper agent** runs on the same platform you're learning. It's
+preloaded with this repo's docs PLUS the platform's full design corpus (every
+shipped sprint design doc, every integration howto, every gotcha). Questions
+it can answer with real ground truth:
+
+- "How does AG-UI's `state` channel actually behave on the wire?"
+- "What are the seven access gates on `/api/sessions/{id}/iframe-context`?"
+- "Why does the A2UI v0.9 wrapper silently drop my spec?"
+- "Show me where multi-provider routing lives in the agent factory."
+
+Answers come from RAG over real `docs/design/v6.X.Y/implemented/` content,
+not the model's prior knowledge. **The helper agent is itself the meta-demo:**
+it uses AG-UI for streaming, A2UI for the workspace, MCP for the docs index,
+and demonstrates the four advanced AIPLA patterns (anonymous-group auth,
+per-cohort budget, artefact review, tenant-id span attribution).
+
+## Pre-work (short version)
+
+Before the workshop:
+
+1. Install Node 20+ and Python 3.11+
+2. Clone the platform repo: `git clone https://github.com/sunholo-data/ai-protocol-platform.git`
+3. Run `make dev-local` — confirm the chat UI works at `http://localhost:3456`
+4. Bring a laptop with a GitHub account ready
+
+You do NOT need: Docker, GCP credentials, Firebase. The platform runs in `LOCAL_MODE=1` with in-memory stubs.
+
+## Take-home
+
+Every attendee leaves with:
+- A working skill they built in 55 minutes, running locally
+- A fork of the public template they own
+- A clear path to the four advanced patterns (sprints 2.11–2.14)
+- A 5-minute read in the platform repo at [`docs/ops/deployment-models.md`](https://github.com/sunholo-data/ai-protocol-platform/blob/main/docs/ops/deployment-models.md) for day-one of operating their fork — picks single-service Cloud Run sidecar vs paired sidecar+standalone *before* first push, so the unused `cloudbuild.yaml` doesn't quietly fail every CI build for months
+
+## License
+
+Apache 2.0. Copyright 2026 Holosun ApS. Same as the platform repo.
