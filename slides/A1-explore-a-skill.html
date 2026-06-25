@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Block 6 — A2A discovery + close</title>
+<title>Round A — Explore a live skill</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;700&family=Montserrat:wght@400;500;600;700;800&display=swap" rel="stylesheet">
@@ -15,7 +15,7 @@
 :root{
   --bg:#0f0f1a;--surface:#1a1a2e;--surface-hi:#222240;
   --orange:#e73c17;--orange-dim:rgba(231,60,23,.35);--orange-glow:rgba(231,60,23,.6);
-  --green:#22c55e;--green-dim:rgba(34,197,94,.15);
+  --green:#22c55e;--green-dim:rgba(34,197,94,.35);
   --red:#ef4444;--amber:#f59e0b;--gray:#4a5568;
   --ghost:rgba(255,255,255,.12);
   --text:#e2e8f0;--text-dim:#718096;
@@ -26,7 +26,7 @@
 [data-theme="light"]{
   --bg:#f5f5f0;--surface:#ffffff;--surface-hi:#f0f0ea;
   --orange:#d4300f;--orange-dim:rgba(212,48,15,.2);--orange-glow:rgba(212,48,15,.4);
-  --green:#16a34a;--green-dim:rgba(22,163,74,.1);
+  --green:#16a34a;--green-dim:rgba(22,163,74,.3);
   --red:#dc2626;--amber:#d97706;--gray:#8896a4;
   --ghost:rgba(0,0,0,.1);
   --text:#1a202c;--text-dim:#4a5568;
@@ -74,18 +74,15 @@ body{
 .slide-title{font-size:clamp(24px,4cqi,52px);font-weight:800;letter-spacing:-.02em;text-align:center;margin-bottom:4cqb}
 .slide-title .dim{color:var(--text-dim);font-weight:500}
 
-/* ─── Hero / block title ─── */
+/* ─── Hero / brain-break ─── */
 .hero{align-items:center;text-align:center;gap:2cqb}
 .eyebrow{font-family:var(--mono);font-size:clamp(11px,1.5cqi,17px);text-transform:uppercase;letter-spacing:.2em;color:var(--text-dim);opacity:0}
 .hero-title{font-size:clamp(30px,6.5cqi,76px);font-weight:800;line-height:1.04;letter-spacing:-.025em;max-width:92%;opacity:0}
-.hero-title.small{font-size:clamp(26px,5cqi,60px)}
+.hero-title.small{font-size:clamp(24px,4.6cqi,56px)}
 .hero-title .accent{color:var(--orange)}
-.hero-sub{font-size:clamp(14px,2.2cqi,26px);color:var(--text-dim);max-width:68%;line-height:1.4;opacity:0}
+.hero-sub{font-size:clamp(14px,2.2cqi,26px);color:var(--text-dim);max-width:70%;line-height:1.4;opacity:0}
 .pill-row{display:flex;gap:1.6cqi;margin-top:2cqb;flex-wrap:wrap;justify-content:center;opacity:0}
 .pill{font-family:var(--mono);font-size:clamp(12px,1.7cqi,20px);font-weight:700;padding:1cqb 2.2cqi;border-radius:999px;border:1px solid var(--orange);color:var(--orange);background:transparent}
-.meta-row{display:flex;gap:1.4cqi;justify-content:center;margin-top:1.4cqb;flex-wrap:wrap;opacity:0}
-.chip{font-family:var(--mono);font-size:clamp(11px,1.4cqi,17px);color:var(--text-dim);border:1px solid var(--ghost);border-radius:999px;padding:.7cqb 1.8cqi}
-.chip.accent{color:var(--orange);border-color:var(--orange-dim)}
 
 /* ─── Protocol stack ─── */
 .stack{display:flex;flex-direction:column;gap:1.2cqb;width:80%;margin:0 auto}
@@ -96,7 +93,7 @@ body{
 .layer.ui{border-color:var(--orange-dim)}
 .layer.ui .name{color:var(--orange)}
 
-/* ─── Cards ─── */
+/* ─── Cards (intro/showcase) ─── */
 .cards{display:flex;gap:2.2cqi;width:90%;margin:0 auto;justify-content:center}
 .card{flex:1;background:var(--surface);border:1px solid var(--ghost);border-radius:12px;padding:3cqb 2.2cqi;display:flex;flex-direction:column;gap:1.2cqb;opacity:0}
 .card i{font-size:clamp(20px,3cqi,38px);color:var(--orange)}
@@ -106,13 +103,36 @@ body{
 .card .url{margin-top:auto;font-family:var(--mono);font-size:clamp(10px,1.3cqi,16px);color:var(--orange);text-decoration:none;word-break:break-all;border-bottom:1px solid var(--orange-dim);align-self:flex-start}
 .card .url:hover{border-bottom-color:var(--orange)}
 
-/* ─── Bullets / skeleton note ─── */
-.bullets{list-style:none;width:78%;margin:0 auto;display:flex;flex-direction:column;gap:1.4cqb}
+/* ─── Bullets / note ─── */
+.bullets{list-style:none;width:80%;margin:0 auto;display:flex;flex-direction:column;gap:1.4cqb}
 .bullets li{position:relative;padding-left:3cqi;font-size:clamp(13px,1.9cqi,24px);color:var(--text);line-height:1.4;opacity:0}
 .bullets li::before{content:"\25B8";position:absolute;left:0;color:var(--orange);font-weight:700}
-.bullets li code{font-family:var(--mono);font-size:.9em;background:var(--code-bg);border:1px solid var(--code-border);border-radius:4px;padding:.05em .4em}
-.note{margin-top:3cqb;text-align:center;font-family:var(--mono);font-size:clamp(11px,1.4cqi,17px);color:var(--text-dim);opacity:.75}
+.bullets li code,.act code{font-family:var(--mono);font-size:.9em;background:var(--code-bg);border:1px solid var(--code-border);border-radius:4px;padding:.05em .4em}
+.note{margin-top:3cqb;text-align:center;font-family:var(--mono);font-size:clamp(11px,1.4cqi,17px);color:var(--text-dim);opacity:.8}
 .note i{color:var(--orange);margin-right:.6em}
+
+/* ─── Activity card (the course-guide slide type) ─── */
+.act{display:flex;flex-direction:column;height:100%;gap:2.2cqb}
+.act-head{display:flex;align-items:center;gap:1.5cqi;flex-wrap:wrap;opacity:0}
+.act-badge{font-family:var(--mono);font-size:clamp(10px,1.3cqi,16px);font-weight:700;color:#fff;background:var(--orange);border-radius:6px;padding:.5cqb 1.4cqi;letter-spacing:.04em}
+.act-title{font-size:clamp(19px,3cqi,40px);font-weight:800;letter-spacing:-.02em}
+.act-meta{display:flex;gap:1cqi;margin-left:auto;flex-wrap:wrap}
+.act-meta .chip{font-family:var(--mono);font-size:clamp(10px,1.35cqi,16px);color:var(--text-dim);border:1px solid var(--ghost);border-radius:999px;padding:.55cqb 1.4cqi}
+.act-meta .chip.accent{color:var(--orange);border-color:var(--orange-dim)}
+.act-body{display:flex;gap:3cqi;flex:1;min-height:0}
+.act-col{flex:1;display:flex;flex-direction:column;gap:1.6cqb;min-height:0}
+.act-col.side{flex:.82;justify-content:center}
+.act .goal{font-size:clamp(13px,1.95cqi,24px);font-weight:600;line-height:1.35;opacity:0}
+.act ol{list-style:none;counter-reset:step;display:flex;flex-direction:column;gap:1.1cqb}
+.act ol li{counter-increment:step;position:relative;padding-left:3.8cqi;font-size:clamp(12px,1.6cqi,21px);line-height:1.4;opacity:0}
+.act ol li::before{content:counter(step);position:absolute;left:0;top:0;min-width:2.4cqi;text-align:center;color:var(--orange);font-weight:700;font-family:var(--mono)}
+.act .block{background:var(--surface);border:1px solid var(--ghost);border-radius:9px;padding:1.4cqb 1.7cqi;opacity:0}
+.act .block.done{border-color:var(--green-dim)}
+.act .block .lbl{font-family:var(--mono);font-size:clamp(10px,1.3cqi,16px);font-weight:700;letter-spacing:.03em;margin-bottom:.6cqb}
+.act .block.done .lbl{color:var(--green)}
+.act .block p{font-size:clamp(11px,1.5cqi,18px);line-height:1.4;color:var(--text-dim)}
+.act .block a{color:var(--orange);text-decoration:none;border-bottom:1px solid var(--orange-dim);word-break:break-all}
+.act .block a:hover{border-bottom-color:var(--orange)}
 
 /* ─── Animations ─── */
 @keyframes fadeSlideUp{from{opacity:0;transform:translateY(20px)}to{opacity:1;transform:translateY(0)}}
@@ -121,7 +141,6 @@ body{
 .slide.active .hero-title{animation:fadeSlideUp .6s ease .18s both}
 .slide.active .hero-sub{animation:fadeSlideUp .6s ease .34s both}
 .slide.active .pill-row{animation:fadeSlideUp .6s ease .5s both}
-.slide.active .meta-row{animation:fadeSlideUp .6s ease .5s both}
 .slide.active .layer:nth-child(1){animation:fadeSlideUp .5s ease .1s both}
 .slide.active .layer:nth-child(2){animation:fadeSlideUp .5s ease .22s both}
 .slide.active .layer:nth-child(3){animation:fadeSlideUp .5s ease .34s both}
@@ -134,7 +153,16 @@ body{
 .slide.active .bullets li:nth-child(3){animation:fadeSlideUp .5s ease .36s both}
 .slide.active .bullets li:nth-child(4){animation:fadeSlideUp .5s ease .48s both}
 .slide.active .bullets li:nth-child(5){animation:fadeSlideUp .5s ease .60s both}
-.slide.active .bullets li:nth-child(6){animation:fadeSlideUp .5s ease .72s both}
+.slide.active .act-head{animation:fadeSlideUp .5s ease .05s both}
+.slide.active .act .goal{animation:fadeSlideUp .5s ease .14s both}
+.slide.active .act ol li:nth-child(1){animation:fadeSlideUp .45s ease .2s both}
+.slide.active .act ol li:nth-child(2){animation:fadeSlideUp .45s ease .3s both}
+.slide.active .act ol li:nth-child(3){animation:fadeSlideUp .45s ease .4s both}
+.slide.active .act ol li:nth-child(4){animation:fadeSlideUp .45s ease .5s both}
+.slide.active .act ol li:nth-child(5){animation:fadeSlideUp .45s ease .6s both}
+.slide.active .act .block:nth-child(1){animation:fadeSlideUp .5s ease .28s both}
+.slide.active .act .block:nth-child(2){animation:fadeSlideUp .5s ease .42s both}
+.slide.active .act .block:nth-child(3){animation:fadeSlideUp .5s ease .56s both}
 
 /* ─── Bottom bar ─── */
 .bottom-bar{display:flex;align-items:center;justify-content:space-between;padding:8px 18px;border-top:1px solid var(--bar-border);background:var(--bar-bg);backdrop-filter:blur(8px);flex-shrink:0}
@@ -162,33 +190,21 @@ body{
   <div class="top-bar">
     <div class="top-bar-left">
       <img src="images/logos/sunholo-logo.svg" alt="Sunholo" class="top-logo">
-      <span class="deck-title">Block 6 · <span class="accent">A2A discovery + close</span></span>
+      <span class="deck-title">Round A · <span class="accent">Explore a live skill</span></span>
     </div>
     <button class="theme-toggle" id="themeToggle" title="Toggle theme"><i class="fas fa-sun"></i></button>
   </div>
   <div class="slides-viewport">
     <div class="slides-stage">
-      <section class="slide active hero" data-slide="0">
-<div class="eyebrow">Block 6 · 10 min</div>
-<h1 class="hero-title small">A2A discovery + <span class="accent">close</span></h1>
-<p class="hero-sub">Your skill is in the marketplace — for real.</p>
-<div class="meta-row"><span class="chip accent">10 min</span></div>
-      </section>
-      <section class="slide" data-slide="1">
-<h2 class="slide-title">Two checkpoints</h2>
-<ul class="bullets"><li><code>curl /.well-known/agent.json | jq '.skills'</code> — the machine-readable card</li><li>Skills picker in the chat UI — same data source, human-readable</li><li>Other AI agents can discover and invoke your skill — actual protocol contract</li></ul>
-      </section>
-      <section class="slide" data-slide="2">
-<h2 class="slide-title">Close <span class="dim">— where to take this next</span></h2>
-<ul class="bullets"><li>Production patterns: 4-mode auth · per-cohort budget · artefact review · tenant attribution</li><li>Clone the public template; the 4 AIPLA extensions (sprints 2.11–2.14) are the worked examples</li><li>Deploying your fork: read <code>docs/ops/deployment-models.md</code> before first push</li><li>Q&amp;A</li></ul>
-<p class="note"><i class="fas fa-pen-ruler"></i>  TODO: expand into slides — see agenda.md &ldquo;Block 6&rdquo;.</p>
+      <section class="slide active" data-slide="0">
+<div class="act"><div class="act-head"><span class="act-badge">ROUND A</span><span class="act-title">Explore a live skill</span><span class="act-meta"><span class="chip accent">&#9201; 20 min</span><span class="chip">&#128101; your table</span><span class="chip">&#129504; explore</span></span></div><div class="act-body"><div class="act-col"><p class="goal">&#127919; Poke ONE running demo skill and pin down what the protocol actually buys you over plain chat.</p><ol><li>Pick one demo skill: AG-UI (<code>demo-researcher</code>), A2UI (<code>demo-form-builder</code>) or MCP (<code>demo-map-explorer</code>)</li><li>Try 3–4 prompts; push on it — make it render, update, misbehave</li><li>AG-UI? Open DevTools &rarr; Network &rarr; <code>stream</code> to watch the events</li><li>As a table, list 3 things this protocol enables that a plain chatbot can&rsquo;t</li><li>Note one thing that surprised you</li></ol></div><div class="act-col side"><div class="block done"><div class="lbl">&#9989; Done when</div><p>Your table can name 3 things the protocol enables that plain chat can&rsquo;t.</p></div><div class="block"><div class="lbl">&#128161; Hints</div><p>Stuck? Ask the helper agent, or skim <a href="../protocol-gotchas.md" target="_blank">protocol-gotchas.md</a>.</p></div><div class="block"><div class="lbl">&#128275; Solution</div><p>No single answer — compare lists across tables in the share-back.</p></div></div></div></div>
       </section>
     </div>
   </div>
   <div class="bottom-bar">
     <div class="transport">
       <button class="transport-btn" id="btnPrev" title="Previous slide"><i class="fas fa-chevron-left"></i></button>
-      <span class="step-indicator"><span class="current" id="slideNum">1</span> / <span id="slideTotal">3</span></span>
+      <span class="step-indicator"><span class="current" id="slideNum">1</span> / <span id="slideTotal">1</span></span>
       <button class="transport-btn" id="btnNext" title="Next slide"><i class="fas fa-chevron-right"></i></button>
     </div>
     <div class="slide-dots" id="slideDots"></div>
@@ -197,7 +213,7 @@ body{
 </div>
 <script>
 (function(){
-  const TOTAL = 3;
+  const TOTAL = 1;
   let current = 0;
   let transitioning = false;
 
@@ -221,7 +237,7 @@ body{
     const dir = n > current ? 1 : -1;
     slides.forEach(s=>{
       s.classList.remove('active','exit-left');
-      s.querySelectorAll('.eyebrow,.hero-title,.hero-sub,.pill-row,.meta-row,.layer,.card,.bullets li').forEach(el=>{
+      s.querySelectorAll('.eyebrow,.hero-title,.hero-sub,.pill-row,.layer,.card,.bullets li,.act-head,.act .goal,.act ol li,.act .block').forEach(el=>{
         el.style.opacity='0'; el.style.transform='';
       });
     });

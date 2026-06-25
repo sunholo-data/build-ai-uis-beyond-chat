@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Build AI UIs Beyond Chat — Welcome</title>
+<title>Round B · A2UI — render a form to the workspace</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;700&family=Montserrat:wght@400;500;600;700;800&display=swap" rel="stylesheet">
@@ -190,34 +190,21 @@ body{
   <div class="top-bar">
     <div class="top-bar-left">
       <img src="images/logos/sunholo-logo.svg" alt="Sunholo" class="top-logo">
-      <span class="deck-title">Build AI UIs <span class="accent">Beyond Chat</span></span>
+      <span class="deck-title">Round B · <span class="accent">A2UI</span></span>
     </div>
     <button class="theme-toggle" id="themeToggle" title="Toggle theme"><i class="fas fa-sun"></i></button>
   </div>
   <div class="slides-viewport">
     <div class="slides-stage">
-      <section class="slide active hero" data-slide="0">
-<div class="eyebrow">Workshop · WebSummerCamp Croatia 2026</div>
-<h1 class="hero-title">Build AI UIs <span class="accent">Beyond Chat</span></h1>
-<p class="hero-sub">The new agent-UI protocols let AI generate real interfaces, not just text. Today you build with all three.</p>
-<div class="pill-row"><span class="pill">MCP Apps</span><span class="pill">A2UI</span><span class="pill">AG-UI</span></div>
-      </section>
-      <section class="slide" data-slide="1">
-<h2 class="slide-title">How today works</h2>
-<ul class="bullets"><li><strong>&#8532; hands-on</strong> — you build &amp; discuss in small groups, not just watch</li><li>Three rounds: <strong>feel it</strong> &rarr; <strong>rebuild it</strong> &rarr; <strong>plan it</strong></li><li>Use AI coding &amp; ask the helper agent anything</li><li>Every activity is a card you can browse here on your own, anytime</li></ul>
-<p class="note"><i class="fas fa-comments"></i>Brain breaks throughout — when you see &#129504;, turn to your neighbour.</p>
-      </section>
-      <section class="slide" data-slide="2">
-<h2 class="slide-title">Two real apps — <span class="accent">demoed throughout</span></h2>
-<div class="cards"><div class="card"><i class="fas fa-atom"></i><span class="badge">EDUCATION</span><h3>AIPLA — AI in Physics</h3><p>Teacher classroom app for physics: multi-surface A2UI, an MCP-App simulation, anonymous group-ID join.</p><a class="url" href="https://aipla-v01-frontend-wgwhd7mspa-lz.a.run.app/teacher/classes/0b99f4e04792" target="_blank" rel="noopener">aipla &middot; teacher view &nearr;</a></div><div class="card"><i class="fas fa-file-invoice-dollar"></i><span class="badge">FINANCE &middot; AP</span><h3>GDE AP Agent — Invoices</h3><p>Accounts-payable pipeline: A2UI invoice card + two MCP Apps, deterministic ADK SequentialAgent.</p><a class="url" href="https://gde-ap-agent-blqtqfexwa-ew.a.run.app/" target="_blank" rel="noopener">gde-ap-agent &middot; live &nearr;</a></div></div>
-<p class="note"><i class="fas fa-circle-info"></i>You&rsquo;ll meet both again at each protocol — and rebuild parts of them.</p>
+      <section class="slide active" data-slide="0">
+<div class="act"><div class="act-head"><span class="act-badge">ROUND B · A2UI</span><span class="act-title">Render a form to the workspace</span><span class="act-meta"><span class="chip accent">&#9201; 20 min</span><span class="chip">&#128101; expert group</span><span class="chip">&#129504; faded code</span></span></div><div class="act-body"><div class="act-col"><p class="goal">&#127919; Make the agent&rsquo;s UI land in the workspace pane, not the chat bubble.</p><ol><li>Open <code>demo-form-builder</code>&rsquo;s skill config — the <code>surface_id</code> is missing</li><li>Set <code>tool_configs.a2ui.surface_id = "workspace"</code></li><li>Ask the skill &ldquo;make me a contact form&rdquo;</li><li>Confirm it renders in the workspace pane, not inline in chat</li></ol></div><div class="act-col side"><div class="block done"><div class="lbl">&#9989; Done when</div><p>The form renders in the workspace surface, not the chat bubble.</p></div><div class="block"><div class="lbl">&#128161; Hints</div><p>Block-3 explainer · protocol-gotchas &ldquo;A2UI&rdquo; (v0.9 vs v0.8!) · helper agent.</p></div><div class="block"><div class="lbl">&#128275; Solution</div><p>Completed skill seed: <a href="https://github.com/sunholo-data/ai-protocol-platform/blob/main/backend/db/local_fixture.py" target="_blank" rel="noopener">local_fixture.py</a></p></div></div></div></div>
       </section>
     </div>
   </div>
   <div class="bottom-bar">
     <div class="transport">
       <button class="transport-btn" id="btnPrev" title="Previous slide"><i class="fas fa-chevron-left"></i></button>
-      <span class="step-indicator"><span class="current" id="slideNum">1</span> / <span id="slideTotal">3</span></span>
+      <span class="step-indicator"><span class="current" id="slideNum">1</span> / <span id="slideTotal">1</span></span>
       <button class="transport-btn" id="btnNext" title="Next slide"><i class="fas fa-chevron-right"></i></button>
     </div>
     <div class="slide-dots" id="slideDots"></div>
@@ -226,7 +213,7 @@ body{
 </div>
 <script>
 (function(){
-  const TOTAL = 3;
+  const TOTAL = 1;
   let current = 0;
   let transitioning = false;
 

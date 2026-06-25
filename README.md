@@ -44,13 +44,18 @@ Full schedule: [`agenda.md`](agenda.md).
 
 | Doc | Status |
 |---|---|
-| [`agenda.md`](agenda.md) | ✅ Instructor's running order |
-| [`code-tour.md`](code-tour.md) | ✅ 7-file ~1,900 LOC reading map for what you'll see |
-| [`protocol-gotchas.md`](protocol-gotchas.md) | ✅ 13 protocol bear traps (AG-UI, A2UI, MCP Apps, ADK) we hit at v6 bring-up — so you can route around them |
-| `pre-work.md` | TBD — 24–48h before-arrival checklist |
-| `skeleton-skill.md` | TBD — block 5 template |
-| `helper-agent-design.md` | TBD — the meta-demo agent that guides attendees |
-| `slides/` | TBD |
+| [`agenda2.md`](agenda2.md) | ✅ Current **activity-led** running order + pedagogy (supersedes `agenda.md`) |
+| [`facilitator-guide.md`](facilitator-guide.md) | ✅ Instructor playbook — how to run each activity, jigsaw mechanics, triage |
+| [`slides/`](slides/) | ✅ The deck — open [`slides/presenter.html`](slides/presenter.html); order/timer in [`slides/outline.md`](slides/outline.md) |
+| [`pre-work.md`](pre-work.md) | ✅ 24–48h before-arrival setup + verify checklist |
+| [`workshop-fork.md`](workshop-fork.md) | ✅ The runnable fork: exercises, start↔solution, solution-rating design |
+| [`helper-agent-design.md`](helper-agent-design.md) | ✅ The meta-demo agent — RAG FAQ + show-and-tell + live solution rating |
+| [`prototype-canvas.md`](prototype-canvas.md) | ✅ Round C worksheet — plan your own protocol app |
+| [`cheat-sheet.md`](cheat-sheet.md) | ✅ 1-page protocol quick reference for the build rounds |
+| [`code-tour.md`](code-tour.md) | ✅ 7-file ~1,900 LOC reading map (take-home) |
+| [`protocol-gotchas.md`](protocol-gotchas.md) | ✅ 13 protocol bear traps (AG-UI, A2UI, MCP Apps, ADK) |
+| [`agenda.md`](agenda.md) | ⚠️ Original presentation-led plan — kept for reference; see `agenda2.md` |
+| skeleton skill | ⬜ Lives in the workshop fork (Round C starter) — see [`workshop-fork.md`](workshop-fork.md) |
 
 ## Ask the helper agent anything
 

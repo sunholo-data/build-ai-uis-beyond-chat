@@ -163,15 +163,21 @@ html,body{height:100%;overflow:hidden;background:var(--bg);color:var(--text);fon
   //   block → deck → minutes mapping). Block budgets are from agenda.md.
   // ═══════════════════════════════════════════════════════════════
   const PLAYLIST = [
-    { src: '00-welcome.html',                 label: 'Welcome',     minutes: 2  },
+    { src: '00-welcome.html',                 label: 'Welcome',     minutes: 5  },
     { src: 'about-mark/about-mark.html',      label: 'About Mark',  minutes: 2  },
-    { src: '01-chat-wall.html',               label: 'Chat Wall',   minutes: 10 },
-    { src: '02-quickstart.html',              label: 'Quick-start', minutes: 10 },
-    { src: '03-adk-agui.html',                label: 'ADK + AG-UI', minutes: 30 },
-    { src: '04-a2ui.html',                    label: 'A2UI',        minutes: 35 },
-    { src: '05-mcp-apps.html',                label: 'MCP Apps',    minutes: 30 },
-    { src: '06-build-skill.html',             label: 'Build skill', minutes: 55 },
-    { src: '07-a2a-close.html',               label: 'A2A + close', minutes: 10 },
+    { src: '01-chat-wall.html',               label: 'Chat Wall',   minutes: 8  },
+    { src: '02-three-protocols.html',         label: 'Protocols',   minutes: 25 },
+    { src: 'A1-explore-a-skill.html',         label: 'A · Explore', minutes: 20 },
+    // ── 10-min BREAK here: click the clock to PAUSE during the break ──
+    { src: 'B0-how-it-works.html',            label: 'B · Jigsaw',  minutes: 40 },
+    // B1–B3 are parallel reference cards (each group does ONE) — the 40-min
+    // round budget sits on B0 above, so these carry 0 to keep the total honest.
+    { src: 'B1-agui.html',                    label: 'B · AG-UI',   minutes: 0  },
+    { src: 'B2-a2ui.html',                    label: 'B · A2UI',    minutes: 0  },
+    { src: 'B3-mcp.html',                     label: 'B · MCP',     minutes: 0  },
+    { src: 'C1-plan-your-app.html',           label: 'C · Plan',    minutes: 25 },
+    { src: 'show-and-tell.html',              label: 'Show & tell', minutes: 20 },
+    { src: '07-wrap-up.html',                 label: 'Wrap-up',     minutes: 10 },
     { src: '08-built-on-this.html',           label: 'Built on it', minutes: 4  },
     { src: 'contact-mark/contact-mark.html',  label: 'Contact',     minutes: 1  },
   ];

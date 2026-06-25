@@ -65,10 +65,16 @@ patterns, boilerplate, and a stage-safe linter). The skill originates from the
   never `vh`/`vw` (the 16:9 stage is letterboxed; viewport units overflow it).
   The only allowed viewport unit is the single `#app{…;height:100vh}` shell line.
   Verify with `node .claude/skills/presentation-slides/scripts/lint-slides.mjs slides/*.html`.
-- `00-welcome.html` + `01-…07-…` are skeletons (title + agenda-derived beats) to
-  be expanded; `about-mark/` and `contact-mark/` are reused as-is. See
-  `slides/README.md` for layout, asset-path rules, and the (not-yet-enabled)
-  GitHub Pages publishing note.
+- The deck is **activity-led** (agenda v2, see `agenda2.md`): instructor intro
+  (`00-welcome`, `01-chat-wall`, `02-three-protocols`) → student activity rounds
+  (`A1`, `B0`+`B1`/`B2`/`B3` jigsaw, `C1`) → `show-and-tell` → `07-wrap-up` →
+  `08-built-on-this` showcase, wrapped in reused `about-mark`/`contact-mark`.
+- Activity decks use the `activity-card` layout (`.act`: goal · steps · done-when
+  · hints · solution) so they double as a **self-paced course guide** on the
+  website. See `slides/README.md` for layout, asset-path rules, the demo thread,
+  and the (not-yet-enabled) GitHub Pages publishing note.
+- `agenda.md` still describes the OLD presentation-led 7-block plan; `agenda2.md`
+  is the current activity-led design and should supersede it once finalised.
 
 ## Editing tone
 

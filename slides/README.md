@@ -25,10 +25,16 @@ python3 -m http.server 8000
 ```
 slides/
   presenter.html          # playlist navigator + per-deck timer — open this for the talk
-  outline.md              # block → deck → minutes (source of truth for the playlist)
-  00-welcome.html         # cold-open title deck
-  01-chat-wall.html …     # one skeleton deck per agenda block (see outline.md)
-  07-a2a-close.html
+  outline.md              # deck order, minutes, demo thread (source of truth for the playlist)
+  00-welcome.html         # intro: framing + how-today-works + real-apps teaser
+  01-chat-wall.html       # intro: the problem + a brain-break (think-pair-share)
+  02-three-protocols.html # instructor guided tour (AG-UI / A2UI / MCP) with brain breaks
+  A1-explore-a-skill.html       # Round A activity card (group explore one live demo)
+  B0-how-it-works.html …  # Round B jigsaw: controller + B1/B2/B3 per-protocol cards
+  C1-plan-your-app.html   # Round C activity card (plan + reflect)
+  show-and-tell.html      # share-back instructions
+  07-wrap-up.html         # wrap + where-next
+  08-built-on-this.html   # showcase: AIPLA + GDE (built on this template)
   about-mark/             # standard intro deck (reused from sunholo-data/presentations)
   contact-mark/           # standard close deck (reused)
   images/
@@ -61,9 +67,10 @@ Lint a deck for stage-safe sizing:
 node .claude/skills/presentation-slides/scripts/lint-slides.mjs slides/*.html
 ```
 
-The skeleton decks were generated to share identical CSS; expand the content
-slide-by-slide. The `.note` line on each block's last slide points back to the
-matching section of [`../agenda.md`](../agenda.md).
+The decks were generated to share identical CSS; expand the content slide-by-slide.
+The middle decks use the **`activity-card`** layout (`.act` — goal · steps ·
+✅ done-when · 💡 hints · 🔓 solution) so a student can follow each activity solo on
+the website. Running order + pedagogy live in [`../agenda2.md`](../agenda2.md).
 
 ## Publishing (not enabled yet)
 
