@@ -49,46 +49,42 @@ workshop-start   ← all three exercises blanked; attendees work here
 - `docs/exercises/{agui,a2ui,mcp}.md` in the fork = the same content as the
   Round-B activity cards in the deck (single source; the cards link here).
 
-## The three reconstruct exercises (Round B jigsaw)
+## The Round B exercises (jigsaw)
 
-Each is **one focused, observable edit** — restore a deleted handler/value, then
-confirm a visible behaviour. Difficulty is comparable so groups finish together.
+Each protocol exercise follows the same shape — **homespun (the pain) → the protocol
+(play with it) → what the protocol removed** — so groups learn what the protocol
+*does*, not just how to patch a line. Most of it is **key-free** (dev playgrounds).
+Full text in `docs/exercises/{agui,a2ui,mcp}.md` (identical on both branches).
 
-> ⚠️ **Build note:** exact files/lines below are from the code-tour and must be
-> confirmed against the fork's actual source when authoring the blanks. The
-> *behaviour to restore* and the *success check* are the stable contract.
+### B1 · AG-UI — a typed event stream
+- **Homespun:** POST + `await` the whole reply → no streaming, tool calls invisible,
+  your own ad-hoc wire shape.
+- **Protocol:** `agent.subscribe({…})` maps 16 typed events → React state. Read the
+  live SSE: DevTools → Network → `stream` *(needs a reply)*.
+- **Advanced reconstruct (`workshop-start`):** restore `onMessagesChanged` in
+  `frontend/src/hooks/useSkillAgent.ts`. ✅ `vitest useSkillAgent.test.tsx`.
 
-### B1 · AG-UI — restore the event stream
-- **File:** `frontend/src/hooks/useSkillAgent.ts` (the `agent.subscribe({…})` block)
-- **Blanked:** the `onTextMessageContent` handler that appends each delta to the
-  current assistant message.
-- **Restore:** append `event.delta` to the in-progress message so text streams.
-- **✅ Success:** messages render token-by-token; events visible in DevTools →
-  Network → `stream`.
-- **Solution:** [`useSkillAgent.ts` on the template](https://github.com/sunholo-data/ai-protocol-platform/blob/main/frontend/src/hooks/useSkillAgent.ts)
+### B2 · A2UI — UI as JSON (key-free) ⭐
+- **Homespun:** a hardcoded React `<ContactForm/>` → a new form means new code + a
+  redeploy.
+- **Protocol:** the form is a JSON component tree. Play at **`/dev/a2ui`** — edit
+  `PATTERN1_SEED_MESSAGES`, hot-reload, watch it render. No agent, no key.
+- **Advanced reconstruct (`workshop-start`):** restore `default_surface` on
+  `demo-workspace` in `backend/db/local_fixture.py`. ✅ `pytest test_demo_workspace_surface.py`.
 
-### B2 · A2UI — send UI to the workspace surface
-- **File:** the `demo-form-builder` / `demo-workspace` skill config in
-  `backend/db/local_fixture.py` (`tool_configs.a2ui`).
-- **Blanked:** `surface_id` (the UI has no declared surface, so it falls back to
-  the chat bubble).
-- **Restore:** `tool_configs.a2ui.surface_id = "workspace"`.
-- **✅ Success:** "make me a contact form" renders in the **workspace pane**, not
-  inline in chat.
-- **Gotcha to surface:** the v0.9-vs-v0.8 import trap (protocol-gotchas #5) — good
-  stretch if a group finishes early.
+### B3 · MCP Apps — sandboxed widgets + two channels (key-free) ⭐
+- **Homespun:** a raw `<iframe>` → it can read your cookies, no back-channel,
+  bespoke postMessage glue.
+- **Protocol:** UI-by-reference + sandboxed origin + `ui/message` &
+  `ui/update-model-context`. Play at **`/dev/mcp-apps/active`** — fire both channels
+  through the real bridge (on-page log). No iframe, no key.
+- **Advanced reconstruct (`workshop-start`):** restore the `ui/update-model-context`
+  POST in `frontend/src/components/protocols/MCPAppToolCallRouter.tsx`.
+  ✅ `vitest MCPAppToolCallRouter.iframeContext.test.tsx`.
 
-### B3 · MCP Apps — wire the second RPC channel
-- **File:** the frontend MCP-app renderer (the `onFallbackRequest` /
-  `onUpdateModelContext` dispatch) — paired with `backend/protocols/mcp_proxy.py`
-  / `POST /api/sessions/{id}/iframe-context`.
-- **Blanked:** the `onUpdateModelContext` handler, so iframe state never reaches
-  the next turn.
-- **Restore:** dispatch `ui/update-model-context` so the widget's state merges
-  into the agent's next-turn context.
-- **✅ Success:** show a map, ask "what city is currently centred?" — the agent
-  answers from context with **no re-render**.
-- **Solution:** [`mcp_proxy.py` on the template](https://github.com/sunholo-data/ai-protocol-platform/blob/main/backend/protocols/mcp_proxy.py)
+> Solutions live on `main`; reveal any reconstruct with
+> `git diff workshop-start main -- <file>`. All three reconstructs are built and
+> test-verified (fail on `workshop-start`, pass on `main`).
 
 ## Round C — the skeleton skill (prototype starter)
 
@@ -137,18 +133,18 @@ to submitted code). Detailed build in [`helper-agent-design.md`](helper-agent-de
 
 ## What ships in the fork (asset checklist)
 
-- [ ] Pinned tag off the template + `workshop-start` branch with 3 blanked spots
-- [ ] `docs/exercises/{agui,a2ui,mcp}.md` (mirror the Round-B cards)
+- [x] Repo created + seeded + `workshop-start` branch with 3 blanked spots
+- [x] `docs/exercises/{README,agui,a2ui,mcp}.md` (homespun-vs-protocol + playgrounds)
+- [x] Verified `make dev-local` green path (drives [`pre-work.md`](pre-work.md))
+- [x] Codespaces devcontainer (one-click, any OS — see [`pre-work.md`](pre-work.md))
 - [ ] Round-C skeleton skill + a worked example
 - [ ] Helper-agent skill (RAG corpus + `submit_for_show_and_tell` + `rate_submission`)
 - [ ] Anonymous-group join pre-configured (printable code for the slide)
-- [ ] A verified `make dev-local` green path (drives [`pre-work.md`](pre-work.md))
 
 ## Open decisions
 
-- **Fork name** — confirm `build-ai-uis-workshop-app` (or pick another).
-- **Submission transport** — paste-in-chat (zero friction, no GitHub needed) vs
-  branch/PR link (more realistic, needs GitHub accounts). Recommend **paste-in-chat
-  as default**, link as optional.
-- **Who authors the blanks** — needs someone with the fork checked out to cut the
-  three exercises and confirm the success checks actually pass from `workshop-start`.
+- ~~**Fork name**~~ — done: `sunholo-data/build-ai-uis-workshop-app` (public).
+- ~~**Who authors the blanks**~~ — done: all three cut + test-verified.
+- **Submission transport** (for the rating feature) — paste-in-chat (zero friction,
+  no GitHub needed) vs branch/PR link (more realistic, needs GitHub accounts).
+  Recommend **paste-in-chat as default**, link as optional.

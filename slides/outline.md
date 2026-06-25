@@ -49,18 +49,19 @@ The presenter ships a per-deck timer + schedule tracker — use it to run the ro
 ## Demo thread — two real apps, used throughout
 
 Each protocol is shown as the clean demo skill, then the same protocol shipping in
-a real fork of the platform; in Round B groups **reconstruct** a piece of one.
+a real fork of the platform; in Round B groups play with one (homespun vs protocol,
+via the dev playgrounds).
 
 - **AIPLA** — *AI in Physics Learning & Assessment* ([cphu-aipla-app](https://github.com/sunholo-data/cphu-aipla-app)) ·
   `https://aipla-v01-frontend-wgwhd7mspa-lz.a.run.app/teacher/classes/0b99f4e04792`
 - **GDE AP Agent** — *invoice / accounts-payable* ([gde-ap-agent](https://github.com/sunholo-data/gde-ap-agent)) ·
   `https://gde-ap-agent-blqtqfexwa-ew.a.run.app/`
 
-| Protocol | Clean demo skill | Real app | Round B reconstruct |
-|---|---|---|---|
-| AG-UI | `demo-researcher` | GDE pipeline visualizer · AIPLA tutor | restore `onTextMessageContent` (`B1`) |
-| A2UI | `demo-form-builder` → `demo-workspace` | GDE `InvoiceHeroCard` · AIPLA workspace | restore `surface_id="workspace"` (`B2`) |
-| MCP Apps | `demo-map-explorer` | GDE dashboards (bidirectional) · AIPLA `led-planck` | restore `onUpdateModelContext` (`B3`) |
+| Protocol | Clean demo skill | Real app | Round B — play with it (key-free unless noted) | Advanced reconstruct |
+|---|---|---|---|---|
+| AG-UI | `demo-researcher` | GDE pipeline visualizer · AIPLA tutor | read the live SSE stream in DevTools *(needs a reply)* | restore `onMessagesChanged` (`B1`) |
+| A2UI | `demo-form-builder` → `demo-workspace` | GDE `InvoiceHeroCard` · AIPLA workspace | `/dev/a2ui` — edit the A2UI JSON, watch it render | restore `default_surface` (`B2`) |
+| MCP Apps | `demo-map-explorer` | GDE dashboards (bidirectional) · AIPLA `led-planck` | `/dev/mcp-apps/active` — fire both channels through the bridge | restore the `update-model-context` POST (`B3`) |
 
 > **Live-demo caveat:** demo skills run locally (`LOCAL_MODE=1`); the real apps
 > are on Cloud Run and the AIPLA teacher link may need sign-in. Decide per moment
@@ -72,6 +73,8 @@ a real fork of the platform; in Round B groups **reconstruct** a piece of one.
 - 🟢 **activity / drafted** — real content; refine copy.
 - 🟡 **draft** — framing decks; expand as needed.
 
-The **faded-code reconstruct exercises** (Round B) still need the actual
-"solution removed" branches prepared in the platform/app repos — the cards link
-to the *completed* files; someone has to author the blanked-out starting point.
+The Round-B exercises live in the workshop fork
+([build-ai-uis-workshop-app](https://github.com/sunholo-data/build-ai-uis-workshop-app)):
+`docs/exercises/{agui,a2ui,mcp}.md` (homespun-vs-protocol + the dev playgrounds),
+with the optional reconstruct blanks on the `workshop-start` branch (each anchored
+by a test). Built and verified — no longer a TODO.
