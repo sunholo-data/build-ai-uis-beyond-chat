@@ -1,114 +1,118 @@
 # Pre-work — get the app running BEFORE you arrive
 
-> Do this 24–48h before the workshop. It takes about 15 minutes. The one
-> thing that matters: **arrive with the app running locally.** Everything
-> else is a nicety.
+> Do this 24–48h before the workshop. ~15 minutes. The one thing that matters:
+> **arrive with the app running and a chat reply streaming back.**
+
+## TL;DR
+
+- **Easiest, any OS (Windows/Mac/Linux/Chromebook), nothing to install →** open the
+  repo in **GitHub Codespaces**.
+- **Prefer it on your own machine →** local setup (macOS/Linux, or Windows via WSL2).
+- **Either way, get a free Gemini key** (2 min): <https://aistudio.google.com/apikey>
+  — the LLM isn't stubbed, so without it the chat won't reply. (Free tier; *not* a
+  GCP project.)
+
+You do **not** need Docker, a GCP account, or Firebase.
 
 ## Why this matters
 
-This is an activity-led, half-day workshop, and you'll work in groups at a
-table. The build rounds assume everyone already has the app up — there's no
-30-minute install break to hide a broken setup in. If you turn up with
-nothing running, you stall your whole table while an instructor triages your
-laptop instead of teaching. Get past `make dev-local` at home, on your own
-network, with time to spare.
+This is an activity-led, half-day workshop and you'll work in groups at a table.
+The build rounds assume everyone already has the app up — there's no 30-minute
+install break. Turn up with nothing running and you stall your whole table.
 
-## 1. Install
+---
 
-You need these on your laptop:
+## Option A — Codespaces (recommended, any OS)
 
-- **Node 20+** — check with `node --version`
-- **Python 3.11+** — check with `python3 --version`
-- **git** — check with `git --version`
-- **A GitHub account** — you'll clone (and later own a fork of) the code
+Runs the whole thing in the cloud from your browser or VS Code. Nothing to
+install locally; everyone gets an identical environment. Needs only a (free)
+GitHub account.
 
-Optional but encouraged:
+1. Go to **<https://github.com/sunholo-data/build-ai-uis-workshop-app>**
+2. Green **Code** button → **Codespaces** tab → **Create codespace on main**.
+3. Wait ~3–5 min the first time — it auto-installs make, uv, and all deps.
+4. In the Codespace terminal, add your key (from the link above):
+   ```bash
+   echo "GEMINI_API_KEY=your-key-here" > backend/.env
+   ```
+   *(Or, to avoid pasting it each time: GitHub → Settings → Codespaces → Secrets,
+   add `GEMINI_API_KEY` scoped to this repo.)*
+5. Start it:
+   ```bash
+   make dev-local
+   ```
+6. Port **3456** pops open automatically → see the **yellow LOCAL_MODE banner** →
+   send a message → it **streams**. Done.
 
-- **An AI coding tool** — Claude Code, Cursor, or Copilot. You'll use AI
-  coding during the build rounds, and it's a lot more fun if your tool of
-  choice is already set up and signed in.
+> A 3-hour session is well within the free Codespaces tier. Create the Codespace a
+> day early so the first-time setup isn't a surprise on the morning.
 
-## 2. Get the code
+---
 
-Clone the pinned workshop fork and check out the `workshop-start` branch —
-that branch is where the exercises live.
+## Option B — Local setup
+
+### Install
+
+- **Node 20+** — `node --version` (this also gives you `npm`)
+- **Python 3.11–3.13** — `python3 --version` (3.14 isn't supported yet)
+- **git** — `git --version`
+- **make** — `make --version`
+- **A GitHub account**
+
+You do **not** need to install `uv` separately — `make install` fetches it.
+
+**Per-OS:**
+- **macOS** — `xcode-select --install` for `make` + `git`; Node/Python via
+  [Homebrew](https://brew.sh) (`brew install node python git`).
+- **Linux** — `sudo apt install build-essential git`, plus Node 20+ / Python 3.11+.
+- **Windows** — easiest is **Option A (Codespaces)**. If you want it local, use
+  **WSL2** (`wsl --install` in admin PowerShell → reboot → Ubuntu) and follow the
+  Linux steps inside it; native PowerShell/CMD won't run the `make`/bash tooling.
+
+### Run
 
 ```bash
 git clone https://github.com/sunholo-data/build-ai-uis-workshop-app.git
 cd build-ai-uis-workshop-app
-git checkout workshop-start
+cd backend && make install && cd ..       # installs uv + Python deps (~1–2 min)
+cd frontend && npm install && cd ..        # installs Node deps
+echo "GEMINI_API_KEY=your-key-here" > backend/.env
+make dev-local                             # backend :1956 + frontend :3456
 ```
-
-> ⚠️ The fork name is still being finalised. If that clone **404s**, fall
-> back to the public template and use its default branch:
->
-> ```bash
-> git clone https://github.com/sunholo-data/ai-protocol-platform.git
-> cd ai-protocol-platform
-> ```
-
-## 3. Run it
-
-One command, in LOCAL_MODE — pure Node + Python, no containers. `LOCAL_MODE=1`
-stubs out Firestore and auth so nothing external is required.
-
-```bash
-make dev-local
-```
-
-It starts three things:
-
-| What | URL / port |
-|---|---|
-| Frontend | http://localhost:3456 |
-| Backend API | http://localhost:1956 |
-| MCP sandbox (optional) | http://localhost:3457 |
-
-## 4. Verify you're ready
-
-Open **http://localhost:3456**, then run the streaming check:
-
-1. You see a **yellow LOCAL_MODE banner** at the top of the page.
-2. Type a message into the chat and send it.
-3. The reply **streams in token-by-token** (not all at once at the end).
-
-If it streams, you're ready. That's the whole test.
-
-**You're ready when…**
-
-- [ ] `node --version` is 20 or higher
-- [ ] `python3 --version` is 3.11 or higher
-- [ ] You cloned the repo and are on the `workshop-start` branch
-- [ ] `make dev-local` runs without errors
-- [ ] http://localhost:3456 shows the yellow LOCAL_MODE banner
-- [ ] A chat message streams back token-by-token
-
-## 5. You do NOT need
-
-- ❌ **Docker** — LOCAL_MODE runs straight on Node + Python
-- ❌ **GCP credentials** — nothing talks to Google Cloud locally
-- ❌ **A Firebase account** — auth and Firestore are stubbed
-
-If a setup step asks you for any of these, you're off the LOCAL_MODE path —
-stop and re-check section 3.
-
-## 6. Troubleshooting
-
-| Symptom | Fix |
-|---|---|
-| Wrong Node version | Install Node 20+ (use `nvm install 20` if you have nvm). Re-check with `node --version`. |
-| Wrong Python version | Install Python 3.11+. Re-check with `python3 --version`. Make sure your shell points at the new one. |
-| Port already in use (3456 / 1956 / 3457) | Something else is on that port. Quit the other process (or find it: `lsof -i :3456`), then re-run `make dev-local`. |
-| `make dev-local` errors | Read the first error, not the last — it's usually a missing Node or Python dep. Re-run after installing it. |
-| Chat sends but nothing streams | Both halves must be up. Confirm the **frontend** at http://localhost:3456 **and** the **backend** at http://localhost:1956 are both running — a blank stream usually means the backend died or never started. |
-
-Still stuck after all that? **Arrive a few minutes early.** Instructors can
-triage a broken laptop before we start — but not once the activities are
-running. Come with the error message on screen.
 
 ---
 
-See also: [agenda2.md](agenda2.md) for the running order, and
-[facilitator-guide.md](facilitator-guide.md) if you're helping run a table.
-The platform code is public at
-[sunholo-data/ai-protocol-platform](https://github.com/sunholo-data/ai-protocol-platform).
+## Verify you're ready (either option)
+
+Open **http://localhost:3456** (Codespaces opens the forwarded URL for you):
+
+1. You see a **yellow LOCAL_MODE banner** at the top.
+2. Send a message in the chat.
+3. The reply **streams in token-by-token**.
+
+**You're ready when…**
+
+- [ ] The app loads with the yellow **LOCAL_MODE** banner
+- [ ] `backend/.env` has your `GEMINI_API_KEY` (or the Codespaces secret is set)
+- [ ] A chat message **streams** back
+
+## Troubleshooting
+
+| Symptom | Fix |
+|---|---|
+| Chat sends but **nothing streams** / a "model" or auth error | Almost always a missing key — check `GEMINI_API_KEY` is set, then restart `make dev-local`. |
+| (Local) Wrong Node/Python version | Node 20+, Python 3.11–3.13; make sure your shell points at them. |
+| (Local) Windows: `make` not found / scripts fail | Use **Option A (Codespaces)**, or run inside **WSL2 / Ubuntu** — not PowerShell/CMD. |
+| (Local) Port in use (3456 / 1956 / 3457) | Quit the other process (`lsof -i :3456`) and re-run. |
+| (Codespaces) Setup seemed to fail | Open the **Terminal → "Codespaces: View Creation Log"**; re-run `bash .devcontainer/post-create.sh`. |
+
+Still stuck? **Arrive a few minutes early** with the error on screen — instructors
+can triage before activities start.
+
+---
+
+See also: [agenda2.md](agenda2.md) (running order) and
+[facilitator-guide.md](facilitator-guide.md) (running a table). Code is public at
+[build-ai-uis-workshop-app](https://github.com/sunholo-data/build-ai-uis-workshop-app)
+(a copy of the template
+[ai-protocol-platform](https://github.com/sunholo-data/ai-protocol-platform)).
