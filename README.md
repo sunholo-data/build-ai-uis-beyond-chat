@@ -17,24 +17,22 @@ You'll clone both for the workshop. The platform repo is the canonical source-of
 
 ## Workshop at a glance
 
-- **Format:** Half-day in-person, 3 hours
+- **Format:** In-person — two 75-min blocks split by a 30-min coffee break (Web Summer Camp, Fri 3 Jul 2026, 10:00–13:00)
 - **Audience:** Developers with some Python + React familiarity
-- **Outcome:** A working multi-protocol skill running locally, on a clone of the platform you own
+- **Outcome:** Hands-on with all three protocols in dev playgrounds · a forked platform you own · a plan for your own protocol app
+- **Shape:** ~⅔ student-led activity, ⅓ framing — group work at tables, AI coding encouraged
 
 | Block | What you'll do |
 |---|---|
-| The Chat Wall Problem | Why text-only AI hits a ceiling; the protocol-stack diagram |
-| ADK + AG-UI walkthrough | Watch the 16-event stream live in DevTools |
-| A2UI + multi-surface | Declarative UI from the agent, with the bidirectional surface-context loop |
-| MCP Apps + sandbox | Sandboxed iframe widgets, two RPC channels, separate-origin security |
-| Build your own skill ⭐ | 55 minutes hands-on — pick one of three paths |
-| A2A + close | Live `/.well-known/agent.json`; your skill is in the marketplace |
+| **Block 1 · framing + explore** (10:00–11:15) | The chat-wall problem · a guided tour of all three protocols · **Round A** — explore a live skill at your table · pick up your Round-B protocol to mull over coffee |
+| ☕ Coffee break (11:15–11:45) | — |
+| **Block 2 · build + share** (11:45–13:00) | **Round B** — jigsaw: master one protocol in a dev playground, then teach it back · **Round C** — plan your own protocol app · show & tell · wrap-up |
 
-Full schedule: [`agenda.md`](agenda.md).
+Full running order + pedagogy: [`agenda.md`](agenda.md).
 
 ## Sessions
 
-- **First:** WebSummerCamp Croatia 2026 — [websummercamp.com](https://websummercamp.com/2026/news/super-early-sold-out-get-your-early-bird-now)
+- **First:** WebSummerCamp Croatia 2026 — **Fri 3 Jul 2026, 10:00–13:00** ([websummercamp.com](https://websummercamp.com/2026/news/super-early-sold-out-get-your-early-bird-now))
 - Tue 18 Aug 2026
 - Tue 17 Nov 2026
 - Tue 16 Feb 2027
@@ -44,7 +42,7 @@ Full schedule: [`agenda.md`](agenda.md).
 
 | Doc | Status |
 |---|---|
-| [`agenda2.md`](agenda2.md) | ✅ Current **activity-led** running order + pedagogy (supersedes `agenda.md`) |
+| [`agenda.md`](agenda.md) | ✅ The **activity-led** running order + pedagogy (two-block schedule) |
 | [`facilitator-guide.md`](facilitator-guide.md) | ✅ Instructor playbook — how to run each activity, jigsaw mechanics, triage |
 | [`slides/`](slides/) | ✅ The deck — open [`slides/presenter.html`](slides/presenter.html); order/timer in [`slides/outline.md`](slides/outline.md) |
 | [`pre-work.md`](pre-work.md) | ✅ 24–48h before-arrival setup + verify checklist |
@@ -54,7 +52,6 @@ Full schedule: [`agenda.md`](agenda.md).
 | [`cheat-sheet.md`](cheat-sheet.md) | ✅ 1-page protocol quick reference for the build rounds |
 | [`code-tour.md`](code-tour.md) | ✅ 7-file ~1,900 LOC reading map (take-home) |
 | [`protocol-gotchas.md`](protocol-gotchas.md) | ✅ 13 protocol bear traps (AG-UI, A2UI, MCP Apps, ADK) |
-| [`agenda.md`](agenda.md) | ⚠️ Original presentation-led plan — kept for reference; see `agenda2.md` |
 | skeleton skill | ⬜ Lives in the workshop fork (Round C starter) — see [`workshop-fork.md`](workshop-fork.md) |
 
 ## Ask the helper agent anything
@@ -89,8 +86,9 @@ You do NOT need: Docker, GCP credentials, Firebase. The platform runs in `LOCAL_
 ## Take-home
 
 Every attendee leaves with:
-- A working skill they built in 55 minutes, running locally
-- A fork of the public template they own
+- Hands-on experience driving all three protocols in their dev playgrounds
+- A fork of the public template they own, running locally
+- A one-page plan for a protocol app in their own context (Round C)
 - A clear path to the four advanced patterns (sprints 2.11–2.14)
 - A 5-minute read in the platform repo at [`docs/ops/deployment-models.md`](https://github.com/sunholo-data/ai-protocol-platform/blob/main/docs/ops/deployment-models.md) for day-one of operating their fork — picks single-service Cloud Run sidecar vs paired sidecar+standalone *before* first push, so the unused `cloudbuild.yaml` doesn't quietly fail every CI build for months
 

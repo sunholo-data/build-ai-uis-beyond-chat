@@ -70,7 +70,7 @@ node .claude/skills/presentation-slides/scripts/lint-slides.mjs slides/*.html
 The decks were generated to share identical CSS; expand the content slide-by-slide.
 The middle decks use the **`activity-card`** layout (`.act` — goal · steps ·
 ✅ done-when · 💡 hints · 🔓 solution) so a student can follow each activity solo on
-the website. Running order + pedagogy live in [`../agenda2.md`](../agenda2.md).
+the website. Running order + pedagogy live in [`../agenda.md`](../agenda.md).
 
 ## Publishing (not enabled yet)
 

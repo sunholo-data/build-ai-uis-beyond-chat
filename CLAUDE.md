@@ -6,7 +6,7 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 `sunholo-data/build-ai-uis-beyond-chat` is the **public curriculum** for the "Build AI UIs Beyond Chat" workshop — a half-day, hands-on session on the agent-UI protocol stack (**MCP Apps**, **A2UI**, **AG-UI**, with A2A + ADK underneath).
 
-It holds **materials, not code**: agenda, code-tour, protocol-gotchas, and (TBD) pre-work, skeleton-skill, helper-agent design, and slides. The runnable code attendees clone and build on lives in a *different* repo (see lineage below). There is no build, no test suite, no app to run here — every file is Markdown.
+It holds **materials, not code**: agenda, facilitator guide, code-tour, protocol-gotchas, pre-work, helper-agent design, the workshop-fork guide, and slides. The runnable code attendees clone and build on lives in a *different* repo (see lineage below). There is no build, no test suite, no app to run here — every file is Markdown, except the self-contained HTML slide decks under `slides/`.
 
 ## The three-repo lineage (read this first)
 
@@ -44,11 +44,13 @@ When writing file/line references in *responses* (not in the materials), use the
 ## What the materials cover (orientation)
 
 - **`README.md`** — the public landing page (hand-maintained here; it originated from `_workshop-readme.md` upstream). Two-repo setup, schedule, pre-work, take-home.
-- **`agenda.md`** — the instructor's running order: 7 blocks over ~3h (Chat Wall → ADK+AG-UI → A2UI multi-surface → MCP Apps sandbox → **build-your-own-skill** (the make-or-break 55 min) → A2A discovery + close). Includes timing reality and hard-floor cut order.
+- **`agenda.md`** — the instructor's running order: the **activity-led**, two-block schedule (2 × 75 min split by a hard 30-min coffee break; confirmed Web Summer Camp, Fri 3 Jul 2026). Block 1 = framing + Round A explore + Round-B handoff; Block 2 = Round B build/teach-back + Round C plan + show-and-tell + wrap. Pedagogy (jigsaw, brain breaks, contrast cases) up top.
+- **`facilitator-guide.md`** — the instructor playbook (the *how*): pre-flight, running the timer, per-block run notes, the jigsaw in detail, setup triage, and the cut order. Pairs with `agenda.md` (the *what*).
 - **`code-tour.md`** — a 7-file, ~1,900 LOC reading map into the *platform* code (the protocol-interaction code is small; most of the platform is production scaffolding the tour tells you to skip).
 - **`protocol-gotchas.md`** — 13 field-tested bear traps in AG-UI / A2UI / MCP Apps / ADK, each mapped to the workshop block where it bites. Source of truth for these is `platform:docs/talks/ai-ui-protocol-stack.md` (the living verification log).
-- **`slides/`** — the HTML slide decks (see below). Skeleton stage.
-- Still TBD (tracked in README/agenda checklists): `pre-work.md`, `skeleton-skill.md`, `helper-agent-design.md`.
+- **`pre-work.md`**, **`workshop-fork.md`**, **`helper-agent-design.md`**, **`prototype-canvas.md`**, **`cheat-sheet.md`** — before-arrival setup; the runnable fork (blanked exercises + dev playgrounds); the meta-demo FAQ/rating agent; the Round C worksheet; and the 1-page protocol quick reference.
+- **`slides/`** — the HTML slide decks (see below).
+- Still TBD: the **skeleton skill** (Round C starter) lives in the workshop fork, not here — see `workshop-fork.md`.
 
 ## Slides (`slides/`)
 
@@ -65,16 +67,15 @@ patterns, boilerplate, and a stage-safe linter). The skill originates from the
   never `vh`/`vw` (the 16:9 stage is letterboxed; viewport units overflow it).
   The only allowed viewport unit is the single `#app{…;height:100vh}` shell line.
   Verify with `node .claude/skills/presentation-slides/scripts/lint-slides.mjs slides/*.html`.
-- The deck is **activity-led** (agenda v2, see `agenda2.md`): instructor intro
+- The deck is **activity-led** (see `agenda.md`): instructor intro
   (`00-welcome`, `01-chat-wall`, `02-three-protocols`) → student activity rounds
   (`A1`, `B0`+`B1`/`B2`/`B3` jigsaw, `C1`) → `show-and-tell` → `07-wrap-up` →
   `08-built-on-this` showcase, wrapped in reused `about-mark`/`contact-mark`.
+  The `B0` handoff closes Block 1 (pre-break); the `B1`–`B3` build opens Block 2.
 - Activity decks use the `activity-card` layout (`.act`: goal · steps · done-when
   · hints · solution) so they double as a **self-paced course guide** on the
   website. See `slides/README.md` for layout, asset-path rules, the demo thread,
   and the (not-yet-enabled) GitHub Pages publishing note.
-- `agenda.md` still describes the OLD presentation-led 7-block plan; `agenda2.md`
-  is the current activity-led design and should supersede it once finalised.
 
 ## Editing tone
 

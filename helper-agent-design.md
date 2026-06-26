@@ -61,7 +61,7 @@ over AG-UI. Submissions roll up into a workspace **leaderboard/gallery**.
 
 ## Corpus (what RAG is preloaded with)
 
-- This repo: `agenda2.md`, `code-tour.md`, `protocol-gotchas.md`, the slides,
+- This repo: `agenda.md`, `code-tour.md`, `protocol-gotchas.md`, the slides,
   `workshop-fork.md`, `cheat-sheet.md`.
 - The fork's `docs/exercises/*` (so it can coach on the reconstructs).
 - The platform's shipped design docs (`docs/design/v6.X.Y/implemented/`) +

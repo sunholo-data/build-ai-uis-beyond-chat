@@ -111,7 +111,7 @@ can triage before activities start.
 
 ---
 
-See also: [agenda2.md](agenda2.md) (running order) and
+See also: [agenda.md](agenda.md) (running order) and
 [facilitator-guide.md](facilitator-guide.md) (running a table). Code is public at
 [build-ai-uis-workshop-app](https://github.com/sunholo-data/build-ai-uis-workshop-app)
 (a copy of the template
