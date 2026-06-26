@@ -261,6 +261,163 @@ Test through the same path the browser uses.
 
 ---
 
+## MCP Apps cross-client rendering (the demo clients)
+
+> Newer field notes — from putting the portable AIPLA sims
+> (`show_boldkast`/`show_kinebot`/`show_led_planck`) in front of real
+> consumer hosts in **June 2026**, not from the v6 bring-up. Verified
+> against `external-host-demo/smoke_test.py` + a live MCP Inspector
+> render. They bite at the **MCP Apps demo** (the tour) — which is exactly
+> why the workshop drives that demo through MCP Inspector, not a consumer
+> app.
+
+**Spec provenance:** MCP Apps is the first official MCP extension
+(`io.modelcontextprotocol/ui`, SEP-1865) — a joint Anthropic + OpenAI +
+MCP-UI spec, proposed 21 Nov 2025, launched **26 Jan 2026**.
+
+**Who actually renders MCP App UI** — official
+[client matrix](https://modelcontextprotocol.io/extensions/client-matrix),
+mid-2026, **11 hosts**: Claude (web + Desktop) · ChatGPT · VS Code (GitHub
+Copilot) · Microsoft 365 Copilot · Goose · Postman · MCPJam · Cursor ·
+Archestra.AI · PostHog Code. Plus **MCP Inspector** — the reference renderer
+(an *Apps* tab; not in the end-user matrix but verified live). **Not
+renderers:** **Slack** (Block Kit, not iframes — see #19); and simply not
+listed as of mid-2026: Windsurf, Zed, Cline, Continue, Jan, Open WebUI,
+LibreChat. **The caveat that matters:** a matrix CHECK records *declared*
+support at the init handshake, **not** verified mounting — Claude Desktop
+(#14) is the cautionary tale.
+
+### 14. Claude Desktop calls the tool but renders **text, not the widget**
+
+**Symptom:** In Claude Desktop (build `1.15962.0`), "show me the boldkast
+simulation" calls `aipla-sims show_boldkast` successfully and prints the
+tool's text — including the server's own fallback line *"[This tool call
+rendered an interactive widget in the chat…]"* — but **no interactive
+widget mounts**. Just text.
+
+**Why:** Early-2026 Claude Desktop builds *negotiate* MCP Apps and call
+the tool, but don't mount the `ui://` resource as an iframe. Host-side
+gap, not a server bug — the server returned a spec-compliant MCP App
+(`smoke_test.py`: valid `text/html;profile=mcp-app` + bridge), and the
+**same** `show_boldkast` mounts the live sim in MCP Inspector v0.22's
+*Apps* tab. Corroborated upstream: ext-apps issues **#671** and **#615**
+document claude.ai / Claude Desktop negotiating the `ui` capability and
+fetching the resource but failing to mount the iframe.
+
+**Fix / the tell:** The tool's text content with **no embedded panel**
+*is* the text fallback — the host didn't mount the UI. Don't debug the
+sim or the config (the call succeeded → both are fine); it's the host.
+Demo via **MCP Inspector** or the AIPLA tutor instead.
+
+### 15. MCP Inspector is the reference renderer — use it as ground truth
+
+**Symptom:** A consumer host shows text and you can't tell whose fault it
+is — the sim, the config, or the host.
+
+**Why / fix:** `npx @modelcontextprotocol/inspector uv run --script
+server.py` launches the reference renderer locally — no auth, no cloud,
+no tunnel. v0.22 has an **Apps** tab that lists the `show_*` tools and
+mounts them (sliders move, readout updates). If Inspector mounts it, the
+sim is spec-correct and the gap is **host-side**; if Inspector *also*
+fails, it's the server's `_meta`/resource shape. One step splits the
+problem. In a Codespace, VS Code auto-forwards port `6274` to a private
+HTTPS URL — same render, inside the workshop environment, no install.
+
+### 16. A deployed `/mcp` endpoint ≠ your sims rendering there
+
+**Symptom:** You point a remote client (ChatGPT connector, remote
+Inspector) at the deployed `…/api/proxy/mcp`, expecting the physics sims.
+You get text-returning **skill** tools — or a `502` — and no
+`show_boldkast`, no `ui://` resource.
+
+**Why:** The platform's mounted server
+(`backend/protocols/mcp_server.py` → `get_mcp_asgi_app()` →
+`rebuild_tools()`) registers **one tool per public marketplace skill** via
+`_make_skill_tool`, and those return concatenated **text**. The sims'
+`show_*` tools + `ui://` resources live **only** in the standalone
+`external-host-demo/server.py`. (Observed live: the proxy returned `502
+backend_unreachable` — Cloud Run scale-to-zero.)
+
+**Fix:** To serve the sims from the cloud URL — fold the `artefacts/`
+registration into `mcp_server.py`, redeploy, confirm `/api/proxy/mcp`
+passes streamable-HTTP cleanly, and **decide auth** (the endpoint is
+open; the sims assume the AIPLA tutor). Until then, run Inspector
+locally. "Has an MCP endpoint" never implies "renders these widgets."
+
+### 17. ChatGPT needs a remote server + HTTPS tunnel + Developer mode
+
+**Symptom:** You want the sims in ChatGPT but there's no "add a local
+server" option.
+
+**Why:** ChatGPT connectors reach **remote** servers over HTTPS only — a
+stdio/localhost server won't do. You need the `--http` server + a public
+HTTPS tunnel (cloudflared/ngrok) + org-enabled **Developer mode** + a
+hand-created connector pointing at `https://<tunnel>/mcp`.
+
+**Fix / implication:** Tunnel- and wifi-dependent → fine for a pre-staged
+"it works in ChatGPT too" beat, risky live. For a live room, Inspector
+(local) is the reliable route; once the deployed URL serves the sims
+(#16), point the ChatGPT connector at the cloud URL and skip the tunnel.
+(Bonus tell: a Claude-Desktop-spawned MCP server is **stdio** — it has no
+TCP port, so "is it running?" means checking the process tree, not
+`lsof`.)
+
+### 18. Hosts agree on the render, disagree on the **interaction→model back-channel**
+
+**Symptom:** The same sim mounts in ChatGPT's connector and looks perfect,
+but when you drag a slider or play, the model has no idea — *"it doesn't
+see what I interact with."* In the AIPLA app (and Inspector) those same
+interactions **do** reach the model (the tutor reacts: *"Fedt, du har
+prøvet at køre simulationen!"*).
+
+**Why:** The **render** path has converged — UI-by-reference
+(`_meta.ui.resourceUri` → `resources/read`) is shared between MCP Apps and
+OpenAI's Apps SDK, so the iframe shows up everywhere. The **back-channel is
+subtler than it first looks** (and we got it wrong on the first pass).
+OpenAI's own docs say to *"build with the MCP-standard keys by default"* —
+`ui/update-model-context` — and `window.openai` (`setWidgetState` /
+`sendFollowUpMessage`) is an **additive** layer that *maps onto* the
+standard, **not** a replacement. So ChatGPT *does* claim standard support.
+**But in practice it's unreliable for a standard-only widget:** our sim
+(standard-only, no `window.openai`, `boldkast/v1/index.html:639–713`)
+rendered yet the model stayed blind, and OpenAI has a documented
+**June-2026 stale-context bug** (`openai-apps-sdk-examples#221`) where
+`ui/update-model-context` is sent but later turns read a stale value.
+Whether a standard-only widget feeds back reliably in production ChatGPT is
+an **open question the MCP/OpenAI docs leave unsettled**. MCP-standard hosts
+(the AIPLA app, MCP Inspector) consume the channel reliably.
+
+**Fix / implication:** For a sim that talks back *reliably everywhere*, the
+bridge should **dual-speak** — emit `ui/update-model-context` (the standard,
+for the AIPLA app / Inspector / spec-pure hosts) **and** `window.openai.*`
+(for robust ChatGPT behaviour). For the workshop: demo the **full loop** in
+the AIPLA app or Inspector; in ChatGPT, treat it as **render-first** and
+don't bank on the model seeing interactions. Inspector's *Server
+Notifications* panel shows the sim correctly emitting `ui/update-model-context`
+— proof the gap is host-side. **Teaching point:** the View standardized
+faster than the interaction loop — "portable UI" is real today, "portable
+bidirectional context" is still settling.
+
+### 19. Slack renders MCP App widgets? No — it speaks Block Kit, not iframes
+
+**Symptom:** You assume the sim will mount in Slack like it does in ChatGPT.
+It won't.
+
+**Why:** Slack's surface is **Block Kit** (cards, data tables, carousels,
+alerts, work objects) rendered *natively* — not sandboxed HTML, not `ui://`
+resources, not `text/html;profile=mcp-app`. Slack is **absent from the MCP
+Apps client matrix** entirely; even Slack's MCP *client* translates partner
+output **to Block Kit** (`slack://blocks/…`) rather than mounting an MCP App
+iframe, and the "Slack MCP Server" is a tool/data **gateway** (a server
+role), not a UI host.
+
+**Fix / implication:** There's no "render this MCP App in Slack" — you'd
+rebuild the UI as Block Kit (separate, non-portable). For the workshop, Slack
+is the clean illustration that **"supports MCP" ≠ "renders MCP Apps"**: it
+speaks the protocol for *tools* but is not an Apps *host*.
+
+---
+
 ## Where these came from
 
 - [`docs/talks/ai-ui-protocol-stack.md`](https://github.com/sunholo-data/ai-protocol-platform/blob/main/docs/talks/ai-ui-protocol-stack.md) — the living
@@ -268,6 +425,12 @@ Test through the same path the browser uses.
   cites the commit / smoke test that proved the fix.
 - The platform's [`docs/design/v6.X.Y/implemented/`](https://github.com/sunholo-data/ai-protocol-platform/tree/main/docs/design) sprint docs — each fix
   has a design doc with the worked example.
+- **#14–19 (MCP Apps cross-client)** — June 2026 live testing (Claude
+  Desktop, ChatGPT, MCP Inspector) + a verified research pass over primary
+  sources: the [MCP Apps announcement](https://blog.modelcontextprotocol.io/posts/2026-01-26-mcp-apps/),
+  the [client matrix](https://modelcontextprotocol.io/extensions/client-matrix),
+  [OpenAI Apps SDK docs](https://developers.openai.com/apps-sdk/), Slack's
+  developer docs, and ext-apps issues #671 / #615 / openai-apps-sdk-examples #221.
 
 The talk doc is the **source of truth**. This page is the workshop
 distillation — protocol traps only, no IaC/deploy gotchas, mapped to
