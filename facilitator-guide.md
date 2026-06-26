@@ -1,22 +1,28 @@
 # Facilitator guide — how to actually run the room
 
 > Field notes, not theory. This is the **instructor playbook** for the
-> half-day (~3h) activity-led workshop. [agenda2.md](agenda2.md) is the
-> running order (the *what*); [slides/outline.md](slides/outline.md) is the
-> deck order + per-deck minute budgets that drive the presenter's timer.
+> activity-led workshop — **two 75-min blocks split by a hard 30-min coffee
+> break** (Web Summer Camp, Fri 3 Jul 2026, 10:00–13:00). [agenda.md](agenda.md)
+> is the running order (the *what*); [slides/outline.md](slides/outline.md) is
+> the deck order + per-deck minute budgets that drive the presenter's timer.
 > This page is the *how* — what to say, where groups get stuck, what to cut
 > when you're behind.
 
-The shape of the day: **instructor intro → 3 student activity rounds → share
-→ wrap**, in groups of 3–5. AI coding is encouraged. A **helper agent**
-fields FAQs and rates submissions so you can circulate instead of grading.
+The shape of the day: **Block 1** (framing → Round A explore → Round-B *handoff*)
+· **coffee** · **Block 2** (Round B build + teach-back → Round C plan → share →
+wrap), in groups of 3–5. AI coding is encouraged. A **helper agent** fields FAQs
+and rates submissions so you can circulate instead of grading. The make-or-break
+move: **assign each group its Round-B protocol *before* coffee** so the break
+primes the build.
 
 ---
 
 ## 1. Before the room (pre-flight)
 
-Run this checklist the morning of. None of it is optional — the failure modes
-are all silent and all cost you the first 20 minutes.
+Run this checklist the morning of. You have the **09:00–10:00 coffee hangout
+before Block 1** as your setup-triage window — that's where broken laptops get
+fixed, not in Block 1. None of it is optional — the failure modes are all silent
+and all cost you the first 20 minutes.
 
 | Check | Done when | If it's not |
 |---|---|---|
@@ -24,15 +30,17 @@ are all silent and all cost you the first 20 minutes.
 | **Fork pinned** | Cohort cloned the pinned tag, not the moving template ([workshop-fork.md](workshop-fork.md)) | A drifting template means your reveal diffs won't match their files. |
 | **Helper agent up** | It answers a test FAQ and rates a throwaway submission to the workspace pane ([helper-agent-design.md](helper-agent-design.md)) | The whole show-and-tell (§8) depends on it. Have a fallback: you read out 2–3 scores manually. |
 | **Join code printed** | The anonymous-group join code is on a slide *and* on paper/whiteboard | No accounts = no friction. If the code's wrong, the room can't connect. |
-| **Demo backups ready** | Screen-capture of each demo on disk | The **AIPLA teacher link needs sign-in**; the **MCP map is cloud-only**. Decide *before* the moment whether you click through live or play the capture. |
+| **Demo backups ready** | Screen-capture of each cloud demo on disk; MCP Inspector launches against the AIPLA sims | The **AIPLA teacher link needs sign-in**. The **MCP Apps demo runs locally via Inspector** (no cloud, no key) — so it won't bite; just **don't route it through Claude Desktop** (early-2026 builds show text, not the widget). Decide per cloud demo whether to click live or play the capture. |
 | **Room layout** | Tables of 3–5, each with power + a screen they can share | Solo rows kill the jigsaw. |
 | **AV** | Presenter on the big screen, your laptop free to circulate | You'll be walking the room in the rounds — don't tether yourself to the podium. |
 
-**The two demos that will bite you:** the AIPLA teacher view ($link$ in
-[slides/outline.md](slides/outline.md)) gates behind sign-in, and the MCP
-Cesium map runs cloud-only (`LOCAL_MODE` won't save you). Both have captures.
-Use them without apology if the live click is risky — the point is the
-*protocol behaviour*, not your network.
+**The cloud demo that will bite you:** the AIPLA teacher view ($link$ in
+[slides/outline.md](slides/outline.md)) gates behind sign-in — have a capture.
+The MCP Apps demo is now **local** (MCP Inspector against the AIPLA sims — see
+[slides/outline.md](slides/outline.md)), so it's no longer a network risk; the
+only rule is **don't demo it through Claude Desktop** (text-only on early builds —
+use Inspector). Use captures without apology if a live cloud click is risky — the
+point is the *protocol behaviour*, not your network.
 
 ---
 
@@ -43,14 +51,16 @@ The presenter ([slides/outline.md](slides/outline.md) describes it; it's
 
 - **Click the wall clock (top-right) to start/pause.** Start it at "Welcome."
 - **Bottom bar** shows `Block M:SS / budget` (green → amber at 80% → orange
-  over), `Total / 170:00`, and a **±delta pill**: green = ahead, orange =
+  over), `Total / 145:00`, and a **±delta pill**: green = ahead, orange =
   behind. Glance at the pill, not the wall.
-- **PAUSE during the 10-min break.** Click the clock when groups stand up;
-  click again when they sit. If you forget, the delta lies for the rest of
-  the day and your cut decisions (§9) go wrong.
-- **Round B is a jigsaw:** the 40-min budget banks against `B0`. When you flip
-  to `B1`/`B2`/`B3` to show a track they read `0:00` — that's expected, not a
-  bug.
+- **PAUSE for the full 30-min coffee break.** Click the clock when groups stand
+  up at the end of Block 1; click again when Block 2 starts. The break is
+  off-clock — if you forget to pause, the delta lies for the rest of the day and
+  your cut decisions (§9) go wrong. Make sure the `B0` handoff is done *before*
+  you pause (it closes Block 1).
+- **Round B is a jigsaw:** `B0` (the 10-min handoff) closes Block 1; the 35-min
+  build budget banks against `B1` in Block 2. When you flip to `B2`/`B3` to show
+  a track they read `0:00` — that's expected, not a bug.
 - Budgets are owned by [slides/outline.md](slides/outline.md). If you retime
   the day, change them there and keep the presenter's `PLAYLIST` in sync.
 
@@ -58,7 +68,9 @@ The presenter ([slides/outline.md](slides/outline.md) describes it; it's
 
 ## 3. Per-block run notes
 
-Block by block. Times are the [agenda2.md](agenda2.md) running order.
+Block by block; times are the [agenda.md](agenda.md) running order. **Block 1
+(10:00–11:15)** runs Welcome through the Round-B handoff; **Block 2
+(11:45–13:00)** is Round B build through wrap.
 
 ### Welcome / how-today-works / real-apps teaser — 5 min · instructor
 Set the deal in one breath: **"⅔ of today is you building, ⅓ is me framing.
@@ -92,22 +104,32 @@ protocol enables that plain chat can't**. You circulate. Last ~5 min: a fast
 share across tables — one line each, no laptops. Goal is articulation, not
 code.
 
-### Break — 10 min · PAUSE THE CLOCK
-Say "ten minutes" and mean it. Pause the presenter clock (§2).
+### Round B handoff — 10 min · instructor → groups · **closes Block 1**
+Explain the jigsaw (§4), **assign each table its ONE protocol**, and have them
+open and skim their exercise. Nothing to build yet — the point is they carry
+"what's my protocol, what does it replace?" into the coffee break. Write the
+thirds on the board now (§4) so you're not organising over coffee.
 
-### Round B — Reconstruct (jigsaw) — 40 min · groups
-The centrepiece. Full mechanics in §4. Two phases: 20-min expert groups (each
-table restores ONE protocol), then regroup for 15-min teach-backs (~3 min
+### ☕ Hard break — 30 min (off-clock) · PAUSE THE CLOCK
+The conference coffee break — the room empties. It's **not yours to compress**
+(§9). Pause the presenter clock (§2); resume at the top of Block 2. Groups
+already have their protocol, so coffee chat does the priming for you.
+
+### Round B — build + teach-back (jigsaw) — 35 min · groups · **opens Block 2**
+The centrepiece; the handoff already happened pre-break. Full mechanics in §4.
+Two phases: 20-min expert groups (each table works ONE protocol — the homespun
+way, then the real thing in its **dev playground**; advanced groups can
+reconstruct the blanked code, §5), then regroup for 15-min teach-backs (~3 min
 each). Protect this block.
 
-### Round C — Plan/prototype your own — 25 min · groups
+### Round C — Plan/prototype your own — 15 min · groups
 Groups sketch a protocol app for *their own* context (lesson tool, intake
 form, dashboard) and reflect. Hand them the skeleton skill
 ([workshop-fork.md](workshop-fork.md) → Round C) — fork, change the
 instruction + one tool, run. **This is the round you protect hardest** (§9):
 it's where the day pays off.
 
-### Show & tell — 20 min · groups present
+### Show & tell — 15 min · groups present
 Groups upload to the helper agent; it rates live (§8). ~2–3 min per group.
 You MC, you don't grade.
 
@@ -123,13 +145,16 @@ AIPLA + GDE as "where this goes," then contact. First thing to cut if behind.
 
 ## 4. The jigsaw in detail (Round B)
 
-The jigsaw only works if you set it up *before* groups start. Decide the
-assignment during the break.
+The jigsaw only works if you set it up *before* groups build. Make the
+assignment at the **Round-B handoff that closes Block 1** (§3) — groups skim
+their exercise over coffee and arrive in Block 2 ready to go.
 
-**Phase 1 — expert groups (20 min).** Each table does exactly **one**
-protocol. Split the tables into **roughly equal thirds**: ~⅓ on AG-UI (B1),
-~⅓ on A2UI (B2), ~⅓ on MCP (B3). Write the assignment on the board so nobody
-drifts. Project that track's card (`B1`/`B2`/`B3`) for the assigned tables.
+**Phase 1 — expert groups (20 min).** Each table works exactly **one**
+protocol: the homespun way, then the real thing in its **dev playground**
+(reconstructing the blanked line, §5, is the advanced tier). Split the tables
+into **roughly equal thirds**: ~⅓ on AG-UI (B1), ~⅓ on A2UI (B2), ~⅓ on MCP
+(B3). Write the assignment on the board at the handoff so nobody drifts. Project
+that track's card (`B1`/`B2`/`B3`) for the assigned tables.
 
 **Phase 2 — regroup + teach-back (15 min).** Re-mix so **each new group has
 one expert per protocol.** Easiest way to do it live:
@@ -147,11 +172,13 @@ experts into one cluster; coverage matters more than symmetry.
 
 ---
 
-## 5. Per-exercise stuck-points + hints (Round B)
+## 5. Per-exercise stuck-points + hints (Round B advanced reconstruct)
 
-Each is one observable edit. Success checks below are from
-[workshop-fork.md](workshop-fork.md). First line of support is always **the
-helper agent** and **[protocol-gotchas.md](protocol-gotchas.md)** — point,
+Most groups stay in the **dev playground** (homespun vs protocol, key-free) and
+teach that back. These notes are for the **advanced tier** — groups that go on
+to restore the blanked code. Each is one observable edit. Success checks below
+are from [workshop-fork.md](workshop-fork.md). First line of support is always
+**the helper agent** and **[protocol-gotchas.md](protocol-gotchas.md)** — point,
 don't solve. Reveal of last resort: `git diff workshop-start main -- <file>`.
 
 ### B1 · AG-UI — restore the event stream
@@ -232,8 +259,8 @@ Everything already runs in groups, so scale is mostly a formation problem.
 - **Mix skill levels** per table so AI-coding-confident and not-so-confident
   sit together. A table that's all beginners stalls in Round B; all experts
   finish Round C in five minutes and get bored.
-- **For the jigsaw, plan the thirds during the break** (§4) — count tables,
-  divide by 3, write it on the board before Round B starts.
+- **For the jigsaw, plan the thirds during Round A** (§4) — count tables,
+  divide by 3, and write it on the board at the Round-B handoff, before coffee.
 - **8 groups is the design point** for the helper-agent rating (§8). More than
   that, lengthen show-and-tell or batch the readouts.
 
@@ -271,11 +298,14 @@ You will run behind. Decide the cuts *before* you need them, and protect the
 parts that make the day worth attending.
 
 **Protect, in order:**
-1. **Round C** (prototype your own) — the payoff. Cut this and people leave
-   with nothing of their own.
-2. **Round B** (reconstruct + jigsaw) — the core learning.
-3. The break — short it to 7 min if you must, but don't skip it (and re-pause
-   the clock correctly, §2).
+1. **Round C** (plan your own) — the payoff. Cut this and people leave with
+   nothing of their own.
+2. **Round B** (build + teach-back jigsaw) — the core learning.
+
+The break is **not a lever**: it's the conference's fixed 30-min slot and Block 2
+restarts at **11:45 on the wall** whether you're ready or not. So each block has
+a **hard 75-min ceiling** you can't borrow against — if Block 1 runs long, cut
+*inside* Block 1 (below); you can't push work past the coffee break.
 
 **Compress / cut, in order (do these first):**
 1. **Showcase** (AIPLA + GDE at the end) — drop to a single slide or skip.
@@ -286,15 +316,17 @@ parts that make the day worth attending.
    from the helper agent, just not stage time.
 
 **Reading the day off the delta pill:** orange and climbing through the tour =
-start trimming contrasts *now*, not at the break. If you hit the break already
-behind, the break is where you decide whether the Showcase survives. Round B
-and Round C are not on the table.
+start trimming contrasts *now* — you can't claw it back over coffee, since Block
+2 starts fresh at 11:45 with the same 75-min ceiling. If you reach the break
+behind, the handoff still has to happen before you pause; then decide which
+Block-2 cut (Showcase first) you'll take. Round B and Round C are not on the
+table.
 
 ---
 
 ## Companion docs
 
-- [agenda2.md](agenda2.md) — running order + pedagogy (the *what*).
+- [agenda.md](agenda.md) — running order + pedagogy (the *what*).
 - [slides/outline.md](slides/outline.md) — deck order + minute budgets (the
   presenter's timer source of truth).
 - [workshop-fork.md](workshop-fork.md) — the pinned fork, the three blanked
