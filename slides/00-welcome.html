@@ -254,7 +254,7 @@ body{
         el.style.opacity='0'; el.style.transform='';
       });
     });
-    if(dir>0) slides[current].classList.add('exit-left');
+    if(dir>0 && slides[current]) slides[current].classList.add('exit-left');
     slides[n].classList.add('active');
     current = n;
     slideNum.textContent = current + 1;
