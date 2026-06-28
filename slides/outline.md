@@ -19,7 +19,12 @@ closes Block 1; **build + teach-back** (`B1`–`B3`) opens Block 2.
 | 1 | [`00-welcome.html`](00-welcome.html) | Intro — framing | 5 | 🟡 draft |
 | 2 | [`about-mark/about-mark.html`](about-mark/about-mark.html) | Intro — standard | 2 | ✅ reused |
 | 3 | [`01-chat-wall.html`](01-chat-wall.html) | Intro — the problem + brain break | 8 | 🟡 draft |
-| 4 | [`02-three-protocols.html`](02-three-protocols.html) | Guided tour (instructor + brain breaks) | 25 | 🟡 draft |
+| 4 | [`02-three-protocols.html`](02-three-protocols.html) | Guided tour — framing + the stack | 4 | 🟡 draft |
+| | ↳ [`wire-overview.html`](wire-overview.html) | Tour · animated **handoff map** (5 protocols, 3 we build) | 5 | 🟢 built |
+| | ↳ [`wire-agui.html`](wire-agui.html) | Tour · **AG-UI** on the wire + the 33-event catalog | 5 | 🟢 built |
+| | ↳ [`wire-a2ui.html`](wire-a2ui.html) | Tour · **A2UI** round-trip + component catalog | 4 | 🟢 built |
+| | ↳ [`wire-mcp.html`](wire-mcp.html) | Tour · **MCP Apps** by-ref + sandbox + bridge | 4 | 🟢 built |
+| | ↳ [`wire-sources.html`](wire-sources.html) | Tour · **validated-sources** reference sheet | 3 | 🟢 built |
 | 5 | [`A1-explore-a-skill.html`](A1-explore-a-skill.html) | **Round A** — group explore (one live demo) | 20 | 🟢 activity |
 | 6 | [`B0-how-it-works.html`](B0-how-it-works.html) | **Round B handoff** — assign protocol + read exercise (pre-break) | 10 | 🟢 activity |
 | — | ☕ **hard break** — room empties; **pause the clock** | 11:15–11:45 | 30 | — |
