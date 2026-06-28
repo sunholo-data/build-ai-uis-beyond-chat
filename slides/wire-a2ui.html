@@ -1,0 +1,224 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>A2UI — on the wire</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;700&family=Montserrat:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+<style>
+*,*::before,*::after{margin:0;padding:0;box-sizing:border-box}
+:root{
+  --bg:#0f0f1a;--surface:#1a1a2e;--surface-hi:#222240;
+  --orange:#e73c17;--orange-dim:rgba(231,60,23,.35);--orange-glow:rgba(231,60,23,.6);
+  --green:#22c55e;--green-dim:rgba(34,197,94,.35);
+  --blue:#5b8def;--blue-dim:rgba(91,141,239,.3);
+  --ghost:rgba(255,255,255,.12);--text:#e2e8f0;--text-dim:#718096;
+  --code-bg:rgba(255,255,255,.03);--code-border:rgba(255,255,255,.07);
+  --bar-bg:rgba(15,15,26,.8);--bar-border:rgba(255,255,255,.06);
+  --mono:'JetBrains Mono',monospace;--sans:'Montserrat',sans-serif;
+}
+[data-theme="light"]{
+  --bg:#f5f5f0;--surface:#ffffff;--surface-hi:#f0f0ea;
+  --orange:#d4300f;--orange-dim:rgba(212,48,15,.2);--orange-glow:rgba(212,48,15,.4);
+  --green:#16a34a;--green-dim:rgba(22,163,74,.3);
+  --blue:#2563eb;--blue-dim:rgba(37,99,235,.25);
+  --ghost:rgba(0,0,0,.1);--text:#1a202c;--text-dim:#4a5568;
+  --code-bg:rgba(0,0,0,.03);--code-border:rgba(0,0,0,.09);
+  --bar-bg:rgba(255,255,255,.85);--bar-border:rgba(0,0,0,.08);
+}
+html,body{height:100%;overflow:hidden;background:var(--bg);color:var(--text);font-family:var(--sans)}
+body{background-image:radial-gradient(circle at 50% 40%, rgba(231,60,23,.04) 0%, transparent 70%)}
+#app{display:flex;flex-direction:column;height:100vh}
+.top-bar{display:flex;align-items:center;justify-content:space-between;padding:10px 18px;border-bottom:1px solid var(--bar-border);background:var(--bar-bg);backdrop-filter:blur(8px);flex-shrink:0;z-index:10}
+.deck-title{font-size:13px;font-weight:600;color:var(--text-dim)}.deck-title .accent{color:var(--orange)}
+.theme-toggle{width:32px;height:32px;border-radius:50%;border:1px solid var(--ghost);background:transparent;color:var(--text-dim);cursor:pointer;font-size:14px;transition:all .25s;display:flex;align-items:center;justify-content:center}
+.theme-toggle:hover{border-color:var(--orange);color:var(--orange)}
+.slides-viewport{flex:1;min-height:0;display:flex;align-items:center;justify-content:center;overflow:hidden;container-type:size}
+.slides-stage{position:relative;width:min(100cqi,100cqb*16/9);height:min(100cqb,100cqi*9/16);container-type:size}
+.slide{position:absolute;inset:0;display:flex;flex-direction:column;padding:4.5cqb 6cqi 3cqb;opacity:0;visibility:hidden;transition:opacity .35s ease}
+.slide.active{opacity:1;visibility:visible}
+.wire-head{flex-shrink:0;margin-bottom:2.2cqb}
+.eyebrow{font-family:var(--mono);font-size:clamp(10px,1.4cqi,16px);text-transform:uppercase;letter-spacing:.24em;color:var(--orange)}
+.wtitle{font-size:clamp(22px,3.6cqi,46px);font-weight:800;letter-spacing:-.02em;line-height:1.05;margin-top:.6cqb}.wtitle .accent{color:var(--orange)}
+.diagram{flex:1;min-height:0;display:grid;grid-template-rows:1fr auto;gap:2cqb}
+.lane{display:grid;grid-template-columns:15% 1fr 34%;align-items:center;gap:1.5cqi;min-height:0}
+.node{background:var(--surface);border:1px solid var(--ghost);border-radius:12px;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:.6cqb;padding:2cqb 1cqi;height:100%;text-align:center}
+.node.agent{border-color:var(--orange-dim)}.node.agent i{font-size:clamp(20px,3.4cqi,40px);color:var(--orange)}
+.node-label{font-weight:700;font-size:clamp(12px,1.7cqi,22px)}.node-sub{font-family:var(--mono);font-size:clamp(8px,1.1cqi,13px);color:var(--text-dim)}
+.wire{position:relative;height:100%;display:flex;flex-direction:column;justify-content:center;min-width:0}
+.rail{position:relative;height:3px;border-radius:3px;background:repeating-linear-gradient(90deg,var(--ghost) 0 8px,transparent 8px 16px);background-size:16px 100%}
+.rail.flow{animation:railFlow .7s linear infinite}@keyframes railFlow{to{background-position:16px 0}}
+.dir-hint{font-family:var(--mono);font-size:clamp(8px,1.05cqi,13px);color:var(--text-dim);text-align:center;margin-top:1.2cqb;letter-spacing:.08em}
+.packet{position:absolute;top:50%;left:0;transform:translateY(-50%);font-family:var(--mono);font-weight:700;font-size:clamp(9px,1.3cqi,16px);padding:.7cqb 1.3cqi;border-radius:7px;background:var(--orange);color:#fff;white-space:nowrap;box-shadow:0 0 0 1px var(--orange),0 6px 22px var(--orange-glow);opacity:0;max-width:82%;overflow:hidden;text-overflow:ellipsis}
+.packet.req{background:var(--blue);box-shadow:0 0 0 1px var(--blue),0 6px 22px var(--blue-dim)}
+.packet.show{opacity:1}
+.packet.fly-down{animation:flyDown .62s cubic-bezier(.4,0,.2,1) both}.packet.fly-up{animation:flyUp .62s cubic-bezier(.4,0,.2,1) both}
+@keyframes flyDown{0%{left:0;opacity:0}18%{opacity:1}100%{left:calc(100% - 1px);transform:translate(-100%,-50%);opacity:1}}
+@keyframes flyUp{0%{left:calc(100% - 1px);transform:translate(-100%,-50%);opacity:0}18%{opacity:1}100%{left:0;transform:translateY(-50%);opacity:1}}
+.screen{background:var(--bg);border:1px solid var(--ghost);border-radius:12px;height:100%;display:flex;flex-direction:column;overflow:hidden}
+.screen-bar{display:flex;align-items:center;gap:.7cqi;padding:1cqb 1.4cqi;border-bottom:1px solid var(--ghost);background:var(--surface)}
+.screen-bar .dot{width:7px;height:7px;border-radius:50%;background:var(--ghost)}.screen-bar .url{margin-left:.6cqi;font-family:var(--mono);font-size:clamp(8px,1cqi,12px);color:var(--text-dim)}
+.ws{flex:1;min-height:0;padding:1.6cqb 1.6cqi;display:flex;flex-direction:column;justify-content:center;overflow:hidden}
+.ws-empty{margin:auto;font-family:var(--mono);font-size:clamp(9px,1.2cqi,15px);color:var(--text-dim);opacity:.6}
+.form{display:none;flex-direction:column;gap:.9cqb;background:var(--surface);border:1px solid var(--orange-dim);border-radius:10px;padding:1.6cqb 1.7cqi}
+.form.on{display:flex;animation:popIn .4s ease both}
+@keyframes popIn{from{opacity:0;transform:translateY(10px) scale(.98)}to{opacity:1;transform:none}}
+.form-title{font-weight:700;font-size:clamp(11px,1.5cqi,19px);margin-bottom:.4cqb}
+.form label{font-family:var(--mono);font-size:clamp(8px,1cqi,13px);color:var(--text-dim);text-transform:uppercase;letter-spacing:.08em}
+.field{height:clamp(18px,3cqb,30px);border:1px solid var(--ghost);border-radius:6px;background:var(--bg);display:flex;align-items:center;padding:0 1cqi;font-size:clamp(9px,1.3cqi,16px);color:var(--text)}
+.field.hot{border-color:var(--orange);box-shadow:0 0 0 3px var(--orange-dim)}
+.form-send{margin-top:.6cqb;align-self:flex-start;background:var(--orange);color:#fff;border:none;border-radius:7px;padding:.7cqb 1.8cqi;font-weight:700;font-family:var(--sans);font-size:clamp(9px,1.3cqi,16px)}
+.form-ok{display:none;margin-top:1cqb;font-family:var(--mono);font-size:clamp(8px,1.1cqi,14px);color:var(--green)}
+.form-ok.on{display:block;animation:popIn .35s ease both}
+.readout{background:var(--code-bg);border:1px solid var(--code-border);border-radius:11px;padding:1.3cqb 1.6cqi;min-height:0;overflow:hidden;display:flex;flex-direction:column}
+.readout-head{display:flex;align-items:center;gap:.8cqi;font-family:var(--mono);font-size:clamp(8px,1.05cqi,13px);text-transform:uppercase;letter-spacing:.16em;color:var(--text-dim);margin-bottom:.9cqb}
+.readout-head::before{content:"";width:7px;height:7px;border-radius:50%;background:var(--orange);box-shadow:0 0 8px var(--orange)}
+.log{list-style:none;font-family:var(--mono);font-size:clamp(9px,1.3cqi,16px);line-height:1.7;display:flex;flex-direction:column;gap:.1cqb}
+.log li{display:flex;gap:1.2cqi;opacity:.5;color:var(--text-dim)}.log li .ev{color:var(--text);min-width:17ch}.log li.cur{opacity:1}.log li.cur .ev{color:var(--orange)}
+.cap{flex-shrink:0;display:grid;grid-template-columns:auto 1fr auto auto;align-items:center;gap:1.4cqi;margin-top:2cqb;padding-top:1.6cqb;border-top:1px solid var(--bar-border)}
+.cap-text{font-size:clamp(11px,1.55cqi,20px);font-weight:500;min-height:2.6em;display:flex;align-items:center}.cap-text b{color:var(--orange);font-weight:700}
+.steps{display:flex;gap:.8cqi}.sdot{width:8px;height:8px;border-radius:50%;background:var(--ghost);transition:all .25s}.sdot.on{background:var(--orange);transform:scale(1.25)}.sdot.past{background:var(--orange-dim)}
+.step-btn{width:clamp(30px,3.6cqi,44px);height:clamp(30px,3.6cqi,44px);border-radius:9px;border:1px solid var(--ghost);background:var(--surface);color:var(--text);font-size:clamp(13px,1.7cqi,20px);cursor:pointer;display:flex;align-items:center;justify-content:center;transition:all .2s}
+.step-btn:hover:not(:disabled){border-color:var(--orange);color:var(--orange)}.step-btn:focus-visible{outline:2px solid var(--orange);outline-offset:2px}.step-btn:disabled{opacity:.3;cursor:default}
+.counter{font-family:var(--mono);font-size:clamp(9px,1.15cqi,14px);color:var(--text-dim)}
+.cat-grid{flex:1;min-height:0;display:grid;grid-template-columns:repeat(3,1fr);gap:1.6cqi}
+.cat{background:var(--surface);border:1px solid var(--ghost);border-radius:11px;padding:1.6cqb 1.7cqi;display:flex;flex-direction:column;gap:1cqb;opacity:0}
+.slide.active .cat{animation:fadeSlideUp .5s ease both}
+.slide.active .cat:nth-child(1){animation-delay:.05s}.slide.active .cat:nth-child(2){animation-delay:.15s}.slide.active .cat:nth-child(3){animation-delay:.25s}
+@keyframes fadeSlideUp{from{opacity:0;transform:translateY(16px)}to{opacity:1;transform:none}}
+.cat-head{display:flex;align-items:baseline;justify-content:space-between;gap:1cqi}.cat-name{font-weight:700;font-size:clamp(12px,1.7cqi,21px)}.cat-count{font-family:var(--mono);font-size:clamp(9px,1.2cqi,15px);color:var(--text-dim)}
+.cat-events{display:flex;flex-wrap:wrap;gap:.7cqi}
+.chip{font-family:var(--mono);font-size:clamp(8px,1.15cqi,14px);padding:.45cqb 1cqi;border-radius:6px;border:1px solid var(--code-border);background:var(--code-bg);color:var(--text-dim)}
+.chip.used{border-color:var(--orange-dim);background:var(--orange-dim);color:var(--text)}
+.cat-foot{flex-shrink:0;display:flex;align-items:center;gap:1.2cqi;margin-top:2cqb;padding-top:1.6cqb;border-top:1px solid var(--bar-border);font-size:clamp(10px,1.4cqi,17px);color:var(--text-dim)}.cat-foot b{color:var(--orange)}
+.cat-foot .legend{font-family:var(--mono);font-size:clamp(8px,1.1cqi,13px);margin-left:auto;display:flex;align-items:center;gap:.6cqi}.cat-foot .swatch{width:11px;height:11px;border-radius:3px;border:1px solid var(--orange-dim);background:var(--orange-dim)}
+@media (prefers-reduced-motion: reduce){.rail.flow,.packet.fly-down,.packet.fly-up,.form.on,.form-ok.on,.slide.active .cat{animation:none}.packet.show{opacity:1}.cat{opacity:1}}
+</style>
+</head>
+<body>
+<div id="app">
+  <div class="top-bar"><div class="deck-title">A2UI <span class="accent">· on the wire</span></div>
+    <button class="theme-toggle" id="themeToggle" title="Toggle theme"><i class="fas fa-sun"></i></button></div>
+  <div class="slides-viewport"><div class="slides-stage">
+
+    <!-- Slide 0 — the round trip -->
+    <section class="slide active" data-viz="wire" data-steps="6">
+      <div class="wire-head"><div class="eyebrow">A2UI · agent ⇄ ui</div>
+        <h2 class="wtitle">The UI is <span class="accent">JSON the agent emits.</span></h2></div>
+      <div class="diagram">
+        <div class="lane">
+          <div class="node agent"><i class="fa-solid fa-server"></i><span class="node-label">Agent</span><span class="node-sub">emits a tree</span></div>
+          <div class="wire" id="wire"><div class="rail" id="rail"></div><div class="packet" id="packet"></div><div class="dir-hint">A2UI · component tree as data</div></div>
+          <div class="screen">
+            <div class="screen-bar"><span class="dot"></span><span class="dot"></span><span class="dot"></span><span class="url">/workspace</span></div>
+            <div class="ws">
+              <div class="ws-empty" id="wsEmpty">workspace · empty</div>
+              <div class="form" id="form">
+                <div class="form-title">Contact form</div>
+                <label>Name</label><div class="field" id="fName"></div>
+                <label>Email</label><div class="field" id="fEmail"></div>
+                <button class="form-send">Send</button>
+                <div class="form-ok" id="formOk">&check; The agent read “Mark” — no re-render</div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="readout"><div class="readout-head">a2ui messages</div><ol class="log" id="log"></ol></div>
+      </div>
+      <div class="cap">
+        <button class="step-btn" id="prev" aria-label="Previous">&larr;</button>
+        <p class="cap-text" id="capText"></p><span class="counter" id="counter"></span>
+        <div class="steps" id="dots"></div><button class="step-btn" id="next" aria-label="Next">&rarr;</button>
+      </div>
+    </section>
+
+    <!-- Slide 1 — the catalog -->
+    <section class="slide">
+      <div class="wire-head"><div class="eyebrow">A2UI · the vocabulary</div>
+        <h2 class="wtitle">One renderer draws <span class="accent">any tree</span></h2></div>
+      <div class="cat-grid" id="catGrid"></div>
+      <div class="cat-foot">4 server messages: <b>createSurface</b> · <b>updateComponents</b> · <b>updateDataModel</b> · <b>deleteSurface</b> (+ <b>actionResponse</b>). Basic catalog · installed <span style="font-family:var(--mono)">@a2ui/web_core 0.9.1-alpha</span>.
+        <span class="legend"><span class="swatch"></span> used in the trace</span></div>
+    </section>
+
+  </div></div>
+</div>
+<script>
+(function(){
+  const STEPS=[
+    {label:'POST /stream', dir:'up', req:true, log:{ev:'POST /stream', arrow:'"make me a contact form"'},
+      cap:'You ask for UI in plain language — no component names, no layout.'},
+    {label:'updateComponents', dir:'down', log:{ev:'A2UI updateComponents', arrow:'[TextField, TextField, Button]'},
+      cap:'The agent emits a <b>JSON component tree</b> — declarative UI as data, not React code.'},
+    {render:true, log:{ev:'render', arrow:'one renderer · any tree'},
+      cap:'<b>One renderer</b> turns the tree into a real form. The skill wrote zero React.'},
+    {fill:true, log:{ev:'surface state', arrow:'name ← "Mark"'},
+      cap:'You fill it in. That value lives in the <b>surface</b>, on the client — the agent hasn\'t seen it yet.'},
+    {label:'a2ui_surface_state', dir:'up', req:true, highlight:true, log:{ev:'forwardedProps', arrow:'a2ui_surface_state'},
+      cap:'On the next turn the surface state <b>rides back up</b> — forwardedProps.a2ui_surface_state.'},
+    {answer:true, dir:'down', label:'reads surface', log:{ev:'reads context', arrow:'name = "Mark"'},
+      cap:'The agent answers from what\'s on screen — <b>zero tool calls, zero re-render</b>. The UI is bidirectional, not one-shot.'},
+  ];
+  const CATS=[
+    {name:'Layout', events:['Row','Column','List','Card','Tabs','Divider','Modal']},
+    {name:'Inputs', events:['TextField','CheckBox','ChoicePicker','Slider','DateTimeInput','Button']},
+    {name:'Display', events:['Text','Image','Icon','Video','AudioPlayer']},
+  ];
+  const USED=new Set(['TextField','Button','Text']);
+
+  const catGrid=document.getElementById('catGrid');
+  CATS.forEach(c=>{ const card=document.createElement('div'); card.className='cat';
+    card.innerHTML='<div class="cat-head"><span class="cat-name">'+c.name+'</span><span class="cat-count">'+c.events.length+'</span></div><div class="cat-events">'+
+      c.events.map(e=>'<span class="chip'+(USED.has(e)?' used':'')+'">'+e+'</span>').join('')+'</div>'; catGrid.appendChild(card); });
+
+  const wire=document.getElementById('wire'),rail=document.getElementById('rail'),packet=document.getElementById('packet'),log=document.getElementById('log'),
+        wsEmpty=document.getElementById('wsEmpty'),form=document.getElementById('form'),fName=document.getElementById('fName'),formOk=document.getElementById('formOk'),
+        capText=document.getElementById('capText'),counter=document.getElementById('counter'),dots=document.getElementById('dots');
+  STEPS.forEach(()=>{ const d=document.createElement('span'); d.className='sdot'; dots.appendChild(d); });
+
+  function renderWire(slideEl, step, animate){
+    const s=STEPS[step];
+    if(s.label){ packet.textContent=s.label; packet.classList.toggle('req',!!s.req);
+      if(animate){ packet.classList.remove('show','fly-down','fly-up'); void packet.offsetWidth; packet.classList.add('show', s.dir==='up'?'fly-up':'fly-down'); }
+      else { packet.classList.remove('fly-down','fly-up'); packet.classList.add('show'); }
+    } else { packet.classList.remove('show','fly-down','fly-up'); }
+    rail.classList.add('flow');
+    log.innerHTML='';
+    for(let i=0;i<=step;i++){ const li=document.createElement('li'); if(i===step) li.classList.add('cur');
+      li.innerHTML='<span class="ev">'+STEPS[i].log.ev+'</span><span>'+STEPS[i].log.arrow+'</span>'; log.appendChild(li); }
+    let mounted=false,filled=false,answered=false;
+    for(let i=0;i<=step;i++){ const e=STEPS[i]; if(e.render)mounted=true; if(e.fill)filled=true; if(e.answer)answered=true; }
+    wsEmpty.style.display=mounted?'none':'block'; form.classList.toggle('on',mounted);
+    fName.textContent=filled?'Mark':''; fName.classList.toggle('hot', STEPS[step].highlight===true);
+    formOk.classList.toggle('on',answered);
+    capText.innerHTML=s.cap; counter.textContent=(step+1)+' / '+STEPS.length;
+    [...dots.children].forEach((d,i)=>{ d.classList.toggle('on',i===step); d.classList.toggle('past',i<step); });
+    document.getElementById('prev').disabled=(step===0 && curSlide===0);
+  }
+  const RENDERERS={wire:renderWire};
+
+  const slidesEl=[...document.querySelectorAll('.slide')];const TOTAL=slidesEl.length;let curSlide=0,step=0;
+  const hasSteps=i=>!!slidesEl[i].dataset.steps;const maxStep=i=>hasSteps(i)?(+slidesEl[i].dataset.steps-1):0;
+  function renderStep(a){const v=slidesEl[curSlide].dataset.viz;if(v&&RENDERERS[v])RENDERERS[v](slidesEl[curSlide],step,a);}
+  function showSlide(i,atLast){slidesEl.forEach(s=>s.classList.remove('active'));curSlide=i;step=(atLast&&hasSteps(i))?maxStep(i):0;slidesEl[i].classList.add('active');renderStep(false);}
+  function advance(){if(hasSteps(curSlide)&&step<maxStep(curSlide)){step++;renderStep(true);}else if(curSlide<TOTAL-1){showSlide(curSlide+1,false);}}
+  function retreat(){if(step>0){step--;renderStep(true);}else if(curSlide>0){showSlide(curSlide-1,true);}}
+  document.getElementById('prev').addEventListener('click',retreat);document.getElementById('next').addEventListener('click',advance);
+  document.addEventListener('keydown',e=>{
+    if(e.key==='ArrowRight'||e.key===' '){e.preventDefault();advance();}
+    else if(e.key==='ArrowLeft'){e.preventDefault();retreat();}
+    else if(e.key==='ArrowDown'){e.preventDefault();window.parent.postMessage({type:'deck-nav',dir:'next'},'*');}
+    else if(e.key==='ArrowUp'){e.preventDefault();window.parent.postMessage({type:'deck-nav',dir:'prev'},'*');}
+  });
+  window.addEventListener('message',e=>{if(!e.data||typeof e.data!=='object')return;if(e.data.action==='go-first')showSlide(0,false);if(e.data.action==='go-last')showSlide(TOTAL-1,true);});
+  const themeToggle=document.getElementById('themeToggle');
+  function setTheme(t){document.documentElement.setAttribute('data-theme',t);themeToggle.innerHTML=t==='light'?'<i class="fas fa-moon"></i>':'<i class="fas fa-sun"></i>';}
+  themeToggle.addEventListener('click',()=>setTheme(document.documentElement.getAttribute('data-theme')==='light'?'dark':'light'));
+  showSlide(0,false);
+})();
+</script>
+</body>
+</html>

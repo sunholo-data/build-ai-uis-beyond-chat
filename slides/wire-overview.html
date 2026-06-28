@@ -1,0 +1,239 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>The protocol stack — how they fit</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;700&family=Montserrat:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+<style>
+*,*::before,*::after{margin:0;padding:0;box-sizing:border-box}
+:root{
+  --bg:#0f0f1a;--surface:#1a1a2e;--surface-hi:#222240;
+  --orange:#e73c17;--orange-dim:rgba(231,60,23,.35);--orange-glow:rgba(231,60,23,.6);
+  --green:#22c55e;--green-dim:rgba(34,197,94,.35);--blue:#5b8def;--blue-dim:rgba(91,141,239,.3);
+  --ghost:rgba(255,255,255,.12);--text:#e2e8f0;--text-dim:#718096;
+  --code-bg:rgba(255,255,255,.03);--code-border:rgba(255,255,255,.07);
+  --bar-bg:rgba(15,15,26,.8);--bar-border:rgba(255,255,255,.06);
+  --mono:'JetBrains Mono',monospace;--sans:'Montserrat',sans-serif;
+}
+[data-theme="light"]{
+  --bg:#f5f5f0;--surface:#ffffff;--surface-hi:#f0f0ea;
+  --orange:#d4300f;--orange-dim:rgba(212,48,15,.2);--orange-glow:rgba(212,48,15,.4);
+  --green:#16a34a;--green-dim:rgba(22,163,74,.3);--blue:#2563eb;--blue-dim:rgba(37,99,235,.25);
+  --ghost:rgba(0,0,0,.1);--text:#1a202c;--text-dim:#4a5568;
+  --code-bg:rgba(0,0,0,.03);--code-border:rgba(0,0,0,.09);
+  --bar-bg:rgba(255,255,255,.85);--bar-border:rgba(0,0,0,.08);
+}
+html,body{height:100%;overflow:hidden;background:var(--bg);color:var(--text);font-family:var(--sans)}
+body{background-image:radial-gradient(circle at 50% 45%, rgba(231,60,23,.05) 0%, transparent 70%)}
+#app{display:flex;flex-direction:column;height:100vh}
+.top-bar{display:flex;align-items:center;justify-content:space-between;padding:10px 18px;border-bottom:1px solid var(--bar-border);background:var(--bar-bg);backdrop-filter:blur(8px);flex-shrink:0;z-index:10}
+.deck-title{font-size:13px;font-weight:600;color:var(--text-dim)}.deck-title .accent{color:var(--orange)}
+.theme-toggle{width:32px;height:32px;border-radius:50%;border:1px solid var(--ghost);background:transparent;color:var(--text-dim);cursor:pointer;font-size:14px;transition:all .25s;display:flex;align-items:center;justify-content:center}
+.theme-toggle:hover{border-color:var(--orange);color:var(--orange)}
+.slides-viewport{flex:1;min-height:0;display:flex;align-items:center;justify-content:center;overflow:hidden;container-type:size}
+.slides-stage{position:relative;width:min(100cqi,100cqb*16/9);height:min(100cqb,100cqi*9/16);container-type:size}
+.slide{position:absolute;inset:0;display:flex;flex-direction:column;padding:4.2cqb 6cqi 3cqb;opacity:0;visibility:hidden;transition:opacity .35s ease}
+.slide.active{opacity:1;visibility:visible}
+.wire-head{flex-shrink:0;margin-bottom:1.4cqb}
+.eyebrow{font-family:var(--mono);font-size:clamp(10px,1.4cqi,16px);text-transform:uppercase;letter-spacing:.24em;color:var(--orange)}
+.wtitle{font-size:clamp(21px,3.4cqi,44px);font-weight:800;letter-spacing:-.02em;line-height:1.05;margin-top:.5cqb}.wtitle .accent{color:var(--orange)}
+
+/* ── the map ── */
+.mapwrap{flex:1;min-height:0;display:grid;grid-template-columns:1fr 28%;gap:3cqi;align-items:center}
+.map{position:relative;display:flex;flex-direction:column;align-items:center;height:100%;justify-content:center;gap:.2cqb}
+.node{position:relative;display:flex;align-items:center;gap:1.1cqi;background:var(--surface);border:1px solid var(--ghost);border-radius:11px;padding:1.4cqb 2cqi;transition:all .3s;z-index:2}
+.node i{font-size:clamp(15px,2.3cqi,28px);color:var(--text-dim);transition:color .3s}
+.node .nlab{font-weight:700;font-size:clamp(11px,1.7cqi,21px)}
+.node .nsub{font-family:var(--mono);font-size:clamp(7px,1.05cqi,13px);color:var(--text-dim)}
+.node.lit{border-color:var(--orange);box-shadow:0 0 0 3px var(--orange-dim),0 8px 26px var(--orange-glow)}
+.node.lit i{color:var(--orange)}
+.node.peer{padding:1.2cqb 1.6cqi}
+
+/* vertical channel: wire centred on the spine, label floated left */
+.chan.v{position:relative;width:100%;display:flex;justify-content:center;padding:.15cqb 0}
+.cwire{position:relative;background:var(--ghost);border-radius:3px;transition:all .3s}
+.cwire.v{width:3px;height:6cqb}
+.cwire .dot{position:absolute;left:50%;top:0;width:10px;height:10px;border-radius:50%;background:var(--orange);box-shadow:0 0 12px var(--orange-glow);opacity:0;transform:translateX(-50%)}
+.clabel{position:absolute;right:calc(50% + 1.8cqi);top:50%;transform:translateY(-50%);display:flex;flex-direction:column;align-items:flex-end;text-align:right;line-height:1.2;white-space:nowrap}
+.cname{font-family:var(--mono);font-weight:700;font-size:clamp(9px,1.4cqi,17px);color:var(--text-dim);letter-spacing:.04em}
+.csub{font-size:clamp(7px,1.02cqi,13px);color:var(--text-dim)}
+.csub b{color:var(--orange);font-weight:700}
+/* build vs backstage */
+.chan.build .cwire{background:var(--orange-dim)}
+.chan.build .cname{color:var(--orange)}
+/* active pulse */
+.chan.on .cwire{background:var(--orange);box-shadow:0 0 14px var(--orange-glow)}
+.chan.on .cname{color:var(--orange)}
+.chan.on .cwire.v .dot{animation:dotDown .85s ease both}
+@keyframes dotDown{0%{top:0;opacity:0}15%{opacity:1}100%{top:100%;opacity:1}}
+/* badge highlight (A2UI / MCP Apps payloads) */
+.csub.hot b{text-shadow:0 0 12px var(--orange-glow)}
+
+/* agent row — Agent stays centred (grid), A2A branch lives in the right column */
+.arow{display:grid;grid-template-columns:1fr auto 1fr;align-items:center;width:100%}
+.chan.h{position:relative;display:flex;align-items:center;gap:1.4cqi;padding-left:1.8cqi}
+.cwire.h{width:5cqi;height:3px}
+.cwire.h .dot{top:50%;left:0;transform:translate(-50%,-50%)}
+.chan.h.on .cwire.h .dot{animation:dotRight .85s ease both}
+@keyframes dotRight{0%{left:0;opacity:0}15%{opacity:1}100%{left:100%;opacity:1}}
+.a2a-lab{position:absolute;left:1.8cqi;top:-2.5cqb;font-family:var(--mono);font-weight:700;font-size:clamp(8px,1.2cqi,15px);color:var(--text-dim);letter-spacing:.04em}
+.node.dim,.chan.dim .cname,.chan.dim .cwire,.chan.dim .a2a-lab{opacity:.4}
+
+/* right rail: live caption + legend */
+.rail{display:flex;flex-direction:column;height:100%;justify-content:center;gap:1.6cqb}
+.rail .cap-text{font-size:clamp(12px,1.7cqi,22px);font-weight:600;line-height:1.4;min-height:7em}
+.rail .cap-text b{color:var(--orange);font-weight:800}
+.legend{display:flex;flex-direction:column;gap:.8cqb;padding-top:1.4cqb;border-top:1px solid var(--bar-border)}
+.leg{display:flex;align-items:center;gap:1cqi;font-size:clamp(9px,1.25cqi,15px);color:var(--text-dim)}
+.leg .sw{width:13px;height:13px;border-radius:4px;flex-shrink:0}
+.leg .sw.build{background:var(--orange-dim);border:1px solid var(--orange)}
+.leg .sw.back{background:var(--ghost);border:1px solid var(--ghost)}
+.leg b{color:var(--text)}
+
+/* controls */
+.cap{flex-shrink:0;display:grid;grid-template-columns:auto 1fr auto auto;align-items:center;gap:1.4cqi;margin-top:1.4cqb;padding-top:1.3cqb;border-top:1px solid var(--bar-border)}
+.hintp{font-family:var(--mono);font-size:clamp(8px,1.05cqi,13px);color:var(--text-dim)}
+.steps{display:flex;gap:.8cqi}.sdot{width:8px;height:8px;border-radius:50%;background:var(--ghost);transition:all .25s}.sdot.on{background:var(--orange);transform:scale(1.25)}.sdot.past{background:var(--orange-dim)}
+.counter{font-family:var(--mono);font-size:clamp(9px,1.15cqi,14px);color:var(--text-dim)}
+.step-btn{width:clamp(30px,3.6cqi,44px);height:clamp(30px,3.6cqi,44px);border-radius:9px;border:1px solid var(--ghost);background:var(--surface);color:var(--text);font-size:clamp(13px,1.7cqi,20px);cursor:pointer;display:flex;align-items:center;justify-content:center;transition:all .2s}
+.step-btn:hover:not(:disabled){border-color:var(--orange);color:var(--orange)}.step-btn:focus-visible{outline:2px solid var(--orange);outline-offset:2px}.step-btn:disabled{opacity:.3;cursor:default}
+
+/* slide 2 — two worlds */
+.worlds{flex:1;min-height:0;display:grid;grid-template-columns:1fr 1fr;gap:2cqi}
+.world{background:var(--surface);border:1px solid var(--ghost);border-radius:12px;padding:1.9cqb 1.9cqi;display:flex;flex-direction:column;gap:1.2cqb;opacity:0}
+.slide.active .world{animation:rise .5s ease both}.slide.active .world:nth-child(2){animation-delay:.12s}
+@keyframes rise{from{opacity:0;transform:translateY(16px)}to{opacity:1;transform:none}}
+.world.build{border-top:2px solid var(--orange)}
+.world h3{font-size:clamp(13px,1.8cqi,23px);font-weight:800;display:flex;align-items:center;gap:.9cqi}
+.world h3 .tag{font-family:var(--mono);font-size:clamp(7px,1cqi,12px);font-weight:700;color:var(--text-dim);border:1px solid var(--ghost);border-radius:5px;padding:.2cqb .7cqi;margin-left:auto}
+.world.build h3 .tag{color:var(--orange);border-color:var(--orange-dim)}
+.prow{display:flex;gap:1.2cqi;align-items:baseline;font-size:clamp(10px,1.4cqi,17px);line-height:1.4}
+.prow .k{font-family:var(--mono);font-weight:700;min-width:8.5ch}
+.world.build .prow .k{color:var(--orange)}.world .prow .k{color:var(--text-dim)}
+.prow .d b{color:var(--text)}
+.world .wnote{margin-top:auto;padding-top:1.2cqb;border-top:1px solid var(--bar-border);font-size:clamp(9px,1.25cqi,15px);color:var(--text-dim);line-height:1.45}
+@media (prefers-reduced-motion: reduce){.chan.on .cwire.v .dot,.chan.h.on .cwire.h .dot,.slide.active .world{animation:none}.world{opacity:1}}
+</style>
+</head>
+<body>
+<div id="app">
+  <div class="top-bar"><div class="deck-title">The stack <span class="accent">· how they fit</span></div>
+    <button class="theme-toggle" id="themeToggle" title="Toggle theme"><i class="fas fa-sun"></i></button></div>
+  <div class="slides-viewport"><div class="slides-stage">
+
+    <!-- Slide 0 — the handoff map -->
+    <section class="slide active" data-viz="map" data-steps="7">
+      <div class="wire-head"><div class="eyebrow">five protocols · one request</div>
+        <h2 class="wtitle">How they <span class="accent">hand off</span></h2></div>
+      <div class="mapwrap">
+        <div class="map" id="map">
+          <div class="node" data-node="you"><i class="fa-solid fa-user"></i><span class="nlab">You</span></div>
+          <div class="chan v" data-ch="ask"><div class="cwire v"><span class="dot"></span></div><div class="clabel"><span class="cname">asks</span></div></div>
+          <div class="node" data-node="ui"><i class="fa-solid fa-window-maximize"></i><span class="nlab">UI</span><span class="nsub">browser</span></div>
+          <div class="chan v build" data-ch="agui"><div class="cwire v"><span class="dot"></span></div><div class="clabel"><span class="cname">AG-UI</span><span class="csub" data-badge="a2ui">carries <b>A2UI</b></span></div></div>
+          <div class="arow">
+            <span></span>
+            <div class="node" data-node="agent"><i class="fa-solid fa-robot"></i><span class="nlab">Agent</span><span class="nsub">ADK</span></div>
+            <div class="chan h" data-ch="a2a"><div class="cwire h"><span class="dot"></span></div><span class="a2a-lab">A2A</span><div class="node peer" data-node="peer"><i class="fa-solid fa-robot"></i><span class="nlab">Peer agent</span></div></div>
+          </div>
+          <div class="chan v" data-ch="mcp"><div class="cwire v"><span class="dot"></span></div><div class="clabel"><span class="cname">MCP</span><span class="csub" data-badge="mcpapps">carries <b>MCP Apps</b></span></div></div>
+          <div class="node" data-node="tools"><i class="fa-solid fa-plug"></i><span class="nlab">Tools</span><span class="nsub">MCP servers</span></div>
+        </div>
+        <div class="rail">
+          <p class="cap-text" id="capText"></p>
+          <div class="legend">
+            <div class="leg"><span class="sw build"></span><b>AG-UI · A2UI · MCP Apps</b> — the 3 we build (last mile to you)</div>
+            <div class="leg"><span class="sw back"></span><b>MCP · A2A</b> — backstage (you already know these)</div>
+          </div>
+        </div>
+      </div>
+      <div class="cap">
+        <button class="step-btn" id="prev" aria-label="Previous">&larr;</button>
+        <span class="hintp">&rarr; / space to advance the request</span>
+        <span class="counter" id="counter"></span>
+        <div class="steps" id="dots"></div>
+        <button class="step-btn" id="next" aria-label="Next">&rarr;</button>
+      </div>
+    </section>
+
+    <!-- Slide 1 — two worlds -->
+    <section class="slide">
+      <div class="wire-head"><div class="eyebrow">the split</div>
+        <h2 class="wtitle">Two worlds, <span class="accent">one agent</span></h2></div>
+      <div class="worlds">
+        <div class="world">
+          <h3>Backstage<span class="tag">you know these</span></h3>
+          <div class="prow"><span class="k">MCP</span><span class="d">agent &#8644; <b>tools</b> &amp; context</span></div>
+          <div class="prow"><span class="k">A2A</span><span class="d">agent &#8644; <b>agent</b> (discovery, delegation)</span></div>
+          <p class="wnote">Mature, widely adopted. Your skills lean on these — but they're not what the user sees.</p>
+        </div>
+        <div class="world build">
+          <h3>The last mile<span class="tag">what we build</span></h3>
+          <div class="prow"><span class="k">AG-UI</span><span class="d">agent &#8644; <b>user</b> — the typed event stream</span></div>
+          <div class="prow"><span class="k">A2UI</span><span class="d"><b>UI as data</b> — declarative, carried over AG-UI</span></div>
+          <div class="prow"><span class="k">MCP Apps</span><span class="d"><b>sandboxed widgets</b> — carried over MCP, with a back-channel</span></div>
+          <p class="wnote">"A single agent can and often does use all three simultaneously." <span style="font-family:var(--mono)">docs.ag-ui.com</span></p>
+        </div>
+      </div>
+    </section>
+
+  </div></div>
+</div>
+<script>
+(function(){
+  const STEPS=[
+    {chans:['ask'], nodes:['you','ui'], cap:'You ask in plain language — <b>"plan a lesson and show me the result."</b>'},
+    {chans:['agui'], nodes:['agent'], cap:'<b>AG-UI</b> carries it to the agent — one connection, and everything streams back down it.'},
+    {chans:['mcp'], nodes:['tools'], cap:'Need a tool or data? <b>MCP</b> — agent &#8644; tools. The protocol you already know.'},
+    {chans:['a2a'], nodes:['peer'], cap:'Need another agent? <b>A2A</b> — agent &#8644; agent, via discovery. Also already familiar.'},
+    {chans:['agui'], nodes:['ui'], badges:['a2ui'], cap:'To draw UI, the agent emits <b>A2UI</b> — declarative UI as data — back over AG-UI.'},
+    {chans:['mcp'], nodes:['ui'], badges:['mcpapps'], cap:'For an interactive, sandboxed widget: <b>MCP Apps</b> — riding on MCP, with a channel back to the model.'},
+    {chans:['agui'], nodes:[], badges:['a2ui','mcpapps'], summary:true, cap:'The <b>three we build</b> — AG-UI · A2UI · MCP Apps — are the <b>last mile to the human</b>. MCP + A2A are backstage; you already know those.'},
+  ];
+  const map=document.getElementById('map'), capText=document.getElementById('capText'),
+        counter=document.getElementById('counter'), dots=document.getElementById('dots');
+  const chans=[...map.querySelectorAll('.chan')], nodes=[...map.querySelectorAll('.node')], badges=[...map.querySelectorAll('[data-badge]')];
+  STEPS.forEach(()=>{ const d=document.createElement('span'); d.className='sdot'; dots.appendChild(d); });
+
+  function renderMap(slideEl, step, animate){
+    const s=STEPS[step];
+    chans.forEach(c=>c.classList.remove('on'));
+    nodes.forEach(n=>n.classList.remove('lit','dim'));
+    badges.forEach(b=>b.classList.remove('hot'));
+    map.classList.toggle('summary', !!s.summary);
+    (s.chans||[]).forEach(ch=>{ const el=map.querySelector('.chan[data-ch="'+ch+'"]'); if(el){ el.classList.add('on'); if(!animate) el.querySelectorAll('.dot').forEach(d=>d.style.opacity=1); } });
+    (s.nodes||[]).forEach(nd=>{ const el=map.querySelector('.node[data-node="'+nd+'"]'); if(el) el.classList.add('lit'); });
+    (s.badges||[]).forEach(bd=>{ const el=map.querySelector('[data-badge="'+bd+'"]'); if(el) el.classList.add('hot'); });
+    if(s.summary){ ['a2a','mcp'].forEach(c=>{ const el=map.querySelector('.chan[data-ch="'+c+'"]'); if(el) el.classList.add('dim'); }); }
+    capText.innerHTML=s.cap; counter.textContent=(step+1)+' / '+STEPS.length;
+    [...dots.children].forEach((d,i)=>{ d.classList.toggle('on',i===step); d.classList.toggle('past',i<step); });
+    document.getElementById('prev').disabled=(step===0 && curSlide===0);
+  }
+  const RENDERERS={map:renderMap};
+
+  const slidesEl=[...document.querySelectorAll('.slide')];const TOTAL=slidesEl.length;let curSlide=0,step=0;
+  const hasSteps=i=>!!slidesEl[i].dataset.steps;const maxStep=i=>hasSteps(i)?(+slidesEl[i].dataset.steps-1):0;
+  function renderStep(a){const v=slidesEl[curSlide].dataset.viz;if(v&&RENDERERS[v])RENDERERS[v](slidesEl[curSlide],step,a);}
+  function showSlide(i,atLast){slidesEl.forEach(s=>s.classList.remove('active'));curSlide=i;step=(atLast&&hasSteps(i))?maxStep(i):0;slidesEl[i].classList.add('active');renderStep(false);}
+  function advance(){if(hasSteps(curSlide)&&step<maxStep(curSlide)){step++;renderStep(true);}else if(curSlide<TOTAL-1){showSlide(curSlide+1,false);}}
+  function retreat(){if(step>0){step--;renderStep(true);}else if(curSlide>0){showSlide(curSlide-1,true);}}
+  document.getElementById('prev').addEventListener('click',retreat);document.getElementById('next').addEventListener('click',advance);
+  document.addEventListener('keydown',e=>{
+    if(e.key==='ArrowRight'||e.key===' '){e.preventDefault();advance();}
+    else if(e.key==='ArrowLeft'){e.preventDefault();retreat();}
+    else if(e.key==='ArrowDown'){e.preventDefault();window.parent.postMessage({type:'deck-nav',dir:'next'},'*');}
+    else if(e.key==='ArrowUp'){e.preventDefault();window.parent.postMessage({type:'deck-nav',dir:'prev'},'*');}
+  });
+  window.addEventListener('message',e=>{if(!e.data||typeof e.data!=='object')return;if(e.data.action==='go-first')showSlide(0,false);if(e.data.action==='go-last')showSlide(TOTAL-1,true);});
+  const themeToggle=document.getElementById('themeToggle');
+  function setTheme(t){document.documentElement.setAttribute('data-theme',t);themeToggle.innerHTML=t==='light'?'<i class="fas fa-moon"></i>':'<i class="fas fa-sun"></i>';}
+  themeToggle.addEventListener('click',()=>setTheme(document.documentElement.getAttribute('data-theme')==='light'?'dark':'light'));
+  showSlide(0,false);
+})();
+</script>
+</body>
+</html>

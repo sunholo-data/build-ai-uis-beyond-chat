@@ -1,0 +1,331 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>AG-UI — on the wire</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;700&family=Montserrat:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+<style>
+*,*::before,*::after{margin:0;padding:0;box-sizing:border-box}
+
+/* ─── Design system ─── */
+:root{
+  --bg:#0f0f1a;--surface:#1a1a2e;--surface-hi:#222240;
+  --orange:#e73c17;--orange-dim:rgba(231,60,23,.35);--orange-glow:rgba(231,60,23,.6);
+  --green:#22c55e;--green-dim:rgba(34,197,94,.35);
+  --blue:#5b8def;--blue-dim:rgba(91,141,239,.3);
+  --ghost:rgba(255,255,255,.12);
+  --text:#e2e8f0;--text-dim:#718096;
+  --code-bg:rgba(255,255,255,.03);--code-border:rgba(255,255,255,.07);
+  --bar-bg:rgba(15,15,26,.8);--bar-border:rgba(255,255,255,.06);
+  --mono:'JetBrains Mono',monospace;--sans:'Montserrat',sans-serif;
+}
+[data-theme="light"]{
+  --bg:#f5f5f0;--surface:#ffffff;--surface-hi:#f0f0ea;
+  --orange:#d4300f;--orange-dim:rgba(212,48,15,.2);--orange-glow:rgba(212,48,15,.4);
+  --green:#16a34a;--green-dim:rgba(22,163,74,.3);
+  --blue:#2563eb;--blue-dim:rgba(37,99,235,.25);
+  --ghost:rgba(0,0,0,.1);--text:#1a202c;--text-dim:#4a5568;
+  --code-bg:rgba(0,0,0,.03);--code-border:rgba(0,0,0,.09);
+  --bar-bg:rgba(255,255,255,.85);--bar-border:rgba(0,0,0,.08);
+}
+
+html,body{height:100%;overflow:hidden;background:var(--bg);color:var(--text);font-family:var(--sans)}
+body{background-image:radial-gradient(circle at 50% 40%, rgba(231,60,23,.04) 0%, transparent 70%)}
+
+/* The single permitted viewport-unit line. */
+#app{display:flex;flex-direction:column;height:100vh}
+
+.top-bar{display:flex;align-items:center;justify-content:space-between;padding:10px 18px;border-bottom:1px solid var(--bar-border);background:var(--bar-bg);backdrop-filter:blur(8px);flex-shrink:0;z-index:10}
+.deck-title{font-size:13px;font-weight:600;color:var(--text-dim);letter-spacing:.02em}
+.deck-title .accent{color:var(--orange)}
+.theme-toggle{width:32px;height:32px;border-radius:50%;border:1px solid var(--ghost);background:transparent;color:var(--text-dim);cursor:pointer;font-size:14px;transition:all .25s;display:flex;align-items:center;justify-content:center}
+.theme-toggle:hover{border-color:var(--orange);color:var(--orange)}
+
+.slides-viewport{flex:1;min-height:0;display:flex;align-items:center;justify-content:center;overflow:hidden;background:var(--bg);container-type:size}
+.slides-stage{position:relative;width:min(100cqi,100cqb*16/9);height:min(100cqb,100cqi*9/16);container-type:size}
+.slide{position:absolute;inset:0;display:flex;flex-direction:column;padding:4.5cqb 6cqi 3cqb;opacity:0;visibility:hidden;transition:opacity .35s ease}
+.slide.active{opacity:1;visibility:visible}
+
+/* ─── Head ─── */
+.wire-head{flex-shrink:0;margin-bottom:2.2cqb}
+.eyebrow{font-family:var(--mono);font-size:clamp(10px,1.4cqi,16px);text-transform:uppercase;letter-spacing:.24em;color:var(--orange)}
+.wtitle{font-size:clamp(22px,3.6cqi,46px);font-weight:800;letter-spacing:-.02em;line-height:1.05;margin-top:.6cqb}
+.wtitle .accent{color:var(--orange)}
+
+/* ─── Wire viz ─── */
+.diagram{flex:1;min-height:0;display:grid;grid-template-rows:1fr auto;gap:2cqb}
+.lane{display:grid;grid-template-columns:15% 1fr 34%;align-items:center;gap:1.5cqi;min-height:0}
+.node{background:var(--surface);border:1px solid var(--ghost);border-radius:12px;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:.6cqb;padding:2cqb 1cqi;height:100%;text-align:center}
+.node.agent{border-color:var(--orange-dim)}
+.node.agent i{font-size:clamp(20px,3.4cqi,40px);color:var(--orange)}
+.node-label{font-weight:700;font-size:clamp(12px,1.7cqi,22px)}
+.node-sub{font-family:var(--mono);font-size:clamp(8px,1.1cqi,13px);color:var(--text-dim)}
+
+.wire{position:relative;height:100%;display:flex;flex-direction:column;justify-content:center;align-items:stretch;min-width:0}
+.rail{position:relative;height:3px;border-radius:3px;background:repeating-linear-gradient(90deg,var(--ghost) 0 8px,transparent 8px 16px);background-size:16px 100%}
+.rail.flow{animation:railFlow .7s linear infinite}
+@keyframes railFlow{to{background-position:16px 0}}
+.rail::before{content:"";position:absolute;inset:-2px 0;background:linear-gradient(90deg,transparent,var(--orange-dim),transparent);opacity:0;transition:opacity .3s}
+.wire.live .rail::before{opacity:1}
+.dir-hint{font-family:var(--mono);font-size:clamp(8px,1.05cqi,13px);color:var(--text-dim);text-align:center;margin-top:1.2cqb;letter-spacing:.08em}
+
+.packet{position:absolute;top:50%;left:0;transform:translateY(-50%);font-family:var(--mono);font-weight:700;font-size:clamp(9px,1.35cqi,17px);padding:.7cqb 1.3cqi;border-radius:7px;background:var(--orange);color:#fff;white-space:nowrap;box-shadow:0 0 0 1px var(--orange),0 6px 22px var(--orange-glow);opacity:0;max-width:80%;overflow:hidden;text-overflow:ellipsis}
+.packet.req{background:var(--blue);box-shadow:0 0 0 1px var(--blue),0 6px 22px var(--blue-dim)}
+.packet.show{opacity:1}
+.packet.fly-down{animation:flyDown .62s cubic-bezier(.4,0,.2,1) both}
+.packet.fly-up{animation:flyUp .62s cubic-bezier(.4,0,.2,1) both}
+@keyframes flyDown{0%{left:0;opacity:0}18%{opacity:1}100%{left:calc(100% - 1px);transform:translate(-100%,-50%);opacity:1}}
+@keyframes flyUp{0%{left:calc(100% - 1px);transform:translate(-100%,-50%);opacity:0}18%{opacity:1}100%{left:0;transform:translateY(-50%);opacity:1}}
+
+.screen{background:var(--bg);border:1px solid var(--ghost);border-radius:12px;height:100%;display:flex;flex-direction:column;overflow:hidden}
+.screen-bar{display:flex;align-items:center;gap:.7cqi;padding:1cqb 1.4cqi;border-bottom:1px solid var(--ghost);background:var(--surface)}
+.screen-bar .dot{width:7px;height:7px;border-radius:50%;background:var(--ghost)}
+.screen-bar .url{margin-left:.6cqi;font-family:var(--mono);font-size:clamp(8px,1cqi,12px);color:var(--text-dim)}
+.chat{flex:1;min-height:0;padding:1.6cqb 1.6cqi;display:flex;flex-direction:column;gap:1.2cqb;justify-content:flex-start;overflow:hidden}
+.bubble{font-size:clamp(10px,1.45cqi,18px);line-height:1.4;padding:1.1cqb 1.5cqi;border-radius:11px;max-width:92%}
+.bubble.user{align-self:flex-end;background:var(--surface-hi);border:1px solid var(--ghost)}
+.bubble.agent{align-self:flex-start;background:var(--surface);border:1px solid var(--orange-dim);opacity:0;transition:opacity .3s}
+.bubble.agent.on{opacity:1}
+.caret{display:inline-block;width:.5ch;height:1.05em;vertical-align:-.15em;background:var(--orange);margin-left:1px;animation:blink 1s steps(1) infinite}
+.caret.gone{display:none}
+@keyframes blink{50%{opacity:0}}
+.toolbadge{display:none;margin-top:1cqb;font-family:var(--mono);font-size:clamp(8px,1.1cqi,14px);color:var(--green);background:var(--green-dim);border:1px solid var(--green-dim);border-radius:7px;padding:.5cqb 1cqi;width:fit-content}
+.toolbadge.on{display:flex;align-items:center;gap:.5cqi;animation:popIn .35s ease both}
+@keyframes popIn{from{opacity:0;transform:translateY(6px)}to{opacity:1;transform:none}}
+
+.readout{background:var(--code-bg);border:1px solid var(--code-border);border-radius:11px;padding:1.3cqb 1.6cqi;min-height:0;overflow:hidden;display:flex;flex-direction:column}
+.readout-head{display:flex;align-items:center;gap:.8cqi;font-family:var(--mono);font-size:clamp(8px,1.05cqi,13px);text-transform:uppercase;letter-spacing:.16em;color:var(--text-dim);margin-bottom:.9cqb}
+.readout-head::before{content:"";width:7px;height:7px;border-radius:50%;background:var(--orange);box-shadow:0 0 8px var(--orange)}
+.log{list-style:none;font-family:var(--mono);font-size:clamp(9px,1.3cqi,16px);line-height:1.7;display:flex;flex-direction:column;gap:.1cqb}
+.log li{display:flex;gap:1.2cqi;opacity:.5;color:var(--text-dim)}
+.log li .ev{color:var(--text);min-width:14.5ch}
+.log li.cur{opacity:1}
+.log li.cur .ev{color:var(--orange)}
+.log li .arrow{color:var(--text-dim)}
+
+/* ─── Caption / step controls (lives in stepped slides) ─── */
+.cap{flex-shrink:0;display:grid;grid-template-columns:auto 1fr auto auto;align-items:center;gap:1.4cqi;margin-top:2cqb;padding-top:1.6cqb;border-top:1px solid var(--bar-border)}
+.cap-text{font-size:clamp(11px,1.55cqi,20px);color:var(--text);font-weight:500;min-height:2.6em;display:flex;align-items:center}
+.cap-text b{color:var(--orange);font-weight:700}
+.steps{display:flex;gap:.8cqi}
+.sdot{width:8px;height:8px;border-radius:50%;background:var(--ghost);transition:all .25s}
+.sdot.on{background:var(--orange);transform:scale(1.25)}
+.sdot.past{background:var(--orange-dim)}
+.step-btn{width:clamp(30px,3.6cqi,44px);height:clamp(30px,3.6cqi,44px);border-radius:9px;border:1px solid var(--ghost);background:var(--surface);color:var(--text);font-size:clamp(13px,1.7cqi,20px);cursor:pointer;display:flex;align-items:center;justify-content:center;transition:all .2s}
+.step-btn:hover:not(:disabled){border-color:var(--orange);color:var(--orange)}
+.step-btn:focus-visible{outline:2px solid var(--orange);outline-offset:2px}
+.step-btn:disabled{opacity:.3;cursor:default}
+.counter{font-family:var(--mono);font-size:clamp(9px,1.15cqi,14px);color:var(--text-dim);align-self:center}
+
+/* ─── Catalog slide ─── */
+.cat-grid{flex:1;min-height:0;display:grid;grid-template-columns:repeat(4,1fr);grid-auto-rows:1fr;gap:1.2cqi}
+.cat{background:var(--surface);border:1px solid var(--ghost);border-radius:10px;padding:1.1cqb 1.2cqi;display:flex;flex-direction:column;gap:.55cqb;opacity:0}
+.slide.active .cat{animation:fadeSlideUp .5s ease both}
+.slide.active .cat:nth-child(1){animation-delay:.04s}
+.slide.active .cat:nth-child(2){animation-delay:.10s}
+.slide.active .cat:nth-child(3){animation-delay:.16s}
+.slide.active .cat:nth-child(4){animation-delay:.22s}
+.slide.active .cat:nth-child(5){animation-delay:.28s}
+.slide.active .cat:nth-child(6){animation-delay:.34s}
+.slide.active .cat:nth-child(7){animation-delay:.40s}
+.slide.active .cat:nth-child(8){animation-delay:.46s}
+@keyframes fadeSlideUp{from{opacity:0;transform:translateY(16px)}to{opacity:1;transform:none}}
+.cat-head{display:flex;align-items:baseline;justify-content:space-between;gap:.8cqi}
+.cat-name{font-weight:700;font-size:clamp(9px,1.35cqi,16px);line-height:1.1}
+.cat-count{font-family:var(--mono);font-size:clamp(8px,1.1cqi,13px);color:var(--text-dim)}
+.cat-events{display:flex;flex-wrap:wrap;gap:.5cqi}
+.chip{font-family:var(--mono);font-size:clamp(7px,.9cqi,11px);padding:.32cqb .7cqi;border-radius:5px;border:1px solid var(--code-border);background:var(--code-bg);color:var(--text-dim);line-height:1.3}
+.chip.used{border-color:var(--orange-dim);background:var(--orange-dim);color:var(--text)}
+.cat-foot{flex-shrink:0;display:flex;align-items:center;gap:1.2cqi;margin-top:2cqb;padding-top:1.6cqb;border-top:1px solid var(--bar-border);font-size:clamp(10px,1.4cqi,17px);color:var(--text-dim)}
+.cat-foot b{color:var(--orange)}
+.cat-foot .legend{font-family:var(--mono);font-size:clamp(8px,1.1cqi,13px);margin-left:auto;display:flex;align-items:center;gap:.6cqi}
+.cat-foot .swatch{width:11px;height:11px;border-radius:3px;border:1px solid var(--orange-dim);background:var(--orange-dim)}
+
+@media (prefers-reduced-motion: reduce){
+  .rail.flow,.packet.fly-down,.packet.fly-up,.toolbadge.on,.caret,.slide.active .cat{animation:none}
+  .packet.show{opacity:1}.cat{opacity:1}
+}
+</style>
+</head>
+<body>
+<div id="app">
+  <div class="top-bar">
+    <div class="deck-title">AG-UI <span class="accent">· on the wire</span></div>
+    <button class="theme-toggle" id="themeToggle" title="Toggle theme"><i class="fas fa-sun"></i></button>
+  </div>
+  <div class="slides-viewport">
+    <div class="slides-stage">
+
+      <!-- Slide 0 — the wire trace -->
+      <section class="slide active" data-viz="wire" data-steps="7">
+        <div class="wire-head">
+          <div class="eyebrow">AG-UI · agent → ui</div>
+          <h2 class="wtitle">One stream. <span class="accent">Every event is typed.</span></h2>
+        </div>
+        <div class="diagram">
+          <div class="lane">
+            <div class="node agent">
+              <i class="fa-solid fa-server"></i>
+              <span class="node-label">Agent</span>
+              <span class="node-sub">ADK · backend</span>
+            </div>
+            <div class="wire" id="wire">
+              <div class="rail" id="rail"></div>
+              <div class="packet" id="packet"></div>
+              <div class="dir-hint">SSE · text/event-stream</div>
+            </div>
+            <div class="screen">
+              <div class="screen-bar"><span class="dot"></span><span class="dot"></span><span class="dot"></span><span class="url">localhost:3456</span></div>
+              <div class="chat">
+                <div class="bubble user">Summarise this article</div>
+                <div class="bubble agent" id="agentBubble"><span id="agentText"></span><span class="caret" id="caret"></span><div class="toolbadge" id="toolBadge"><i class="fa-solid fa-wrench"></i> fetch_url()</div></div>
+              </div>
+            </div>
+          </div>
+          <div class="readout">
+            <div class="readout-head">event stream</div>
+            <ol class="log" id="log"></ol>
+          </div>
+        </div>
+        <div class="cap">
+          <button class="step-btn" id="prev" aria-label="Previous">&larr;</button>
+          <p class="cap-text" id="capText"></p>
+          <span class="counter" id="counter"></span>
+          <div class="steps" id="dots"></div>
+          <button class="step-btn" id="next" aria-label="Next">&rarr;</button>
+        </div>
+      </section>
+
+      <!-- Slide 1 — the full event catalog -->
+      <section class="slide">
+        <div class="wire-head">
+          <div class="eyebrow">AG-UI · the full set</div>
+          <h2 class="wtitle">The full set: <span class="accent">33 typed events</span></h2>
+        </div>
+        <div class="cat-grid" id="catGrid"></div>
+        <div class="cat-foot">
+          You used <b>5 of 33</b> in the trace — most turns touch a handful. <span style="font-family:var(--mono)">THINKING_*</span> is deprecated (&rarr; <span style="font-family:var(--mono)">REASONING_*</span>). Source: installed <span style="font-family:var(--mono)">@ag-ui/core</span>.
+          <span class="legend"><span class="swatch"></span> seen in the trace</span>
+        </div>
+      </section>
+
+    </div>
+  </div>
+</div>
+
+<script>
+(function(){
+  /* ── Wire trace data (one message per step) ── */
+  const STEPS = [
+    { label:'POST /stream', dir:'up', req:true, log:{ev:'POST /stream', arrow:'{ messages:[…] }'},
+      cap:'The UI opens <b>one</b> SSE connection and posts your message. Everything after comes back down that single stream.' },
+    { label:'RUN_STARTED', dir:'down', log:{ev:'RUN_STARTED', arrow:'threadId, runId'},
+      cap:'The agent opens the run. <b>RUN_STARTED</b> — the first typed event.' },
+    { label:'TEXT_MESSAGE_START', dir:'down', bubble:true, log:{ev:'TEXT_MESSAGE_START', arrow:'role: assistant'},
+      cap:'A new assistant message begins. The UI mounts an empty bubble, ready to fill.' },
+    { label:'TEXT_MESSAGE_CONTENT', dir:'down', text:'The article ', log:{ev:'TEXT_MESSAGE_CONTENT', arrow:'"The article "'},
+      cap:'Each token is a <b>delta</b> — the UI just appends it. This is the streaming you see character by character.' },
+    { label:'TOOL_CALL_START', dir:'down', tool:true, log:{ev:'TOOL_CALL_START', arrow:'fetch_url(url)'},
+      cap:'Mid-stream the agent calls a tool. <b>Same channel</b> — tool calls are typed events too, not a side request.' },
+    { label:'TEXT_MESSAGE_CONTENT', dir:'down', text:'argues that protocols win. ', log:{ev:'TEXT_MESSAGE_CONTENT', arrow:'"argues that…"'},
+      cap:'…then the text picks up exactly where it left off. The UI never had to know a tool ran.' },
+    { label:'RUN_FINISHED', dir:'down', done:true, log:{ev:'RUN_FINISHED', arrow:'ok'},
+      cap:'<b>RUN_FINISHED</b> closes the run. No polling, no bespoke wire — the UI just subscribed to typed events.' },
+  ];
+
+  const CATS = [
+    { name:'Lifecycle', events:['RUN_STARTED','RUN_FINISHED','RUN_ERROR','STEP_STARTED','STEP_FINISHED'] },
+    { name:'Text messages', events:['TEXT_MESSAGE_START','TEXT_MESSAGE_CONTENT','TEXT_MESSAGE_END','TEXT_MESSAGE_CHUNK'] },
+    { name:'Tool calls', events:['TOOL_CALL_START','TOOL_CALL_ARGS','TOOL_CALL_END','TOOL_CALL_RESULT','TOOL_CALL_CHUNK'] },
+    { name:'State', events:['STATE_SNAPSHOT','STATE_DELTA','MESSAGES_SNAPSHOT'] },
+    { name:'Activity', events:['ACTIVITY_SNAPSHOT','ACTIVITY_DELTA'] },
+    { name:'Reasoning', events:['REASONING_START','REASONING_MESSAGE_START','REASONING_MESSAGE_CONTENT','REASONING_MESSAGE_END','REASONING_MESSAGE_CHUNK','REASONING_END','REASONING_ENCRYPTED_VALUE'] },
+    { name:'Special', events:['RAW','CUSTOM'] },
+    { name:'Thinking · deprecated', events:['THINKING_START','THINKING_END','THINKING_TEXT_MESSAGE_START','THINKING_TEXT_MESSAGE_CONTENT','THINKING_TEXT_MESSAGE_END'] },
+  ];
+  const USED = new Set(['RUN_STARTED','TEXT_MESSAGE_START','TEXT_MESSAGE_CONTENT','TOOL_CALL_START','RUN_FINISHED']);
+
+  /* build catalog */
+  const catGrid=document.getElementById('catGrid');
+  CATS.forEach(c=>{
+    const card=document.createElement('div'); card.className='cat';
+    const chips=c.events.map(ev=>'<span class="chip'+(USED.has(ev)?' used':'')+'">'+ev+'</span>').join('');
+    card.innerHTML='<div class="cat-head"><span class="cat-name">'+c.name+'</span><span class="cat-count">'+c.events.length+'</span></div><div class="cat-events">'+chips+'</div>';
+    catGrid.appendChild(card);
+  });
+
+  /* wire-slide render */
+  const wire=document.getElementById('wire'), rail=document.getElementById('rail'), packet=document.getElementById('packet'),
+        log=document.getElementById('log'), agentBubble=document.getElementById('agentBubble'), agentText=document.getElementById('agentText'),
+        caret=document.getElementById('caret'), toolBadge=document.getElementById('toolBadge'), capText=document.getElementById('capText'),
+        counter=document.getElementById('counter'), dots=document.getElementById('dots');
+  STEPS.forEach(()=>{ const d=document.createElement('span'); d.className='sdot'; dots.appendChild(d); });
+
+  function renderWire(slideEl, step, animate){
+    const s=STEPS[step];
+    packet.textContent=s.label; packet.classList.toggle('req',!!s.req);
+    if(animate){ packet.classList.remove('show','fly-down','fly-up'); void packet.offsetWidth; packet.classList.add('show', s.dir==='up'?'fly-up':'fly-down'); }
+    else { packet.classList.remove('fly-down','fly-up'); packet.classList.add('show'); }
+    wire.classList.add('live'); rail.classList.add('flow');
+    log.innerHTML='';
+    for(let i=0;i<=step;i++){ const li=document.createElement('li'); if(i===step) li.classList.add('cur');
+      li.innerHTML='<span class="ev">'+STEPS[i].log.ev+'</span><span class="arrow">'+STEPS[i].log.arrow+'</span>'; log.appendChild(li); }
+    let txt='',bubbleOn=false,toolOn=false,done=false;
+    for(let i=0;i<=step;i++){ const e=STEPS[i]; if(e.bubble)bubbleOn=true; if(e.text){txt+=e.text;bubbleOn=true;} if(e.tool)toolOn=true; if(e.done)done=true; }
+    agentBubble.classList.toggle('on',bubbleOn); agentText.textContent=txt; toolBadge.classList.toggle('on',toolOn);
+    caret.classList.toggle('gone', done||!bubbleOn);
+    capText.innerHTML=s.cap; counter.textContent=(step+1)+' / '+STEPS.length;
+    [...dots.children].forEach((d,i)=>{ d.classList.toggle('on',i===step); d.classList.toggle('past',i<step); });
+    document.getElementById('prev').disabled=(step===0 && curSlide===0);
+    document.getElementById('next').disabled=false;
+  }
+  const RENDERERS={ wire:renderWire };
+
+  /* ── Generic slide + step engine ── */
+  const slidesEl=[...document.querySelectorAll('.slide')];
+  const TOTAL=slidesEl.length;
+  let curSlide=0, step=0;
+  const hasSteps=i=> !!slidesEl[i].dataset.steps;
+  const maxStep=i=> hasSteps(i)? (+slidesEl[i].dataset.steps-1):0;
+
+  function renderStep(animate){
+    const viz=slidesEl[curSlide].dataset.viz;
+    if(viz && RENDERERS[viz]) RENDERERS[viz](slidesEl[curSlide], step, animate);
+  }
+  function showSlide(i, atLast){
+    slidesEl.forEach(s=> s.classList.remove('active'));
+    curSlide=i; step= (atLast && hasSteps(i))? maxStep(i):0;
+    slidesEl[i].classList.add('active');
+    renderStep(false);
+  }
+  function advance(){ if(hasSteps(curSlide) && step<maxStep(curSlide)){ step++; renderStep(true); } else if(curSlide<TOTAL-1){ showSlide(curSlide+1,false); } }
+  function retreat(){ if(step>0){ step--; renderStep(true); } else if(curSlide>0){ showSlide(curSlide-1,true); } }
+
+  document.getElementById('prev').addEventListener('click',retreat);
+  document.getElementById('next').addEventListener('click',advance);
+  document.addEventListener('keydown',e=>{
+    if(e.key==='ArrowRight'||e.key===' '){ e.preventDefault(); advance(); }
+    else if(e.key==='ArrowLeft'){ e.preventDefault(); retreat(); }
+    else if(e.key==='ArrowDown'){ e.preventDefault(); window.parent.postMessage({type:'deck-nav',dir:'next'},'*'); }
+    else if(e.key==='ArrowUp'){ e.preventDefault(); window.parent.postMessage({type:'deck-nav',dir:'prev'},'*'); }
+  });
+  window.addEventListener('message',e=>{
+    if(!e.data||typeof e.data!=='object') return;
+    if(e.data.action==='go-first') showSlide(0,false);
+    if(e.data.action==='go-last') showSlide(TOTAL-1,true);
+  });
+
+  /* theme */
+  const themeToggle=document.getElementById('themeToggle');
+  function setTheme(t){ document.documentElement.setAttribute('data-theme',t); themeToggle.innerHTML=t==='light'?'<i class="fas fa-moon"></i>':'<i class="fas fa-sun"></i>'; }
+  themeToggle.addEventListener('click',()=> setTheme(document.documentElement.getAttribute('data-theme')==='light'?'dark':'light'));
+
+  showSlide(0,false);
+})();
+</script>
+</body>
+</html>
