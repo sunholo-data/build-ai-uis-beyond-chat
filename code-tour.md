@@ -107,7 +107,7 @@ Each callback maps one AG-UI event type to React state:
 - `onRunFinalized` → flip `isLoading=false`
 - `onRunFailed` → classify error (network, run_error, budget_exceeded), set banner state
 
-**This is the entire chat UI's reactive plumbing.** 16 event types, ~16 callbacks. No polling, no EventSource fiddling, no custom protocol.
+**This is the entire chat UI's reactive plumbing.** AG-UI defines 33 typed events; the UI subscribes to the handful it needs. No polling, no EventSource fiddling, no custom protocol.
 
 ### `classifyRunError()` (sprint 2.12 + later)
 

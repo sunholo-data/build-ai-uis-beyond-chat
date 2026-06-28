@@ -10,7 +10,7 @@
 
 ## AG-UI — the event stream
 
-- **16 event types, 6 categories.** The ones you'll touch:
+- **33 typed events, 8 groups** (installed `@ag-ui/core`). The ones you'll touch:
   - `RUN_STARTED` … `RUN_FINISHED` / `RUN_ERROR`
   - `TEXT_MESSAGE_START` → `TEXT_MESSAGE_CONTENT` (deltas) → `TEXT_MESSAGE_END`
   - `TOOL_CALL_START` → `TOOL_CALL_ARGS` → `TOOL_CALL_END` → `TOOL_CALL_RESULT`

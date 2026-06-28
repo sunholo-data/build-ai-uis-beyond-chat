@@ -59,7 +59,7 @@ Full text in `docs/exercises/{agui,a2ui,mcp}.md` (identical on both branches).
 ### B1 · AG-UI — a typed event stream
 - **Homespun:** POST + `await` the whole reply → no streaming, tool calls invisible,
   your own ad-hoc wire shape.
-- **Protocol:** `agent.subscribe({…})` maps 16 typed events → React state. Read the
+- **Protocol:** `agent.subscribe({…})` maps the typed event stream → React state. Read the
   live SSE: DevTools → Network → `stream` *(needs a reply)*.
 - **Advanced reconstruct (`workshop-start`):** restore `onMessagesChanged` in
   `frontend/src/hooks/useSkillAgent.ts`. ✅ `vitest useSkillAgent.test.tsx`.

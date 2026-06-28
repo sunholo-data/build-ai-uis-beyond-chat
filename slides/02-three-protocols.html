@@ -198,11 +198,11 @@ body{
     <div class="slides-stage">
       <section class="slide active" data-slide="0">
 <h2 class="slide-title">The protocol stack <span class="dim">— four layers</span></h2>
-<div class="stack"><div class="layer ui"><span class="tag">Layer 4 · UI</span><span class="name">A2UI&nbsp;+&nbsp;MCP Apps</span><span class="desc">Declarative JSON UI · sandboxed iframes</span></div><div class="layer"><span class="tag">Layer 3 · Transport</span><span class="name">AG-UI</span><span class="desc">Event streaming — 16 event types</span></div><div class="layer"><span class="tag">Layer 2 · Coordination</span><span class="name">A2A&nbsp;+&nbsp;MCP</span><span class="desc">Discovery · tools</span></div><div class="layer"><span class="tag">Layer 1 · Framework</span><span class="name">Google ADK</span><span class="desc">Agents, sessions, models</span></div></div>
+<div class="stack"><div class="layer ui"><span class="tag">Layer 4 · UI</span><span class="name">A2UI&nbsp;+&nbsp;MCP Apps</span><span class="desc">Declarative JSON UI · sandboxed iframes</span></div><div class="layer"><span class="tag">Layer 3 · Transport</span><span class="name">AG-UI</span><span class="desc">Event streaming — 33 typed events</span></div><div class="layer"><span class="tag">Layer 2 · Coordination</span><span class="name">A2A&nbsp;+&nbsp;MCP</span><span class="desc">Discovery · tools</span></div><div class="layer"><span class="tag">Layer 1 · Framework</span><span class="name">Google ADK</span><span class="desc">Agents, sessions, models</span></div></div>
       </section>
       <section class="slide" data-slide="1">
 <h2 class="slide-title">AG-UI <span class="dim">— the event stream</span></h2>
-<ul class="bullets"><li>Streams the agent &rarr; UI: 16 event types (text deltas, tool calls, state)</li><li>Clean demo: <code>demo-researcher</code> — watch the SSE in DevTools</li><li><strong>Real app:</strong> GDE&rsquo;s live pipeline visualizer</li><li><strong>Portable:</strong> any AG-UI frontend (CopilotKit, React/Vue) &amp; any agent framework (ADK, LangGraph, CrewAI)</li></ul>
+<ul class="bullets"><li>Streams the agent &rarr; UI: 33 typed events (text deltas, tool calls, state, reasoning)</li><li>Clean demo: <code>demo-researcher</code> — watch the SSE in DevTools</li><li><strong>Real app:</strong> GDE&rsquo;s live pipeline visualizer</li><li><strong>Portable:</strong> any AG-UI frontend (CopilotKit, React/Vue) &amp; any agent framework (ADK, LangGraph, CrewAI)</li></ul>
       </section>
       <section class="slide" data-slide="2">
 <h2 class="slide-title">A2UI <span class="dim">— declarative UI</span></h2>
