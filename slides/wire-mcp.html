@@ -43,15 +43,30 @@ body{background-image:radial-gradient(circle at 50% 40%, rgba(231,60,23,.04) 0%,
 .wire-head{flex-shrink:0;margin-bottom:2.2cqb}
 .eyebrow{font-family:var(--mono);font-size:clamp(10px,1.4cqi,16px);text-transform:uppercase;letter-spacing:.24em;color:var(--orange)}
 .wtitle{font-size:clamp(22px,3.6cqi,46px);font-weight:800;letter-spacing:-.02em;line-height:1.05;margin-top:.6cqb}.wtitle .accent{color:var(--orange)}
-.diagram{flex:1;min-height:0;display:grid;grid-template-rows:1fr auto;gap:2cqb}
-.lane{display:grid;grid-template-columns:15% 1fr 38%;align-items:center;gap:1.5cqi;min-height:0}
-.node{background:var(--surface);border:1px solid var(--ghost);border-radius:12px;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:.6cqb;padding:2cqb 1cqi;height:100%;text-align:center}
-.node.agent{border-color:var(--orange-dim)}.node.agent i{font-size:clamp(20px,3.2cqi,38px);color:var(--orange)}
+.diagram{flex:1;min-height:0;display:grid;grid-template-rows:1fr 27cqb;gap:1.8cqb;overflow:hidden}
+.lane{display:grid;grid-template-columns:16% 1fr 36%;align-items:center;gap:1.5cqi;min-height:0}
+.node{background:var(--surface);border:1px solid var(--ghost);border-radius:12px;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:.9cqb;padding:2cqb 1cqi;height:100%;text-align:center}
+.node.agent{border-color:var(--orange-dim)}
+.node .ico{display:flex;align-items:center;justify-content:center;width:clamp(38px,6cqi,66px);aspect-ratio:1;border-radius:50%;background:radial-gradient(circle at 50% 38%,var(--orange-dim),transparent 72%);border:1px solid var(--orange-dim)}
+.node .ico i{font-size:clamp(17px,2.8cqi,32px);color:var(--orange)}
 .node-label{font-weight:700;font-size:clamp(11px,1.6cqi,21px)}.node-sub{font-family:var(--mono);font-size:clamp(8px,1.05cqi,12px);color:var(--text-dim)}
 .wire{position:relative;height:100%;display:flex;flex-direction:column;justify-content:center;min-width:0}
 .rail{position:relative;height:3px;border-radius:3px;background:repeating-linear-gradient(90deg,var(--ghost) 0 8px,transparent 8px 16px);background-size:16px 100%}
 .rail.flow{animation:railFlow .7s linear infinite}@keyframes railFlow{to{background-position:16px 0}}
-.dir-hint{font-family:var(--mono);font-size:clamp(8px,1.05cqi,13px);color:var(--text-dim);text-align:center;margin-top:1.2cqb;letter-spacing:.08em}
+/* dir-hint is taken out of flow so the rail stays at the wire's true centre and the packet rides exactly on it */
+.dir-hint{position:absolute;left:0;right:0;top:calc(50% + 3.6cqb);font-family:var(--mono);font-size:clamp(8px,1.05cqi,13px);color:var(--text-dim);text-align:center;letter-spacing:.08em}
+/* mid-column reveal: the model context, then the homespun contrast */
+#mid{position:absolute;left:50%;top:50%;transform:translate(-50%,-50%);width:100%;z-index:3;background:var(--surface);border:1px solid var(--ghost);border-radius:10px;padding:1.1cqb 1.4cqi;opacity:0;transition:opacity .3s;box-shadow:0 8px 26px rgba(0,0,0,.18)}
+#mid.on{opacity:1}
+.midh{font-family:var(--mono);font-size:clamp(7px,.98cqi,12px);text-transform:uppercase;letter-spacing:.1em;color:var(--text-dim);margin-bottom:.7cqb}
+.json{font-family:var(--mono);font-size:clamp(7px,1.05cqi,13px);line-height:1.5;color:var(--text-dim);white-space:pre;overflow-x:hidden}
+.json .hot{color:var(--orange);font-weight:700}
+.json .dim{opacity:.6;font-style:italic}
+.vsrow{display:flex;gap:1cqi;align-items:baseline;font-family:var(--mono);font-size:clamp(7px,1.02cqi,13px);line-height:1.4;margin-top:.5cqb}
+.vsrow .mk{flex-shrink:0;font-weight:700;min-width:11ch}
+.vsrow.bad{color:var(--text-dim)}.vsrow.bad .mk{color:var(--text-dim)}.vsrow.bad b{color:var(--text)}
+.vsrow.good{color:var(--text)}.vsrow.good .mk{color:var(--green)}.vsrow.good b{color:var(--orange)}
+.wire.boxed .rail{opacity:.2}.wire.boxed .dir-hint{opacity:0}.wire.boxed .packet{opacity:0!important}
 .packet{position:absolute;top:50%;left:0;transform:translateY(-50%);font-family:var(--mono);font-weight:700;font-size:clamp(8px,1.25cqi,15px);padding:.7cqb 1.2cqi;border-radius:7px;background:var(--orange);color:#fff;white-space:nowrap;box-shadow:0 0 0 1px var(--orange),0 6px 22px var(--orange-glow);opacity:0;max-width:88%;overflow:hidden;text-overflow:ellipsis}
 .packet.req{background:var(--blue);box-shadow:0 0 0 1px var(--blue),0 6px 22px var(--blue-dim)}
 .packet.show{opacity:1}
@@ -79,28 +94,39 @@ body{background-image:radial-gradient(circle at 50% 40%, rgba(231,60,23,.04) 0%,
 .pin{display:flex;align-items:center;gap:.5cqi;font-family:var(--mono);font-size:clamp(8px,1.15cqi,14px);color:#fff;background:var(--orange);padding:.45cqb 1cqi;border-radius:999px;box-shadow:0 4px 14px var(--orange-glow);transition:all .25s}
 .pin::before{content:"\f3c5";font-family:"Font Awesome 6 Free";font-weight:900}
 .pin.hot{box-shadow:0 0 0 4px var(--orange-dim),0 4px 14px var(--orange-glow);transform:scale(1.08)}
-.readout{background:var(--code-bg);border:1px solid var(--code-border);border-radius:11px;padding:1.3cqb 1.6cqi;min-height:0;overflow:hidden;display:flex;flex-direction:column}
+.readout{background:var(--code-bg);border:1px solid var(--code-border);border-radius:11px;padding:1.1cqb 1.6cqi;min-height:0;overflow:hidden;display:flex;flex-direction:column}
 .readout-head{display:flex;align-items:center;gap:.8cqi;font-family:var(--mono);font-size:clamp(8px,1.05cqi,13px);text-transform:uppercase;letter-spacing:.16em;color:var(--text-dim);margin-bottom:.9cqb}
 .readout-head::before{content:"";width:7px;height:7px;border-radius:50%;background:var(--orange);box-shadow:0 0 8px var(--orange)}
-.log{list-style:none;font-family:var(--mono);font-size:clamp(8px,1.25cqi,15px);line-height:1.65;display:flex;flex-direction:column;gap:.1cqb}
+.log{list-style:none;font-family:var(--mono);font-size:clamp(8px,1.18cqi,14px);line-height:1.45;display:flex;flex-direction:column;gap:.05cqb}
 .log li{display:flex;gap:1.2cqi;opacity:.5;color:var(--text-dim)}.log li .ev{color:var(--text);min-width:21ch}.log li.cur{opacity:1}.log li.cur .ev{color:var(--orange)}
-.cap{flex-shrink:0;display:grid;grid-template-columns:auto 1fr auto auto;align-items:center;gap:1.4cqi;margin-top:2cqb;padding-top:1.6cqb;border-top:1px solid var(--bar-border)}
+.cap{flex-shrink:0;display:grid;grid-template-columns:auto 1fr auto auto auto;align-items:center;gap:1.4cqi;margin-top:2cqb;padding-top:1.6cqb;border-top:1px solid var(--bar-border)}
 .cap-text{font-size:clamp(11px,1.5cqi,19px);font-weight:500;min-height:2.6em;display:flex;align-items:center}.cap-text b{color:var(--orange);font-weight:700}
 .steps{display:flex;gap:.8cqi}.sdot{width:8px;height:8px;border-radius:50%;background:var(--ghost);transition:all .25s}.sdot.on{background:var(--orange);transform:scale(1.25)}.sdot.past{background:var(--orange-dim)}
 .step-btn{width:clamp(30px,3.6cqi,44px);height:clamp(30px,3.6cqi,44px);border-radius:9px;border:1px solid var(--ghost);background:var(--surface);color:var(--text);font-size:clamp(13px,1.7cqi,20px);cursor:pointer;display:flex;align-items:center;justify-content:center;transition:all .2s}
 .step-btn:hover:not(:disabled){border-color:var(--orange);color:var(--orange)}.step-btn:focus-visible{outline:2px solid var(--orange);outline-offset:2px}.step-btn:disabled{opacity:.3;cursor:default}
 .counter{font-family:var(--mono);font-size:clamp(9px,1.15cqi,14px);color:var(--text-dim)}
-.cat-grid{flex:1;min-height:0;display:grid;grid-template-columns:repeat(3,1fr);gap:1.6cqi}
-.cat{background:var(--surface);border:1px solid var(--ghost);border-radius:11px;padding:1.7cqb 1.8cqi;display:flex;flex-direction:column;gap:1.1cqb;opacity:0}
-.slide.active .cat{animation:fadeSlideUp .5s ease both}
-.slide.active .cat:nth-child(1){animation-delay:.05s}.slide.active .cat:nth-child(2){animation-delay:.15s}.slide.active .cat:nth-child(3){animation-delay:.25s}
+/* ── Anatomy slide (slide 1): the app object + three numbered reasons ── */
 @keyframes fadeSlideUp{from{opacity:0;transform:translateY(16px)}to{opacity:1;transform:none}}
-.cat .cat-ico{font-size:clamp(16px,2.6cqi,30px);color:var(--orange)}
-.cat-name{font-weight:700;font-size:clamp(13px,1.8cqi,22px)}
-.cat p{font-size:clamp(9px,1.3cqi,16px);color:var(--text-dim);line-height:1.5}
-.cat code{font-family:var(--mono);font-size:.92em;color:var(--text);background:var(--code-bg);border:1px solid var(--code-border);border-radius:4px;padding:.05em .4em}
+.anatomy{flex:1;min-height:0;display:grid;grid-template-columns:0.9fr 1.1fr;gap:3.4cqi;align-items:center}
+.app-stage{display:flex;flex-direction:column;align-items:stretch;gap:1.3cqb;min-width:0;opacity:0}
+.slide.active .app-stage{animation:fadeSlideUp .5s ease both}
+.port{font-family:var(--mono);font-size:clamp(8px,1.1cqi,13px);color:var(--text-dim);display:flex;align-items:center;justify-content:center;gap:.7cqi;flex-wrap:wrap;line-height:1.3}
+.port i{color:var(--orange)}.port b{color:var(--orange);font-weight:700}
+.port.out{gap:.9cqi}
+.chanpill{font-family:var(--mono);font-size:clamp(7px,1cqi,12px);color:#fff;background:var(--orange);border-radius:6px;padding:.45cqb .9cqi;box-shadow:0 3px 12px var(--orange-glow);white-space:nowrap}
+.app-card{position:relative;border:1.5px dashed var(--orange-dim);border-radius:12px;background:rgba(231,60,23,.04);padding:1.9cqb 1.6cqi 1.6cqb}
+.app-tag{position:absolute;top:-1.1cqb;left:1.4cqi;font-family:var(--mono);font-size:clamp(7px,.95cqi,11px);color:var(--orange);background:var(--bg);padding:0 .6cqi;letter-spacing:.04em}
+.reasons{display:flex;flex-direction:column;gap:1.3cqb;min-width:0}
+.reason{display:grid;grid-template-columns:auto 1fr;gap:1.3cqi;align-items:start;background:var(--surface);border:1px solid var(--ghost);border-radius:11px;padding:1.3cqb 1.5cqi;opacity:0}
+.slide.active .reason{animation:fadeSlideUp .5s ease both}
+.slide.active .reason:nth-child(1){animation-delay:.10s}.slide.active .reason:nth-child(2){animation-delay:.20s}.slide.active .reason:nth-child(3){animation-delay:.30s}
+.r-num{width:clamp(22px,3cqi,34px);aspect-ratio:1;border-radius:50%;background:var(--orange);color:#fff;font-family:var(--mono);font-weight:700;font-size:clamp(10px,1.4cqi,17px);display:flex;align-items:center;justify-content:center;box-shadow:0 3px 12px var(--orange-glow)}
+.r-body h4{font-weight:700;font-size:clamp(12px,1.7cqi,21px);margin-bottom:.4cqb}
+.r-body p{font-size:clamp(9px,1.25cqi,15px);color:var(--text-dim);line-height:1.45}
+.r-body code{font-family:var(--mono);font-size:.9em;color:var(--text);background:var(--code-bg);border:1px solid var(--code-border);border-radius:4px;padding:.05em .4em}
+.r-body b{color:var(--orange);font-weight:700}
 .cat-foot{flex-shrink:0;margin-top:2cqb;padding-top:1.6cqb;border-top:1px solid var(--bar-border);font-size:clamp(10px,1.4cqi,17px);color:var(--text-dim)}.cat-foot b{color:var(--orange)}
-@media (prefers-reduced-motion: reduce){.rail.flow,.packet.fly-down,.packet.fly-up,.widget.on,.bubble.agent.on,.slide.active .cat{animation:none}.packet.show{opacity:1}.cat{opacity:1}}
+@media (prefers-reduced-motion: reduce){.rail.flow,.packet.fly-down,.packet.fly-up,.widget.on,.bubble.agent.on,.slide.active .reason,.slide.active .app-stage{animation:none}.packet.show{opacity:1}.reason,.app-stage{opacity:1}}
 </style>
 </head>
 <body>
@@ -110,13 +136,13 @@ body{background-image:radial-gradient(circle at 50% 40%, rgba(231,60,23,.04) 0%,
   <div class="slides-viewport"><div class="slides-stage">
 
     <!-- Slide 0 — by reference + sandbox + bridge -->
-    <section class="slide active" data-viz="wire" data-steps="6">
+    <section class="slide active" data-viz="wire" data-steps="7">
       <div class="wire-head"><div class="eyebrow">MCP Apps · ui by reference</div>
         <h2 class="wtitle">A sandboxed widget, <span class="accent">two channels back.</span></h2></div>
       <div class="diagram">
         <div class="lane">
-          <div class="node agent"><i class="fa-solid fa-plug"></i><span class="node-label">MCP server</span><span class="node-sub">tool + ui://</span></div>
-          <div class="wire" id="wire"><div class="rail" id="rail"></div><div class="packet" id="packet"></div><div class="dir-hint">JSON-RPC · then postMessage bridge</div></div>
+          <div class="node agent"><span class="ico"><i class="fa-solid fa-plug"></i></span><span class="node-label">MCP server</span><span class="node-sub">tool + ui://</span></div>
+          <div class="wire" id="wire"><div class="rail" id="rail"></div><div class="packet" id="packet"></div><div class="dir-hint">JSON-RPC · then postMessage bridge</div><div id="mid"></div></div>
           <div class="screen">
             <div class="screen-bar"><span class="dot"></span><span class="dot"></span><span class="dot"></span><span class="url">host · localhost:3456</span></div>
             <div class="chat">
@@ -136,25 +162,44 @@ body{background-image:radial-gradient(circle at 50% 40%, rgba(231,60,23,.04) 0%,
       </div>
     </section>
 
-    <!-- Slide 1 — the three ideas -->
+    <!-- Slide 1 — anatomy: why it's not just an iframe -->
     <section class="slide">
-      <div class="wire-head"><div class="eyebrow">MCP Apps · the three ideas</div>
+      <div class="wire-head"><div class="eyebrow">MCP Apps · anatomy of a widget</div>
         <h2 class="wtitle">Why it's <span class="accent">not just an iframe</span></h2></div>
-      <div class="cat-grid">
-        <div class="cat"><i class="fa-solid fa-link cat-ico"></i><div class="cat-name">UI by reference</div>
-          <p>The tool advertises <code>_meta.ui.resourceUri</code> on <code>tools/list</code>. The host fetches the HTML with a separate <code>resources/read</code> — the UI is never embedded in the tool result.</p></div>
-        <div class="cat"><i class="fa-solid fa-right-left cat-ico"></i><div class="cat-name">Two channels back</div>
-          <p><code>ui/message</code> — a synthetic chat turn ("I clicked Munich"). <code>ui/update-model-context</code> — structured state merged into the model's next turn. <b>The render is portable; this back-channel isn't yet.</b></p></div>
-        <div class="cat"><i class="fa-solid fa-shield-halved cat-ico"></i><div class="cat-name">Sandboxed</div>
-          <p>Mounts in a sandboxed iframe on a <b>separate origin</b> (:3457). No host cookies, no host DOM — CSP set by HTTP headers, message-passing only.</p></div>
+      <div class="anatomy">
+        <!-- left: the app object with its in / out ports -->
+        <div class="app-stage">
+          <div class="port"><i class="fa-solid fa-arrow-down-long"></i> host fetches <b>resources/read</b> &rarr; ui:// HTML</div>
+          <div class="app-card"><div class="app-tag">sandbox · separate origin :3457</div>
+            <div class="map"><span class="pin">München</span></div></div>
+          <div class="port out"><i class="fa-solid fa-arrow-up-long"></i>
+            <span class="chanpill">ui/message</span><span class="chanpill">ui/update-model-context</span></div>
+        </div>
+        <!-- right: the three reasons it isn't a plain iframe -->
+        <div class="reasons">
+          <div class="reason"><div class="r-num">1</div><div class="r-body">
+            <h4>UI by reference</h4>
+            <p>The tool advertises <code>_meta.ui.resourceUri</code> on <code>tools/list</code>; the host fetches the HTML with a separate <code>resources/read</code>. <b>Never embedded in the tool result.</b></p></div></div>
+          <div class="reason"><div class="r-num">2</div><div class="r-body">
+            <h4>Two channels back</h4>
+            <p><code>ui/message</code> = a synthetic chat turn; <code>ui/update-model-context</code> = state for the next turn. Both are <b>postMessage, not AG-UI</b> — a sandboxed iframe can't ride the agent stream, so the host stashes it in <b>session state</b> (A2UI, host-rendered, rides AG-UI <code>forwardedProps</code> instead).</p></div></div>
+          <div class="reason"><div class="r-num">3</div><div class="r-body">
+            <h4>Sandboxed</h4>
+            <p>Mounts in a sandboxed iframe on a <b>separate origin</b> (:3457). No host cookies, no host DOM — CSP via HTTP headers, message-passing only.</p></div></div>
+        </div>
       </div>
-      <div class="cat-foot">The host is always in control. The widget is <b>sandboxed and message-passing only</b> — that's what makes it safe to render a stranger's UI.</div>
+      <div class="cat-foot">MCP Apps standardized the <b>render</b> — UI by reference, sandboxed, portable across 11 hosts. The <b>interaction &rarr; model</b> back-channel hasn't: each host wires it differently. <b>Portable UI today, portable context tomorrow.</b></div>
     </section>
 
   </div></div>
 </div>
 <script>
 (function(){
+  const CTX='<div class="midh">folded into the model&rsquo;s next system prompt &darr;</div>'+
+    '<div class="json">Current iframe-app context  <span class="dim">(pushed by the app, not the user)</span>\n{\n  "ext-apps-map.show-map": {\n    <span class="hot">"city": "München"</span>, "zoom": 12\n  }\n}</div>';
+  const VS='<div class="midh">get the widget\'s state to the model</div>'+
+    '<div class="vsrow bad"><span class="mk">&#10007; raw iframe</span><span>hand-write postMessage glue, then build your own path to feed that state into the prompt</span></div>'+
+    '<div class="vsrow good"><span class="mk">&check; MCP Apps</span><span><b>ui/update-model-context</b> merges it into the next turn — the model just reads it</span></div>';
   const STEPS=[
     {label:'tools/list', dir:'down', log:{ev:'tools/list', arrow:'_meta.ui.resourceUri = ui://maps'},
       cap:'The tool declares a UI <b>by reference</b> — a ui:// URL, not embedded HTML.'},
@@ -164,14 +209,16 @@ body{background-image:radial-gradient(circle at 50% 40%, rgba(231,60,23,.04) 0%,
       cap:'The host fetches the widget HTML in a <b>separate call</b> — by reference, not by value.'},
     {mount:true, log:{ev:'mount', arrow:'sandboxed iframe · :3457'},
       cap:'It mounts in a <b>sandboxed iframe</b> on a separate origin — it can\'t read your cookies or host DOM.'},
-    {label:'ui/update-model-context', dir:'up', req:true, hot:true, log:{ev:'bridge ui/update-model-context', arrow:'{ city: "München" }'},
-      cap:'You interact. The widget pushes structured state back over the <b>postMessage bridge</b> — its sibling <code>ui/message</code> sends a synthetic chat turn.'},
-    {answer:true, dir:'down', label:'reads context', log:{ev:'mcp_app_context', arrow:'city = "München"'},
-      cap:'Next turn, the model reads what\'s on screen — answers from context, <b>no re-render</b>.'},
+    {label:'ui/update-model-context', dir:'up', req:true, hot:true, log:{ev:'bridge ui/update-model-context', arrow:'→ POST /iframe-context'},
+      cap:'You interact. The widget pushes state over the <b>postMessage bridge</b> &rarr; <code>POST /iframe-context</code> — into session state, <b>not</b> the AG-UI stream. No tool call.'},
+    {answer:true, mid:CTX, log:{ev:'session.state', arrow:'mcp_app_context.* = { city: "München" }'},
+      cap:'The server folds it into the model&rsquo;s <b>next system prompt</b> under <code>mcp_app_context</code> — read as context. <b>No tool round-trip, no re-render.</b>'},
+    {mid:VS, log:{ev:'∴ structured back-channel', arrow:'no bespoke glue'},
+      cap:'<b>Without MCP Apps</b> a raw iframe can\'t talk to the model — you\'d wire that bridge yourself. The protocol gives it to you <b>sandboxed, for free</b>.'},
   ];
 
   const wire=document.getElementById('wire'),rail=document.getElementById('rail'),packet=document.getElementById('packet'),log=document.getElementById('log'),
-        widget=document.getElementById('widget'),pin=document.getElementById('pin'),ans=document.getElementById('ans'),
+        widget=document.getElementById('widget'),pin=document.getElementById('pin'),ans=document.getElementById('ans'),midEl=document.getElementById('mid'),
         capText=document.getElementById('capText'),counter=document.getElementById('counter'),dots=document.getElementById('dots');
   STEPS.forEach(()=>{ const d=document.createElement('span'); d.className='sdot'; dots.appendChild(d); });
 
@@ -188,7 +235,9 @@ body{background-image:radial-gradient(circle at 50% 40%, rgba(231,60,23,.04) 0%,
     let mounted=false,answered=false;
     for(let i=0;i<=step;i++){ const e=STEPS[i]; if(e.mount)mounted=true; if(e.answer)answered=true; }
     widget.classList.toggle('on',mounted); pin.classList.toggle('hot', STEPS[step].hot===true); ans.classList.toggle('on',answered);
-    capText.innerHTML=s.cap; counter.textContent=(step+1)+' / '+STEPS.length;
+    if(s.mid){ midEl.innerHTML=s.mid; midEl.classList.add('on'); wire.classList.add('boxed'); }
+    else { midEl.classList.remove('on'); wire.classList.remove('boxed'); midEl.innerHTML=''; }
+    capText.innerHTML='<span>'+s.cap+'</span>'; counter.textContent=(step+1)+' / '+STEPS.length;
     [...dots.children].forEach((d,i)=>{ d.classList.toggle('on',i===step); d.classList.toggle('past',i<step); });
     document.getElementById('prev').disabled=(step===0 && curSlide===0);
   }
@@ -207,9 +256,9 @@ body{background-image:radial-gradient(circle at 50% 40%, rgba(231,60,23,.04) 0%,
     else if(e.key==='ArrowDown'){e.preventDefault();window.parent.postMessage({type:'deck-nav',dir:'next'},'*');}
     else if(e.key==='ArrowUp'){e.preventDefault();window.parent.postMessage({type:'deck-nav',dir:'prev'},'*');}
   });
-  window.addEventListener('message',e=>{if(!e.data||typeof e.data!=='object')return;if(e.data.action==='go-first')showSlide(0,false);if(e.data.action==='go-last')showSlide(TOTAL-1,true);});
+  window.addEventListener('message',e=>{if(!e.data||typeof e.data!=='object')return;if(e.data.action==='go-first')showSlide(0,false);if(e.data.action==='go-last')showSlide(TOTAL-1,true);if(e.data.action==='set-theme')setTheme(e.data.theme);});
   const themeToggle=document.getElementById('themeToggle');
-  function setTheme(t){document.documentElement.setAttribute('data-theme',t);themeToggle.innerHTML=t==='light'?'<i class="fas fa-moon"></i>':'<i class="fas fa-sun"></i>';}
+  function setTheme(t){document.documentElement.setAttribute('data-theme',t);themeToggle.innerHTML=t==='light'?'<i class="fas fa-moon"></i>':'<i class="fas fa-sun"></i>';window.parent.postMessage({type:'deck-theme',theme:t},'*');}
   themeToggle.addEventListener('click',()=>setTheme(document.documentElement.getAttribute('data-theme')==='light'?'dark':'light'));
   showSlide(0,false);
 })();

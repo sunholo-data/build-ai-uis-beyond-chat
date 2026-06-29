@@ -51,7 +51,20 @@ body{background-image:radial-gradient(circle at 50% 40%, rgba(231,60,23,.04) 0%,
 .wire{position:relative;height:100%;display:flex;flex-direction:column;justify-content:center;min-width:0}
 .rail{position:relative;height:3px;border-radius:3px;background:repeating-linear-gradient(90deg,var(--ghost) 0 8px,transparent 8px 16px);background-size:16px 100%}
 .rail.flow{animation:railFlow .7s linear infinite}@keyframes railFlow{to{background-position:16px 0}}
-.dir-hint{font-family:var(--mono);font-size:clamp(8px,1.05cqi,13px);color:var(--text-dim);text-align:center;margin-top:1.2cqb;letter-spacing:.08em}
+/* dir-hint is taken out of flow so the rail stays at the wire's true centre and the packet rides exactly on it */
+.dir-hint{position:absolute;left:0;right:0;top:calc(50% + 3.6cqb);font-family:var(--mono);font-size:clamp(8px,1.05cqi,13px);color:var(--text-dim);text-align:center;letter-spacing:.08em}
+/* mid-column reveal: the request context, then the homespun contrast */
+#mid{position:absolute;left:50%;top:50%;transform:translate(-50%,-50%);width:100%;z-index:3;background:var(--surface);border:1px solid var(--ghost);border-radius:10px;padding:1.1cqb 1.4cqi;opacity:0;transition:opacity .3s;box-shadow:0 8px 26px rgba(0,0,0,.18)}
+#mid.on{opacity:1}
+.midh{font-family:var(--mono);font-size:clamp(7px,.98cqi,12px);text-transform:uppercase;letter-spacing:.1em;color:var(--text-dim);margin-bottom:.7cqb}
+.json{font-family:var(--mono);font-size:clamp(7px,1.05cqi,13px);line-height:1.5;color:var(--text-dim);white-space:pre;overflow-x:hidden}
+.json .hot{color:var(--orange);font-weight:700}
+.json .dim{opacity:.6;font-style:italic}
+.vsrow{display:flex;gap:1cqi;align-items:baseline;font-family:var(--mono);font-size:clamp(7px,1.02cqi,13px);line-height:1.4;margin-top:.5cqb}
+.vsrow .mk{flex-shrink:0;font-weight:700;min-width:9.5ch}
+.vsrow.bad{color:var(--text-dim)}.vsrow.bad .mk{color:var(--text-dim)}.vsrow.bad b{color:var(--text)}
+.vsrow.good{color:var(--text)}.vsrow.good .mk{color:var(--green)}.vsrow.good b{color:var(--orange)}
+.wire.boxed .rail{opacity:.2}.wire.boxed .dir-hint{opacity:0}.wire.boxed .packet{opacity:0!important}
 .packet{position:absolute;top:50%;left:0;transform:translateY(-50%);font-family:var(--mono);font-weight:700;font-size:clamp(9px,1.3cqi,16px);padding:.7cqb 1.3cqi;border-radius:7px;background:var(--orange);color:#fff;white-space:nowrap;box-shadow:0 0 0 1px var(--orange),0 6px 22px var(--orange-glow);opacity:0;max-width:82%;overflow:hidden;text-overflow:ellipsis}
 .packet.req{background:var(--blue);box-shadow:0 0 0 1px var(--blue),0 6px 22px var(--blue-dim)}
 .packet.show{opacity:1}
@@ -78,24 +91,117 @@ body{background-image:radial-gradient(circle at 50% 40%, rgba(231,60,23,.04) 0%,
 .readout-head::before{content:"";width:7px;height:7px;border-radius:50%;background:var(--orange);box-shadow:0 0 8px var(--orange)}
 .log{list-style:none;font-family:var(--mono);font-size:clamp(9px,1.3cqi,16px);line-height:1.7;display:flex;flex-direction:column;gap:.1cqb}
 .log li{display:flex;gap:1.2cqi;opacity:.5;color:var(--text-dim)}.log li .ev{color:var(--text);min-width:17ch}.log li.cur{opacity:1}.log li.cur .ev{color:var(--orange)}
-.cap{flex-shrink:0;display:grid;grid-template-columns:auto 1fr auto auto;align-items:center;gap:1.4cqi;margin-top:2cqb;padding-top:1.6cqb;border-top:1px solid var(--bar-border)}
+.cap{flex-shrink:0;display:grid;grid-template-columns:auto 1fr auto auto auto;align-items:center;gap:1.4cqi;margin-top:2cqb;padding-top:1.6cqb;border-top:1px solid var(--bar-border)}
 .cap-text{font-size:clamp(11px,1.55cqi,20px);font-weight:500;min-height:2.6em;display:flex;align-items:center}.cap-text b{color:var(--orange);font-weight:700}
 .steps{display:flex;gap:.8cqi}.sdot{width:8px;height:8px;border-radius:50%;background:var(--ghost);transition:all .25s}.sdot.on{background:var(--orange);transform:scale(1.25)}.sdot.past{background:var(--orange-dim)}
 .step-btn{width:clamp(30px,3.6cqi,44px);height:clamp(30px,3.6cqi,44px);border-radius:9px;border:1px solid var(--ghost);background:var(--surface);color:var(--text);font-size:clamp(13px,1.7cqi,20px);cursor:pointer;display:flex;align-items:center;justify-content:center;transition:all .2s}
 .step-btn:hover:not(:disabled){border-color:var(--orange);color:var(--orange)}.step-btn:focus-visible{outline:2px solid var(--orange);outline-offset:2px}.step-btn:disabled{opacity:.3;cursor:default}
 .counter{font-family:var(--mono);font-size:clamp(9px,1.15cqi,14px);color:var(--text-dim)}
-.cat-grid{flex:1;min-height:0;display:grid;grid-template-columns:repeat(3,1fr);gap:1.6cqi}
-.cat{background:var(--surface);border:1px solid var(--ghost);border-radius:11px;padding:1.6cqb 1.7cqi;display:flex;flex-direction:column;gap:1cqb;opacity:0}
-.slide.active .cat{animation:fadeSlideUp .5s ease both}
-.slide.active .cat:nth-child(1){animation-delay:.05s}.slide.active .cat:nth-child(2){animation-delay:.15s}.slide.active .cat:nth-child(3){animation-delay:.25s}
 @keyframes fadeSlideUp{from{opacity:0;transform:translateY(16px)}to{opacity:1;transform:none}}
-.cat-head{display:flex;align-items:baseline;justify-content:space-between;gap:1cqi}.cat-name{font-weight:700;font-size:clamp(12px,1.7cqi,21px)}.cat-count{font-family:var(--mono);font-size:clamp(9px,1.2cqi,15px);color:var(--text-dim)}
-.cat-events{display:flex;flex-wrap:wrap;gap:.7cqi}
-.chip{font-family:var(--mono);font-size:clamp(8px,1.15cqi,14px);padding:.45cqb 1cqi;border-radius:6px;border:1px solid var(--code-border);background:var(--code-bg);color:var(--text-dim)}
+/* ── Catalog (left) → rendered surface (right) showcase ── */
+.showcase{flex:1;min-height:0;display:grid;grid-template-columns:0.82fr 1.18fr;gap:2.8cqi;align-items:stretch;overflow:hidden}
+.vocab{display:flex;flex-direction:column;gap:1cqb;min-width:0}
+.vlead{font-family:var(--mono);font-size:clamp(8px,1.05cqi,13px);color:var(--text-dim);letter-spacing:.06em;text-transform:uppercase}
+.vlead b{color:var(--orange)}
+.cat-grid{display:flex;flex-direction:column;gap:1cqb;min-height:0}
+.cat{background:var(--surface);border:1px solid var(--ghost);border-radius:10px;padding:1cqb 1.3cqi;display:flex;flex-direction:column;gap:.6cqb;opacity:0}
+.slide.active .cat{animation:fadeSlideUp .5s ease both}
+.slide.active .cat:nth-child(1){animation-delay:.04s}.slide.active .cat:nth-child(2){animation-delay:.12s}.slide.active .cat:nth-child(3){animation-delay:.20s}
+.cat-head{display:flex;align-items:baseline;justify-content:space-between;gap:1cqi}.cat-name{font-weight:700;font-size:clamp(10px,1.45cqi,18px)}.cat-count{font-family:var(--mono);font-size:clamp(8px,1.05cqi,13px);color:var(--text-dim)}
+.cat-events{display:flex;flex-wrap:wrap;gap:.5cqi}
+.chip{font-family:var(--mono);font-size:clamp(7px,1.02cqi,13px);padding:.32cqb .8cqi;border-radius:5px;border:1px solid var(--code-border);background:var(--code-bg);color:var(--text-dim);white-space:nowrap}
 .chip.used{border-color:var(--orange-dim);background:var(--orange-dim);color:var(--text)}
-.cat-foot{flex-shrink:0;display:flex;align-items:center;gap:1.2cqi;margin-top:2cqb;padding-top:1.6cqb;border-top:1px solid var(--bar-border);font-size:clamp(10px,1.4cqi,17px);color:var(--text-dim)}.cat-foot b{color:var(--orange)}
+
+/* the rendered surface — a real screen drawn from the catalog only */
+.surface{position:relative;min-width:0;height:100%;display:flex;flex-direction:column;background:var(--bg);border:1px solid var(--ghost);border-radius:12px;overflow:hidden;opacity:0}
+.slide.active .surface{animation:fadeSlideUp .55s ease both;animation-delay:.18s}
+.mock{flex:1;min-height:0;overflow:hidden;padding:1.4cqb 1.7cqi;display:flex;flex-direction:column;gap:.95cqb}
+.tag{position:absolute;top:.4cqb;right:.6cqi;font-family:var(--mono);font-size:clamp(6px,.82cqi,10px);color:var(--orange);background:var(--bg);border:1px solid var(--orange-dim);border-radius:4px;padding:.05cqb .45cqi;letter-spacing:.02em;z-index:2;white-space:nowrap}
+.tag.l{left:.6cqi;right:auto}
+.m-tabs{position:relative;display:flex;gap:1.6cqi;border-bottom:1px solid var(--ghost);padding-bottom:.7cqb;flex-shrink:0}
+.m-tab{position:relative;font-size:clamp(8px,1.15cqi,15px);color:var(--text-dim);font-weight:600}
+.m-tab.on{color:var(--text)}
+.m-tab.on::after{content:"";position:absolute;left:0;right:0;bottom:-.75cqb;height:2px;background:var(--orange)}
+.m-hero{position:relative;height:clamp(40px,10.5cqb,108px);border-radius:9px;background:linear-gradient(120deg,var(--orange-dim),rgba(91,141,239,.22));display:flex;align-items:center;justify-content:center;color:var(--orange);flex-shrink:0}
+.m-hero i{font-size:clamp(15px,2.9cqi,32px);opacity:.75}
+.m-row{display:flex;align-items:center;gap:1cqi}
+.m-title{font-weight:800;font-size:clamp(11px,1.8cqi,23px)}
+.m-price{font-weight:800;font-size:clamp(11px,1.8cqi,23px);color:var(--orange);margin-left:auto}
+.m-sub{font-size:clamp(8px,1.1cqi,14px);color:var(--text-dim)}
+.m-stars{display:flex;gap:.3cqi;color:var(--orange);font-size:clamp(8px,1.18cqi,15px)}
+.m-stars .dim{color:var(--text-dim);opacity:.35}
+.m-two{display:grid;grid-template-columns:1fr 1fr;gap:1.6cqi}
+.m-field{display:flex;flex-direction:column;gap:.45cqb;min-width:0}
+.m-label{font-family:var(--mono);font-size:clamp(7px,.98cqi,12px);color:var(--text-dim);text-transform:uppercase;letter-spacing:.07em}
+.m-pills{position:relative;display:flex;gap:.7cqi;align-items:center}
+.m-pill{font-family:var(--mono);font-size:clamp(8px,1.05cqi,14px);border:1px solid var(--ghost);border-radius:999px;padding:.28cqb .95cqi;color:var(--text-dim)}
+.m-pill.on{border-color:var(--orange);background:var(--orange-dim);color:var(--text)}
+.m-sliderwrap{position:relative;padding:.7cqb 0}
+.m-slider{position:relative;height:6px;border-radius:6px;background:var(--ghost)}
+.m-slider .fill{position:absolute;left:0;top:0;bottom:0;width:64%;background:var(--orange);border-radius:6px}
+.m-slider .thumb{position:absolute;left:64%;top:50%;width:clamp(10px,1.6cqi,16px);aspect-ratio:1;background:var(--bg);border:2px solid var(--orange);border-radius:50%;transform:translate(-50%,-50%);box-shadow:0 2px 8px var(--orange-glow)}
+.m-check{position:relative;display:flex;align-items:center;gap:.8cqi;font-size:clamp(8px,1.15cqi,15px);color:var(--text)}
+.m-check .box{width:clamp(12px,1.6cqi,18px);aspect-ratio:1;border-radius:4px;background:var(--orange);color:#fff;display:flex;align-items:center;justify-content:center;font-size:.78em;flex-shrink:0}
+.m-btn{position:relative;margin-top:auto;text-align:center;background:var(--orange);color:#fff;font-weight:700;border-radius:8px;padding:.85cqb 0;font-size:clamp(9px,1.4cqi,17px);box-shadow:0 4px 16px var(--orange-glow)}
+.m-div{height:1px;background:var(--ghost);flex-shrink:0}
+.cat-foot{flex-shrink:0;margin-top:2cqb;padding-top:1.6cqb;border-top:1px solid var(--bar-border);font-size:clamp(10px,1.4cqi,17px);line-height:1.45;color:var(--text-dim)}.cat-foot b{color:var(--orange)}
 .cat-foot .legend{font-family:var(--mono);font-size:clamp(8px,1.1cqi,13px);margin-left:auto;display:flex;align-items:center;gap:.6cqi}.cat-foot .swatch{width:11px;height:11px;border-radius:3px;border:1px solid var(--orange-dim);background:var(--orange-dim)}
-@media (prefers-reduced-motion: reduce){.rail.flow,.packet.fly-down,.packet.fly-up,.form.on,.form-ok.on,.slide.active .cat{animation:none}.packet.show{opacity:1}.cat{opacity:1}}
+/* ── Slide 2: the A2UI ceiling → MCP Apps boundary ── */
+.boundary{flex:1;min-height:0;display:flex;flex-direction:column;gap:1.8cqb;overflow:hidden}
+.axis{display:grid;grid-template-columns:auto 1fr auto;align-items:center;gap:1.4cqi;flex-shrink:0}
+.axis .albl{font-family:var(--mono);font-size:clamp(7px,1cqi,13px);text-transform:uppercase;letter-spacing:.07em;color:var(--text-dim);white-space:nowrap}
+.axis .albl:last-child{text-align:right}.axis .albl b{color:var(--text)}
+.axis .abar{height:6px;border-radius:6px;background:linear-gradient(90deg,var(--orange),var(--blue))}
+.zones{flex:1;min-height:0;display:grid;grid-template-columns:1fr auto 1fr;gap:1.8cqi;align-items:stretch}
+.zone{position:relative;display:flex;flex-direction:column;gap:.9cqb;background:var(--surface);border:1px solid var(--ghost);border-radius:12px;padding:1.5cqb 1.8cqi;opacity:0;overflow:hidden}
+.slide.active .zone{animation:fadeSlideUp .5s ease both}
+.slide.active .zone:nth-child(1){animation-delay:.06s}.slide.active .zone:nth-child(3){animation-delay:.16s}
+.zone.a2ui{border-top:3px solid var(--orange)}
+.zone.mcp{border-top:3px solid var(--blue)}
+.zhead{display:flex;align-items:baseline;gap:1cqi}
+.zhead h3{font-weight:800;font-size:clamp(14px,2.1cqi,27px)}
+.zhead .l4{font-family:var(--mono);font-size:clamp(7px,1cqi,13px);color:var(--text-dim);letter-spacing:.04em}
+.ztag{font-family:var(--mono);font-size:clamp(7px,1.05cqi,13px);color:var(--text-dim);letter-spacing:.02em;line-height:1.4}
+.zone.a2ui .ztag b{color:var(--orange)}.zone.mcp .ztag b{color:var(--blue)}
+.zwhen{font-size:clamp(9px,1.32cqi,17px);line-height:1.5;color:var(--text)}
+.zwhen b{font-weight:700}.zone.a2ui .zwhen b{color:var(--orange)}.zone.mcp .zwhen b{color:var(--blue)}
+.zex{margin-top:auto;display:flex;flex-wrap:wrap;gap:.55cqi;align-items:center}
+.zexlbl{width:100%;font-family:var(--mono);font-size:clamp(7px,.92cqi,12px);text-transform:uppercase;letter-spacing:.08em;color:var(--text-dim);margin-bottom:.25cqb}
+.zchip{font-family:var(--mono);font-size:clamp(7px,1.02cqi,13px);padding:.32cqb .85cqi;border-radius:6px;border:1px solid var(--code-border);background:var(--code-bg);color:var(--text);white-space:nowrap}
+.zone.a2ui .zchip{border-color:var(--orange-dim)}.zone.mcp .zchip{border-color:var(--blue-dim)}
+.gate{display:flex;flex-direction:column;align-items:center;justify-content:center;gap:.9cqb;min-width:0;padding:0 .2cqi}
+.gate .gline{flex:1;width:2px;background:repeating-linear-gradient(180deg,var(--ghost) 0 6px,transparent 6px 12px)}
+.gate .gbadge{font-family:var(--mono);font-size:clamp(7px,.95cqi,12px);line-height:1.25;text-align:center;color:var(--text);background:var(--bg);border:1px solid var(--ghost);border-radius:9px;padding:.5cqb .8cqi;white-space:nowrap}
+.gate .garrow{color:var(--blue);font-size:clamp(12px,2cqi,22px)}
+/* ── Slide: one tree, three renderers (portability) ── */
+.portrow{flex:1;min-height:0;display:flex;flex-direction:column;gap:1.4cqb;overflow:hidden}
+.onetree{flex-shrink:0;display:flex;flex-direction:column;align-items:center;gap:.4cqb;text-align:center}
+.ot-pill{font-family:var(--mono);font-size:clamp(7px,1.05cqi,14px);color:var(--text);background:var(--code-bg);border:1px solid var(--orange-dim);border-radius:7px;padding:.5cqb 1.2cqi}
+.ot-pill b{color:var(--orange)}
+.ot-sub{font-family:var(--mono);font-size:clamp(7px,.98cqi,12px);color:var(--text-dim);letter-spacing:.04em}
+.rgrid{flex:1;min-height:0;display:grid;grid-template-columns:repeat(3,1fr);gap:2.2cqi}
+.rcol{display:flex;flex-direction:column;gap:.8cqb;min-width:0;min-height:0;opacity:0}
+.slide.active .rcol{animation:fadeSlideUp .5s ease both}
+.slide.active .rcol:nth-child(1){animation-delay:.06s}.slide.active .rcol:nth-child(2){animation-delay:.16s}.slide.active .rcol:nth-child(3){animation-delay:.26s}
+.rcap{flex-shrink:0;min-width:0}
+.rname{font-weight:700;font-size:clamp(10px,1.45cqi,18px)}
+.rpkg{font-family:var(--mono);font-size:clamp(7px,1cqi,12px);color:var(--orange);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.rtheme{font-family:var(--mono);font-size:clamp(7px,.92cqi,11px);color:var(--text-dim)}
+/* the themed surface — self-contained palette per renderer */
+.rform{--rc-bg:#ffffff;--rc-text:#1a202c;--rc-muted:#64748b;--rc-border:#e2e8f0;--rc-fill:#ffffff;--rc-accent:#e73c17;--rc-acctext:#ffffff;--rc-rad:11px;--rc-frad:7px;--rc-font:var(--sans);
+  flex:1;min-height:0;display:flex;flex-direction:column;gap:.8cqb;background:var(--rc-bg);color:var(--rc-text);font-family:var(--rc-font);border:1px solid var(--rc-border);border-radius:var(--rc-rad);padding:1.4cqb 1.5cqi;box-shadow:0 6px 20px rgba(0,0,0,.10)}
+.rf-title{font-weight:700;font-size:clamp(11px,1.5cqi,20px);display:flex;align-items:center;gap:.6cqi}
+.rf-field{display:flex;flex-direction:column;gap:.25cqb}
+.rf-label{font-size:clamp(7px,.96cqi,12px);color:var(--rc-muted)}
+.rf-input{height:clamp(14px,2.7cqb,26px);border:1px solid var(--rc-border);border-radius:var(--rc-frad);background:var(--rc-fill);padding:0 1cqi;display:flex;align-items:center;font-size:clamp(8px,1.02cqi,13px);color:var(--rc-muted)}
+.rf-check{display:flex;align-items:center;gap:.7cqi;font-size:clamp(8px,1cqi,13px);color:var(--rc-text)}
+.rf-box{width:clamp(11px,1.5cqi,15px);aspect-ratio:1;border-radius:4px;background:var(--rc-accent);color:var(--rc-acctext);display:flex;align-items:center;justify-content:center;font-size:.7em;flex-shrink:0}
+.rf-btn{margin-top:auto;text-align:center;background:var(--rc-accent);color:var(--rc-acctext);border-radius:var(--rc-frad);padding:.75cqb 0;font-weight:600;font-size:clamp(8px,1.18cqi,15px)}
+/* theme tokens — @a2ui/react read from the installed package CSS; the other two indicative of each lib's design language */
+.r-ref{--rc-accent:#3b82f6;--rc-rad:8px;--rc-frad:8px;--rc-border:#e5e7eb;--rc-fill:#f5f5f5;--rc-muted:#6b7280;box-shadow:0 4px 14px rgba(59,130,246,.15)}
+.r-copilot{--rc-accent:#6366f1;--rc-rad:18px;--rc-frad:12px;--rc-border:#e5e7eb;--rc-fill:#f9fafb;--rc-muted:#6b7280;box-shadow:0 10px 30px rgba(99,102,241,.20)}
+.r-shad{--rc-bg:#09090b;--rc-text:#fafafa;--rc-border:#27272a;--rc-fill:#18181b;--rc-accent:#fafafa;--rc-acctext:#18181b;--rc-muted:#a1a1aa;--rc-rad:8px;--rc-frad:6px;box-shadow:0 1px 2px rgba(0,0,0,.4)}
+@media (prefers-reduced-motion: reduce){.rail.flow,.packet.fly-down,.packet.fly-up,.form.on,.form-ok.on,.slide.active .cat,.slide.active .surface,.slide.active .zone,.slide.active .rcol{animation:none}.packet.show{opacity:1}.cat,.surface,.zone,.rcol{opacity:1}}
 </style>
 </head>
 <body>
@@ -105,13 +211,13 @@ body{background-image:radial-gradient(circle at 50% 40%, rgba(231,60,23,.04) 0%,
   <div class="slides-viewport"><div class="slides-stage">
 
     <!-- Slide 0 — the round trip -->
-    <section class="slide active" data-viz="wire" data-steps="6">
+    <section class="slide active" data-viz="wire" data-steps="7">
       <div class="wire-head"><div class="eyebrow">A2UI · agent ⇄ ui</div>
         <h2 class="wtitle">The UI is <span class="accent">JSON the agent emits.</span></h2></div>
       <div class="diagram">
         <div class="lane">
           <div class="node agent"><i class="fa-solid fa-server"></i><span class="node-label">Agent</span><span class="node-sub">emits a tree</span></div>
-          <div class="wire" id="wire"><div class="rail" id="rail"></div><div class="packet" id="packet"></div><div class="dir-hint">A2UI · component tree as data</div></div>
+          <div class="wire" id="wire"><div class="rail" id="rail"></div><div class="packet" id="packet"></div><div class="dir-hint">A2UI · component tree as data</div><div id="mid"></div></div>
           <div class="screen">
             <div class="screen-bar"><span class="dot"></span><span class="dot"></span><span class="dot"></span><span class="url">/workspace</span></div>
             <div class="ws">
@@ -135,19 +241,123 @@ body{background-image:radial-gradient(circle at 50% 40%, rgba(231,60,23,.04) 0%,
       </div>
     </section>
 
-    <!-- Slide 1 — the catalog -->
+    <!-- Slide 1 — catalog (left) → a real rendered surface (right) -->
     <section class="slide">
       <div class="wire-head"><div class="eyebrow">A2UI · the vocabulary</div>
         <h2 class="wtitle">One renderer draws <span class="accent">any tree</span></h2></div>
-      <div class="cat-grid" id="catGrid"></div>
-      <div class="cat-foot">4 server messages: <b>createSurface</b> · <b>updateComponents</b> · <b>updateDataModel</b> · <b>deleteSurface</b> (+ <b>actionResponse</b>). Basic catalog · installed <span style="font-family:var(--mono)">@a2ui/web_core 0.9.1-alpha</span>.
-        <span class="legend"><span class="swatch"></span> used in the trace</span></div>
+      <div class="showcase">
+        <div class="vocab">
+          <div class="vlead">the whole <b>Basic</b> catalog · 18 components</div>
+          <div class="cat-grid" id="catGrid"></div>
+        </div>
+        <div class="surface">
+          <div class="screen-bar"><span class="dot"></span><span class="dot"></span><span class="dot"></span><span class="url">/workspace · one tree, rendered</span></div>
+          <div class="mock">
+            <div class="m-tabs"><span class="tag">Tabs</span><span class="m-tab on">Overview</span><span class="m-tab">Specs</span><span class="m-tab">Reviews</span></div>
+            <div class="m-hero"><span class="tag">Image</span><i class="fa-solid fa-image"></i></div>
+            <div class="m-row"><span class="m-title">Alpine Pack 32L</span><span class="m-price">€129</span></div>
+            <div class="m-row"><span class="m-stars"><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star dim"></i></span><span class="m-sub">128 reviews</span></div>
+            <div class="m-div"></div>
+            <div class="m-two">
+              <div class="m-field"><span class="m-label">Size · <span style="text-transform:none;color:var(--orange)">ChoicePicker</span></span><div class="m-pills"><span class="m-pill">S</span><span class="m-pill on">M</span><span class="m-pill">L</span></div></div>
+              <div class="m-field"><span class="m-label">Quantity · <span style="text-transform:none;color:var(--orange)">Slider</span></span><div class="m-sliderwrap"><div class="m-slider"><div class="fill"></div><div class="thumb"></div></div></div></div>
+            </div>
+            <div class="m-check"><span class="box"><i class="fa-solid fa-check"></i></span> Add gift wrap (+€4) · <span style="font-family:var(--mono);color:var(--orange);font-size:.82em">CheckBox</span></div>
+            <div class="m-btn"><span class="tag l">Button</span>Add to cart · €129</div>
+          </div>
+        </div>
+      </div>
+      <div class="cat-foot">Same <b>4 messages</b> move any tree — createSurface · updateComponents · updateDataModel · deleteSurface. This one screen draws on <b>12 of the 18</b>, zero bespoke React. <b>Can't:</b> no Table/Chart in Basic — compose List+Row or ship a custom catalog · <span style="font-family:var(--mono)">@a2ui/web_core 0.9.1-alpha</span>.
+        <span class="legend"><span class="swatch"></span> drawn on the right &rarr;</span></div>
+    </section>
+
+    <!-- Slide 2 — portability: one tree, three renderers -->
+    <section class="slide">
+      <div class="wire-head"><div class="eyebrow">A2UI · portability</div>
+        <h2 class="wtitle">One tree, <span class="accent">three renderers</span></h2></div>
+      <div class="portrow">
+        <div class="onetree">
+          <span class="ot-pill"><b>updateComponents</b> · [ Text, TextField, TextField, CheckBox, Button ]</span>
+          <span class="ot-sub">the agent emits this once — each renderer themes it &darr;</span>
+        </div>
+        <div class="rgrid">
+          <div class="rcol">
+            <div class="rcap"><div class="rname">Reference</div><div class="rpkg">@a2ui/react</div><div class="rtheme">default theme · read from package</div></div>
+            <div class="rform r-ref">
+              <div class="rf-title">Contact</div>
+              <div class="rf-field"><span class="rf-label">Name</span><div class="rf-input">Mark</div></div>
+              <div class="rf-field"><span class="rf-label">Email</span><div class="rf-input">mark@…</div></div>
+              <div class="rf-check"><span class="rf-box"><i class="fa-solid fa-check"></i></span> Subscribe to updates</div>
+              <div class="rf-btn">Send</div>
+            </div>
+          </div>
+          <div class="rcol">
+            <div class="rcap"><div class="rname">CopilotKit</div><div class="rpkg">@copilotkit/a2ui-renderer</div><div class="rtheme">CopilotKit theme · indicative</div></div>
+            <div class="rform r-copilot">
+              <div class="rf-title"><i class="fa-solid fa-wand-magic-sparkles" style="color:#6366f1"></i> Contact</div>
+              <div class="rf-field"><span class="rf-label">Name</span><div class="rf-input">Mark</div></div>
+              <div class="rf-field"><span class="rf-label">Email</span><div class="rf-input">mark@…</div></div>
+              <div class="rf-check"><span class="rf-box"><i class="fa-solid fa-check"></i></span> Subscribe to updates</div>
+              <div class="rf-btn">Send</div>
+            </div>
+          </div>
+          <div class="rcol">
+            <div class="rcap"><div class="rname">Community</div><div class="rpkg">@a2ui-sdk/react</div><div class="rtheme">shadcn / Tailwind · indicative</div></div>
+            <div class="rform r-shad">
+              <div class="rf-title">Contact</div>
+              <div class="rf-field"><span class="rf-label">Name</span><div class="rf-input">Mark</div></div>
+              <div class="rf-field"><span class="rf-label">Email</span><div class="rf-input">mark@…</div></div>
+              <div class="rf-check"><span class="rf-box"><i class="fa-solid fa-check"></i></span> Subscribe to updates</div>
+              <div class="rf-btn">Send</div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="cat-foot"><b>Same JSON, three house styles</b> — only theme tokens differ (colour · radius · density); the structure is identical. <span style="font-family:var(--mono)">@a2ui/react read from the installed package · CopilotKit &amp; shadcn indicative (not installed) · all React · alpha</span></div>
+    </section>
+
+    <!-- Slide 3 — the boundary: A2UI ceiling → MCP Apps -->
+    <section class="slide">
+      <div class="wire-head"><div class="eyebrow">A2UI · the boundary</div>
+        <h2 class="wtitle">Where A2UI stops, <span class="accent">MCP Apps starts</span></h2></div>
+      <div class="boundary">
+        <div class="axis">
+          <span class="albl"><b>host owns the look</b> · portable</span>
+          <span class="abar"></span>
+          <span class="albl">the tool ships its own UI · <b>sandboxed</b></span>
+        </div>
+        <div class="zones">
+          <div class="zone a2ui">
+            <div class="zhead"><h3>A2UI</h3><span class="l4">declarative · Google open std</span></div>
+            <div class="ztag">JSON tree · <b>18-component Basic catalog</b> · two-way binding</div>
+            <div class="zwhen">Reach for it when the host owns the look — <b>forms, media, tabs, dashboards</b> built from primitives.</div>
+            <div class="zex" style="margin-top:.4cqb"><span class="zexlbl">renders in · any A2UI renderer (all React)</span>
+              <span class="zchip">@a2ui/react · reference</span><span class="zchip">CopilotKit</span><span class="zchip">shadcn · community</span></div>
+            <div class="zex"><span class="zexlbl">stops at</span>
+              <span class="zchip">Table*</span><span class="zchip">Chart</span><span class="zchip">WebGL / 3D</span></div>
+          </div>
+          <div class="gate"><div class="gline"></div><div class="gbadge">A2UI&rsquo;s<br>ceiling</div><div class="garrow"><i class="fa-solid fa-arrow-right-long"></i></div><div class="gline"></div></div>
+          <div class="zone mcp">
+            <div class="zhead"><h3>MCP Apps</h3><span class="l4">open · sandboxed</span></div>
+            <div class="ztag">sandboxed iframe · separate origin · <b>your own HTML / JS</b></div>
+            <div class="zwhen">Reach for it when the widget is <b>bigger than the catalog</b> — a <b>3D globe, a charting lib, a video editor</b>: the tool ships its own UI.</div>
+            <div class="zex"><span class="zexlbl">costs</span>
+              <span class="zchip">sandbox overhead</span><span class="zchip">isolation</span><span class="zchip">renders only in MCP hosts</span></div>
+          </div>
+        </div>
+      </div>
+      <div class="cat-foot">Rule of thumb: pick the <b>lowest-openness</b> pattern that does the job — A2UI until it can&rsquo;t, then MCP Apps (the sandbox is real overhead). <span style="font-family:var(--mono)">* Table = compose List+Row · A2UI v0.9 is alpha — pin versions</span></div>
     </section>
 
   </div></div>
 </div>
 <script>
 (function(){
+  const CTX='<div class="midh">folded into the model&rsquo;s next system prompt &darr;</div>'+
+    '<div class="json">## Current A2UI surface state  <span class="dim">(data, not a request)</span>\n{\n  "workspace": {\n    "dataModel": { <span class="hot">"name": "Mark"</span>, "email": "" },\n    "catalogId": "contact-form"\n  }\n}</div>';
+  const VS='<div class="midh">read the typed-in value back</div>'+
+    '<div class="vsrow bad"><span class="mk">&#10007; no protocol</span><span>add a <b>/form-state</b> route or a <b>read_form()</b> tool hop, then splice it into the prompt</span></div>'+
+    '<div class="vsrow good"><span class="mk">&check; A2UI</span><span>the surface is <b>already in the request</b> — the agent just reads it</span></div>';
   const STEPS=[
     {label:'POST /stream', dir:'up', req:true, log:{ev:'POST /stream', arrow:'"make me a contact form"'},
       cap:'You ask for UI in plain language — no component names, no layout.'},
@@ -156,18 +366,20 @@ body{background-image:radial-gradient(circle at 50% 40%, rgba(231,60,23,.04) 0%,
     {render:true, log:{ev:'render', arrow:'one renderer · any tree'},
       cap:'<b>One renderer</b> turns the tree into a real form. The skill wrote zero React.'},
     {fill:true, log:{ev:'surface state', arrow:'name ← "Mark"'},
-      cap:'You fill it in. That value lives in the <b>surface</b>, on the client — the agent hasn\'t seen it yet.'},
-    {label:'a2ui_surface_state', dir:'up', req:true, highlight:true, log:{ev:'forwardedProps', arrow:'a2ui_surface_state'},
-      cap:'On the next turn the surface state <b>rides back up</b> — forwardedProps.a2ui_surface_state.'},
-    {answer:true, dir:'down', label:'reads surface', log:{ev:'reads context', arrow:'name = "Mark"'},
-      cap:'The agent answers from what\'s on screen — <b>zero tool calls, zero re-render</b>. The UI is bidirectional, not one-shot.'},
+      cap:'You type into it. The value lives in the <b>surface</b> — a client-side data model. The agent hasn\'t seen it yet.'},
+    {label:'a2ui_surface_state', dir:'up', req:true, highlight:true, log:{ev:'forwardedProps', arrow:'a2ui_surface_state &uarr;'},
+      cap:'Next turn, the client <b>auto-attaches the surface</b> to the request — no tool call, no custom endpoint.'},
+    {answer:true, mid:CTX, log:{ev:'reads context', arrow:'name = "Mark"'},
+      cap:'The server folds it into the model&rsquo;s <b>next system prompt</b> — read as context, never a tool call. The agent answers with <b>zero re-render</b>.'},
+    {mid:VS, log:{ev:'∴ bidirectional', arrow:'no custom back-channel'},
+      cap:'<b>Without A2UI</b> you\'d hand-build that round-trip yourself. A2UI makes the UI <b>bidirectional for free</b>.'},
   ];
   const CATS=[
     {name:'Layout', events:['Row','Column','List','Card','Tabs','Divider','Modal']},
     {name:'Inputs', events:['TextField','CheckBox','ChoicePicker','Slider','DateTimeInput','Button']},
     {name:'Display', events:['Text','Image','Icon','Video','AudioPlayer']},
   ];
-  const USED=new Set(['TextField','Button','Text']);
+  const USED=new Set(['Row','Column','Card','Tabs','Divider','Text','Image','Icon','ChoicePicker','Slider','CheckBox','Button']);
 
   const catGrid=document.getElementById('catGrid');
   CATS.forEach(c=>{ const card=document.createElement('div'); card.className='cat';
@@ -176,6 +388,7 @@ body{background-image:radial-gradient(circle at 50% 40%, rgba(231,60,23,.04) 0%,
 
   const wire=document.getElementById('wire'),rail=document.getElementById('rail'),packet=document.getElementById('packet'),log=document.getElementById('log'),
         wsEmpty=document.getElementById('wsEmpty'),form=document.getElementById('form'),fName=document.getElementById('fName'),formOk=document.getElementById('formOk'),
+        midEl=document.getElementById('mid'),
         capText=document.getElementById('capText'),counter=document.getElementById('counter'),dots=document.getElementById('dots');
   STEPS.forEach(()=>{ const d=document.createElement('span'); d.className='sdot'; dots.appendChild(d); });
 
@@ -194,7 +407,9 @@ body{background-image:radial-gradient(circle at 50% 40%, rgba(231,60,23,.04) 0%,
     wsEmpty.style.display=mounted?'none':'block'; form.classList.toggle('on',mounted);
     fName.textContent=filled?'Mark':''; fName.classList.toggle('hot', STEPS[step].highlight===true);
     formOk.classList.toggle('on',answered);
-    capText.innerHTML=s.cap; counter.textContent=(step+1)+' / '+STEPS.length;
+    if(s.mid){ midEl.innerHTML=s.mid; midEl.classList.add('on'); wire.classList.add('boxed'); }
+    else { midEl.classList.remove('on'); wire.classList.remove('boxed'); midEl.innerHTML=''; }
+    capText.innerHTML='<span>'+s.cap+'</span>'; counter.textContent=(step+1)+' / '+STEPS.length;
     [...dots.children].forEach((d,i)=>{ d.classList.toggle('on',i===step); d.classList.toggle('past',i<step); });
     document.getElementById('prev').disabled=(step===0 && curSlide===0);
   }
@@ -213,9 +428,9 @@ body{background-image:radial-gradient(circle at 50% 40%, rgba(231,60,23,.04) 0%,
     else if(e.key==='ArrowDown'){e.preventDefault();window.parent.postMessage({type:'deck-nav',dir:'next'},'*');}
     else if(e.key==='ArrowUp'){e.preventDefault();window.parent.postMessage({type:'deck-nav',dir:'prev'},'*');}
   });
-  window.addEventListener('message',e=>{if(!e.data||typeof e.data!=='object')return;if(e.data.action==='go-first')showSlide(0,false);if(e.data.action==='go-last')showSlide(TOTAL-1,true);});
+  window.addEventListener('message',e=>{if(!e.data||typeof e.data!=='object')return;if(e.data.action==='go-first')showSlide(0,false);if(e.data.action==='go-last')showSlide(TOTAL-1,true);if(e.data.action==='set-theme')setTheme(e.data.theme);});
   const themeToggle=document.getElementById('themeToggle');
-  function setTheme(t){document.documentElement.setAttribute('data-theme',t);themeToggle.innerHTML=t==='light'?'<i class="fas fa-moon"></i>':'<i class="fas fa-sun"></i>';}
+  function setTheme(t){document.documentElement.setAttribute('data-theme',t);themeToggle.innerHTML=t==='light'?'<i class="fas fa-moon"></i>':'<i class="fas fa-sun"></i>';window.parent.postMessage({type:'deck-theme',theme:t},'*');}
   themeToggle.addEventListener('click',()=>setTheme(document.documentElement.getAttribute('data-theme')==='light'?'dark':'light'));
   showSlide(0,false);
 })();

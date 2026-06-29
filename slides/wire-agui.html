@@ -57,7 +57,7 @@ body{background-image:radial-gradient(circle at 50% 40%, rgba(231,60,23,.04) 0%,
 .wtitle .accent{color:var(--orange)}
 
 /* ─── Wire viz ─── */
-.diagram{flex:1;min-height:0;display:grid;grid-template-rows:1fr auto;gap:2cqb}
+.diagram{flex:1;min-height:0;display:grid;grid-template-rows:1fr 26cqb;gap:1.8cqb;overflow:hidden}
 .lane{display:grid;grid-template-columns:15% 1fr 34%;align-items:center;gap:1.5cqi;min-height:0}
 .node{background:var(--surface);border:1px solid var(--ghost);border-radius:12px;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:.6cqb;padding:2cqb 1cqi;height:100%;text-align:center}
 .node.agent{border-color:var(--orange-dim)}
@@ -71,7 +71,8 @@ body{background-image:radial-gradient(circle at 50% 40%, rgba(231,60,23,.04) 0%,
 @keyframes railFlow{to{background-position:16px 0}}
 .rail::before{content:"";position:absolute;inset:-2px 0;background:linear-gradient(90deg,transparent,var(--orange-dim),transparent);opacity:0;transition:opacity .3s}
 .wire.live .rail::before{opacity:1}
-.dir-hint{font-family:var(--mono);font-size:clamp(8px,1.05cqi,13px);color:var(--text-dim);text-align:center;margin-top:1.2cqb;letter-spacing:.08em}
+/* dir-hint is taken out of flow so the rail stays at the wire's true centre and the packet rides exactly on it */
+.dir-hint{position:absolute;left:0;right:0;top:calc(50% + 3.6cqb);font-family:var(--mono);font-size:clamp(8px,1.05cqi,13px);color:var(--text-dim);text-align:center;letter-spacing:.08em}
 
 .packet{position:absolute;top:50%;left:0;transform:translateY(-50%);font-family:var(--mono);font-weight:700;font-size:clamp(9px,1.35cqi,17px);padding:.7cqb 1.3cqi;border-radius:7px;background:var(--orange);color:#fff;white-space:nowrap;box-shadow:0 0 0 1px var(--orange),0 6px 22px var(--orange-glow);opacity:0;max-width:80%;overflow:hidden;text-overflow:ellipsis}
 .packet.req{background:var(--blue);box-shadow:0 0 0 1px var(--blue),0 6px 22px var(--blue-dim)}
@@ -97,10 +98,10 @@ body{background-image:radial-gradient(circle at 50% 40%, rgba(231,60,23,.04) 0%,
 .toolbadge.on{display:flex;align-items:center;gap:.5cqi;animation:popIn .35s ease both}
 @keyframes popIn{from{opacity:0;transform:translateY(6px)}to{opacity:1;transform:none}}
 
-.readout{background:var(--code-bg);border:1px solid var(--code-border);border-radius:11px;padding:1.3cqb 1.6cqi;min-height:0;overflow:hidden;display:flex;flex-direction:column}
+.readout{background:var(--code-bg);border:1px solid var(--code-border);border-radius:11px;padding:1cqb 1.6cqi;min-height:0;overflow:hidden;display:flex;flex-direction:column}
 .readout-head{display:flex;align-items:center;gap:.8cqi;font-family:var(--mono);font-size:clamp(8px,1.05cqi,13px);text-transform:uppercase;letter-spacing:.16em;color:var(--text-dim);margin-bottom:.9cqb}
 .readout-head::before{content:"";width:7px;height:7px;border-radius:50%;background:var(--orange);box-shadow:0 0 8px var(--orange)}
-.log{list-style:none;font-family:var(--mono);font-size:clamp(9px,1.3cqi,16px);line-height:1.7;display:flex;flex-direction:column;gap:.1cqb}
+.log{list-style:none;font-family:var(--mono);font-size:clamp(9px,1.2cqi,14px);line-height:1.45;display:flex;flex-direction:column;gap:.05cqb}
 .log li{display:flex;gap:1.2cqi;opacity:.5;color:var(--text-dim)}
 .log li .ev{color:var(--text);min-width:14.5ch}
 .log li.cur{opacity:1}
@@ -108,7 +109,7 @@ body{background-image:radial-gradient(circle at 50% 40%, rgba(231,60,23,.04) 0%,
 .log li .arrow{color:var(--text-dim)}
 
 /* ─── Caption / step controls (lives in stepped slides) ─── */
-.cap{flex-shrink:0;display:grid;grid-template-columns:auto 1fr auto auto;align-items:center;gap:1.4cqi;margin-top:2cqb;padding-top:1.6cqb;border-top:1px solid var(--bar-border)}
+.cap{flex-shrink:0;display:grid;grid-template-columns:auto 1fr auto auto auto;align-items:center;gap:1.4cqi;margin-top:2cqb;padding-top:1.6cqb;border-top:1px solid var(--bar-border)}
 .cap-text{font-size:clamp(11px,1.55cqi,20px);color:var(--text);font-weight:500;min-height:2.6em;display:flex;align-items:center}
 .cap-text b{color:var(--orange);font-weight:700}
 .steps{display:flex;gap:.8cqi}
@@ -142,7 +143,8 @@ body{background-image:radial-gradient(circle at 50% 40%, rgba(231,60,23,.04) 0%,
 .chip.used{border-color:var(--orange-dim);background:var(--orange-dim);color:var(--text)}
 .cat-foot{flex-shrink:0;display:flex;align-items:center;gap:1.2cqi;margin-top:2cqb;padding-top:1.6cqb;border-top:1px solid var(--bar-border);font-size:clamp(10px,1.4cqi,17px);color:var(--text-dim)}
 .cat-foot b{color:var(--orange)}
-.cat-foot .legend{font-family:var(--mono);font-size:clamp(8px,1.1cqi,13px);margin-left:auto;display:flex;align-items:center;gap:.6cqi}
+.cat-foot .cf-text{flex:1;min-width:0;line-height:1.45}
+.cat-foot .legend{flex-shrink:0;font-family:var(--mono);font-size:clamp(8px,1.1cqi,13px);margin-left:auto;display:flex;align-items:center;gap:.6cqi}
 .cat-foot .swatch{width:11px;height:11px;border-radius:3px;border:1px solid var(--orange-dim);background:var(--orange-dim)}
 
 /* ── "where A2UI & MCP Apps sit" slide ── */
@@ -233,7 +235,7 @@ body{background-image:radial-gradient(circle at 50% 40%, rgba(231,60,23,.04) 0%,
         </div>
         <div class="cat-grid" id="catGrid"></div>
         <div class="cat-foot">
-          You used <b>5</b> in the trace; the <b>5 deprecated</b> <span style="font-family:var(--mono)">THINKING_*</span> events (&rarr; <span style="font-family:var(--mono)">REASONING_*</span>) aren't shown — 33 total. Source: installed <span style="font-family:var(--mono)">@ag-ui/core</span>.
+          <p class="cf-text">You used <b>5</b> in the trace; the <b>5 deprecated</b> <span style="font-family:var(--mono)">THINKING_*</span> events (&rarr; <span style="font-family:var(--mono)">REASONING_*</span>) aren't shown — 33 total. Source: installed <span style="font-family:var(--mono)">@ag-ui/core</span>.</p>
           <span class="legend"><span class="swatch"></span> seen in the trace</span>
         </div>
       </section>
@@ -331,7 +333,7 @@ body{background-image:radial-gradient(circle at 50% 40%, rgba(231,60,23,.04) 0%,
     for(let i=0;i<=step;i++){ const e=STEPS[i]; if(e.bubble)bubbleOn=true; if(e.text){txt+=e.text;bubbleOn=true;} if(e.tool)toolOn=true; if(e.done)done=true; }
     agentBubble.classList.toggle('on',bubbleOn); agentText.textContent=txt; toolBadge.classList.toggle('on',toolOn);
     caret.classList.toggle('gone', done||!bubbleOn);
-    capText.innerHTML=s.cap; counter.textContent=(step+1)+' / '+STEPS.length;
+    capText.innerHTML='<span>'+s.cap+'</span>'; counter.textContent=(step+1)+' / '+STEPS.length;
     [...dots.children].forEach((d,i)=>{ d.classList.toggle('on',i===step); d.classList.toggle('past',i<step); });
     document.getElementById('prev').disabled=(step===0 && curSlide===0);
     document.getElementById('next').disabled=false;
@@ -370,11 +372,12 @@ body{background-image:radial-gradient(circle at 50% 40%, rgba(231,60,23,.04) 0%,
     if(!e.data||typeof e.data!=='object') return;
     if(e.data.action==='go-first') showSlide(0,false);
     if(e.data.action==='go-last') showSlide(TOTAL-1,true);
+    if(e.data.action==='set-theme') setTheme(e.data.theme);
   });
 
   /* theme */
   const themeToggle=document.getElementById('themeToggle');
-  function setTheme(t){ document.documentElement.setAttribute('data-theme',t); themeToggle.innerHTML=t==='light'?'<i class="fas fa-moon"></i>':'<i class="fas fa-sun"></i>'; }
+  function setTheme(t){ document.documentElement.setAttribute('data-theme',t); themeToggle.innerHTML=t==='light'?'<i class="fas fa-moon"></i>':'<i class="fas fa-sun"></i>'; window.parent.postMessage({type:'deck-theme',theme:t},'*'); }
   themeToggle.addEventListener('click',()=> setTheme(document.documentElement.getAttribute('data-theme')==='light'?'dark':'light'));
 
   showSlide(0,false);
