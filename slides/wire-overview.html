@@ -140,15 +140,25 @@ body{background-image:radial-gradient(circle at 50% 45%, rgba(231,60,23,.05) 0%,
 .hub-dirs{display:flex;gap:1.4cqi;font-family:var(--mono);font-size:clamp(7px,1.05cqi,13px);color:var(--text-dim);white-space:nowrap}
 .hub-dirs .o{color:var(--orange)}
 @media (prefers-reduced-motion: reduce){.chan.on .cwire.v .dot,.chan.h.on .cwire.h .dot,.slide.active .wld,.slide.active .hub,.rail .hero.flash{animation:none}.wld,.hub{opacity:1}}
+/* ── density: Stage (big screen) hides .detail; Guide (laptop) reveals it ── */
+html[data-density="stage"] .detail{display:none}
+.bar-tools{display:flex;align-items:center;gap:10px}
+.dtoggle{display:flex;align-items:center;gap:.5em;height:32px;padding:0 13px;border-radius:999px;border:1px solid var(--ghost);background:transparent;color:var(--text-dim);cursor:pointer;font-family:var(--mono);font-size:11px;letter-spacing:.05em;transition:all .25s}
+.dtoggle:hover{border-color:var(--orange);color:var(--orange)}
+.dtoggle.guide{border-color:var(--orange-dim);color:var(--orange)}
+.dtoggle i{font-size:12px}
 /* embedded-in-presenter: hide the deck's own chrome (the presenter provides title + theme) */
 .in-iframe .top-bar{display:none}
 </style>
 </head>
 <body>
-<script>if(window!==window.top)document.body.classList.add('in-iframe');</script>
+<script>(function(){var e=window!==window.top;if(e)document.body.classList.add('in-iframe');document.documentElement.setAttribute('data-density',e?'stage':'guide');})();</script>
 <div id="app">
   <div class="top-bar"><div class="deck-title">The stack <span class="accent">· how they fit</span></div>
-    <button class="theme-toggle" id="themeToggle" title="Toggle theme"><i class="fas fa-sun"></i></button></div>
+    <div class="bar-tools">
+      <button class="dtoggle" id="densityToggle" title="Toggle detail (D)"><i class="fa-solid fa-circle-info"></i><span>Detail</span></button>
+      <button class="theme-toggle" id="themeToggle" title="Toggle theme"><i class="fas fa-sun"></i></button>
+    </div></div>
   <div class="slides-viewport"><div class="slides-stage">
 
     <!-- Slide 0 — the handoff map -->
@@ -196,7 +206,7 @@ body{background-image:radial-gradient(circle at 50% 45%, rgba(231,60,23,.05) 0%,
           <div class="wld-h">Backstage<span class="wtag">you know these</span></div>
           <div class="proto"><span class="pk">MCP</span><span class="pd">agent &#8644; <b>tools</b> &amp; context</span></div>
           <div class="proto"><span class="pk">A2A</span><span class="pd">agent &#8644; <b>agent</b> &middot; discovery, delegation</span></div>
-          <div class="wld-n">Mature, widely adopted. Your skills lean on these — but they're not what the user sees.</div>
+          <div class="wld-n detail">Mature, widely adopted. Your skills lean on these — but they're not what the user sees.</div>
         </div>
         <div class="hub">
           <div class="hub-eye">one agent</div>
@@ -208,10 +218,10 @@ body{background-image:radial-gradient(circle at 50% 45%, rgba(231,60,23,.05) 0%,
           <div class="proto"><span class="pk">AG-UI</span><span class="pd">agent &#8644; <b>user</b> &middot; the typed event stream</span></div>
           <div class="proto"><span class="pk">A2UI</span><span class="pd"><b>UI as data</b> &middot; declarative, over AG-UI</span></div>
           <div class="proto"><span class="pk">MCP Apps</span><span class="pd"><b>sandboxed widgets</b> &middot; over MCP, with a back-channel</span></div>
-          <div class="wld-n">"A single agent can and often does use all three simultaneously." <span class="mono">docs.ag-ui.com</span></div>
+          <div class="wld-n detail">"A single agent can and often does use all three simultaneously." <span class="mono">docs.ag-ui.com</span></div>
         </div>
       </div>
-      <div class="bridge-foot">The last mile is young — the <b>render</b> standardized across hosts; the <b>back-channel</b> (UI &rarr; agent) hasn&rsquo;t, yet.</div>
+      <div class="bridge-foot">The last mile is the <b>young</b> part of the stack.<span class="detail"> The <b>render</b> standardized across hosts; the <b>back-channel</b> (UI &rarr; agent) hasn&rsquo;t, yet.</span></div>
     </section>
 
   </div></div>
@@ -264,11 +274,18 @@ body{background-image:radial-gradient(circle at 50% 45%, rgba(231,60,23,.05) 0%,
     else if(e.key==='ArrowLeft'){e.preventDefault();retreat();}
     else if(e.key==='ArrowDown'){e.preventDefault();window.parent.postMessage({type:'deck-nav',dir:'next'},'*');}
     else if(e.key==='ArrowUp'){e.preventDefault();window.parent.postMessage({type:'deck-nav',dir:'prev'},'*');}
+    else if(e.key==='d'||e.key==='D'){e.preventDefault();toggleDens();}
   });
-  window.addEventListener('message',e=>{if(!e.data||typeof e.data!=='object')return;if(e.data.action==='go-first')showSlide(0,false);if(e.data.action==='go-last')showSlide(TOTAL-1,true);if(e.data.action==='set-theme')setTheme(e.data.theme);});
+  window.addEventListener('message',e=>{if(!e.data||typeof e.data!=='object')return;if(e.data.action==='go-first')showSlide(0,false);if(e.data.action==='go-last')showSlide(TOTAL-1,true);if(e.data.action==='set-theme')setTheme(e.data.theme);if(e.data.action==='set-density')setDens(e.data.density);});
   const themeToggle=document.getElementById('themeToggle');
   function setTheme(t){document.documentElement.setAttribute('data-theme',t);themeToggle.innerHTML=t==='light'?'<i class="fas fa-moon"></i>':'<i class="fas fa-sun"></i>';window.parent.postMessage({type:'deck-theme',theme:t},'*');}
   themeToggle.addEventListener('click',()=>setTheme(document.documentElement.getAttribute('data-theme')==='light'?'dark':'light'));
+  const densEl=document.getElementById('densityToggle');
+  function reflectDens(){ if(densEl) densEl.classList.toggle('guide', document.documentElement.getAttribute('data-density')==='guide'); }
+  function setDens(d){ document.documentElement.setAttribute('data-density', d==='guide'?'guide':'stage'); reflectDens(); }
+  function toggleDens(){ setDens(document.documentElement.getAttribute('data-density')==='guide'?'stage':'guide'); }
+  if(densEl) densEl.addEventListener('click',toggleDens);
+  reflectDens();
   showSlide(0,false);
 })();
 </script>

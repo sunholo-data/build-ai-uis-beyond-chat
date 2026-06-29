@@ -82,15 +82,25 @@ body{background-image:radial-gradient(circle at 50% 40%, rgba(231,60,23,.04) 0%,
 .step-btn{width:clamp(28px,3.4cqi,40px);height:clamp(28px,3.4cqi,40px);border-radius:9px;border:1px solid var(--ghost);background:var(--surface);color:var(--text);font-size:clamp(12px,1.6cqi,18px);cursor:pointer;display:flex;align-items:center;justify-content:center;transition:all .2s}
 .step-btn:hover:not(:disabled){border-color:var(--orange);color:var(--orange)}.step-btn:focus-visible{outline:2px solid var(--orange);outline-offset:2px}.step-btn:disabled{opacity:.3;cursor:default}
 @media (prefers-reduced-motion: reduce){.slide.active .pcol,.slide.active .panel{animation:none}.pcol,.panel{opacity:1}}
+/* ── density: Stage (big screen) hides .detail; Guide (laptop) reveals it ── */
+html[data-density="stage"] .detail{display:none}
+.bar-tools{display:flex;align-items:center;gap:10px}
+.dtoggle{display:flex;align-items:center;gap:.5em;height:32px;padding:0 13px;border-radius:999px;border:1px solid var(--ghost);background:transparent;color:var(--text-dim);cursor:pointer;font-family:var(--mono);font-size:11px;letter-spacing:.05em;transition:all .25s}
+.dtoggle:hover{border-color:var(--orange);color:var(--orange)}
+.dtoggle.guide{border-color:var(--orange-dim);color:var(--orange)}
+.dtoggle i{font-size:12px}
 /* embedded-in-presenter: hide the deck's own chrome (the presenter provides title + theme) */
 .in-iframe .top-bar{display:none}
 </style>
 </head>
 <body>
-<script>if(window!==window.top)document.body.classList.add('in-iframe');</script>
+<script>(function(){var e=window!==window.top;if(e)document.body.classList.add('in-iframe');document.documentElement.setAttribute('data-density',e?'stage':'guide');})();</script>
 <div id="app">
   <div class="top-bar"><div class="deck-title">Protocol facts <span class="accent">· validated sources</span></div>
-    <button class="theme-toggle" id="themeToggle" title="Toggle theme"><i class="fas fa-sun"></i></button></div>
+    <div class="bar-tools">
+      <button class="dtoggle" id="densityToggle" title="Toggle detail (D)"><i class="fa-solid fa-circle-info"></i><span>Detail</span></button>
+      <button class="theme-toggle" id="themeToggle" title="Toggle theme"><i class="fas fa-sun"></i></button>
+    </div></div>
   <div class="slides-viewport"><div class="slides-stage">
 
     <!-- Slide 0 — the facts, each with its receipt -->
@@ -100,22 +110,22 @@ body{background-image:radial-gradient(circle at 50% 40%, rgba(231,60,23,.04) 0%,
       <div class="facts">
         <div class="pcol agui">
           <div class="phead"><span class="pname">AG-UI</span><span class="prole">agent &rarr; user</span></div>
-          <div class="fact"><div class="claim"><b>33</b> typed events, 8 groups (Lifecycle · Text · Tool · State · Activity · Reasoning · Special · deprecated Thinking)</div><span class="src">@ag-ui/core (installed)</span></div>
-          <div class="fact"><div class="claim">Run boundary: <code>RUN_STARTED</code> … <code>RUN_FINISHED</code> / <code>RUN_ERROR</code></div><span class="src">docs.ag-ui.com/concepts/events</span></div>
-          <div class="fact"><div class="claim">Surface state rides back on <code>forwardedProps.a2ui_surface_state</code></div><span class="src">useSkillAgent.ts · fast_api_app.py</span></div>
+          <div class="fact"><div class="claim"><b>33</b> typed events, 8 groups (Lifecycle · Text · Tool · State · Activity · Reasoning · Special · deprecated Thinking)</div><span class="src detail">@ag-ui/core (installed)</span></div>
+          <div class="fact"><div class="claim">Run boundary: <code>RUN_STARTED</code> … <code>RUN_FINISHED</code> / <code>RUN_ERROR</code></div><span class="src detail">docs.ag-ui.com/concepts/events</span></div>
+          <div class="fact"><div class="claim">Surface state rides back on <code>forwardedProps.a2ui_surface_state</code></div><span class="src detail">useSkillAgent.ts · fast_api_app.py</span></div>
         </div>
         <div class="pcol a2ui">
           <div class="phead"><span class="pname">A2UI</span><span class="prole">agent &#8644; ui</span></div>
-          <div class="fact"><div class="claim">Installed <b>v0.9.1-alpha</b></div><span class="src">@a2ui/web_core/package.json</span></div>
-          <div class="fact"><div class="claim"><b>4</b> server messages: <code>createSurface</code> · <code>updateComponents</code> · <code>updateDataModel</code> · <code>deleteSurface</code> (+ <code>actionResponse</code>)</div><span class="src">@a2ui/web_core/src/v0_9</span></div>
-          <div class="fact"><div class="claim">Basic catalog · 18 components (Row, Column, Card, TextField, ChoicePicker, …)</div><span class="src">a2ui.org spec · Basic catalog</span></div>
+          <div class="fact"><div class="claim">Installed <b>v0.9.1-alpha</b></div><span class="src detail">@a2ui/web_core/package.json</span></div>
+          <div class="fact"><div class="claim"><b>4</b> server messages: <code>createSurface</code> · <code>updateComponents</code> · <code>updateDataModel</code> · <code>deleteSurface</code> (+ <code>actionResponse</code>)</div><span class="src detail">@a2ui/web_core/src/v0_9</span></div>
+          <div class="fact"><div class="claim">Basic catalog · 18 components (Row, Column, Card, TextField, ChoicePicker, …)</div><span class="src detail">a2ui.org spec · Basic catalog</span></div>
         </div>
         <div class="pcol mcp">
           <div class="phead"><span class="pname">MCP Apps</span><span class="prole">host &#8644; widget</span></div>
-          <div class="fact"><div class="claim"><b>SEP-1865</b> · <code>io.modelcontextprotocol/ui</code> · launched 26 Jan 2026</div><span class="src">blog.modelcontextprotocol.io</span></div>
-          <div class="fact"><div class="claim">By reference: <code>_meta.ui.resourceUri</code> &rarr; <code>resources/read</code> &rarr; <code>text/html;profile=mcp-app</code></div><span class="src">SEP-1865 spec</span></div>
-          <div class="fact"><div class="claim">Two channels back: <code>ui/message</code> · <code>ui/update-model-context</code></div><span class="src">SEP-1865 · OpenAI Apps SDK</span></div>
-          <div class="fact"><div class="claim"><b>11</b> hosts render MCP Apps; <b>Slack does not</b> (Block Kit)</div><span class="src">modelcontextprotocol.io/extensions/client-matrix</span></div>
+          <div class="fact"><div class="claim"><b>SEP-1865</b> · <code>io.modelcontextprotocol/ui</code> · launched 26 Jan 2026</div><span class="src detail">blog.modelcontextprotocol.io</span></div>
+          <div class="fact"><div class="claim">By reference: <code>_meta.ui.resourceUri</code> &rarr; <code>resources/read</code> &rarr; <code>text/html;profile=mcp-app</code></div><span class="src detail">SEP-1865 spec</span></div>
+          <div class="fact"><div class="claim">Two channels back: <code>ui/message</code> · <code>ui/update-model-context</code></div><span class="src detail">SEP-1865 · OpenAI Apps SDK</span></div>
+          <div class="fact"><div class="claim"><b>11</b> hosts render MCP Apps; <b>Slack does not</b> (Block Kit)</div><span class="src detail">modelcontextprotocol.io/extensions/client-matrix</span></div>
         </div>
       </div>
     </section>
@@ -162,11 +172,18 @@ body{background-image:radial-gradient(circle at 50% 40%, rgba(231,60,23,.04) 0%,
     else if(e.key==='ArrowLeft'){e.preventDefault(); if(cur>0) show(cur-1);}
     else if(e.key==='ArrowDown'){e.preventDefault();window.parent.postMessage({type:'deck-nav',dir:'next'},'*');}
     else if(e.key==='ArrowUp'){e.preventDefault();window.parent.postMessage({type:'deck-nav',dir:'prev'},'*');}
+    else if(e.key==='d'||e.key==='D'){e.preventDefault();toggleDens();}
   });
-  window.addEventListener('message',e=>{if(!e.data||typeof e.data!=='object')return;if(e.data.action==='go-first')show(0);if(e.data.action==='go-last')show(TOTAL-1);if(e.data.action==='set-theme')setTheme(e.data.theme);});
+  window.addEventListener('message',e=>{if(!e.data||typeof e.data!=='object')return;if(e.data.action==='go-first')show(0);if(e.data.action==='go-last')show(TOTAL-1);if(e.data.action==='set-theme')setTheme(e.data.theme);if(e.data.action==='set-density')setDens(e.data.density);});
   const themeToggle=document.getElementById('themeToggle');
   function setTheme(t){document.documentElement.setAttribute('data-theme',t);themeToggle.innerHTML=t==='light'?'<i class="fas fa-moon"></i>':'<i class="fas fa-sun"></i>';window.parent.postMessage({type:'deck-theme',theme:t},'*');}
   themeToggle.addEventListener('click',()=>setTheme(document.documentElement.getAttribute('data-theme')==='light'?'dark':'light'));
+  const densEl=document.getElementById('densityToggle');
+  function reflectDens(){ if(densEl) densEl.classList.toggle('guide', document.documentElement.getAttribute('data-density')==='guide'); }
+  function setDens(d){ document.documentElement.setAttribute('data-density', d==='guide'?'guide':'stage'); reflectDens(); }
+  function toggleDens(){ setDens(document.documentElement.getAttribute('data-density')==='guide'?'stage':'guide'); }
+  if(densEl) densEl.addEventListener('click',toggleDens);
+  reflectDens();
   show(0);
 })();
 </script>

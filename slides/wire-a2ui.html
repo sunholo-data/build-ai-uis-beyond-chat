@@ -203,15 +203,25 @@ body{background-image:radial-gradient(circle at 50% 40%, rgba(231,60,23,.04) 0%,
 .r-copilot .rf-btn{font-weight:700}
 .r-shad{--rc-bg:#09090b;--rc-text:#fafafa;--rc-border:#27272a;--rc-fill:#18181b;--rc-accent:#fafafa;--rc-acctext:#18181b;--rc-muted:#a1a1aa;--rc-rad:8px;--rc-frad:6px;box-shadow:0 1px 2px rgba(0,0,0,.4)}
 @media (prefers-reduced-motion: reduce){.rail.flow,.packet.fly-down,.packet.fly-up,.form.on,.form-ok.on,.slide.active .cat,.slide.active .surface,.slide.active .zone,.slide.active .rcol{animation:none}.packet.show{opacity:1}.cat,.surface,.zone,.rcol{opacity:1}}
+/* ── density: Stage (big screen) hides .detail; Guide (laptop) reveals it ── */
+html[data-density="stage"] .detail{display:none}
+.bar-tools{display:flex;align-items:center;gap:10px}
+.dtoggle{display:flex;align-items:center;gap:.5em;height:32px;padding:0 13px;border-radius:999px;border:1px solid var(--ghost);background:transparent;color:var(--text-dim);cursor:pointer;font-family:var(--mono);font-size:11px;letter-spacing:.05em;transition:all .25s}
+.dtoggle:hover{border-color:var(--orange);color:var(--orange)}
+.dtoggle.guide{border-color:var(--orange-dim);color:var(--orange)}
+.dtoggle i{font-size:12px}
 /* embedded-in-presenter: hide the deck's own chrome (the presenter provides title + theme) */
 .in-iframe .top-bar{display:none}
 </style>
 </head>
 <body>
-<script>if(window!==window.top)document.body.classList.add('in-iframe');</script>
+<script>(function(){var e=window!==window.top;if(e)document.body.classList.add('in-iframe');document.documentElement.setAttribute('data-density',e?'stage':'guide');})();</script>
 <div id="app">
   <div class="top-bar"><div class="deck-title">A2UI <span class="accent">· on the wire</span></div>
-    <button class="theme-toggle" id="themeToggle" title="Toggle theme"><i class="fas fa-sun"></i></button></div>
+    <div class="bar-tools">
+      <button class="dtoggle" id="densityToggle" title="Toggle detail (D)"><i class="fa-solid fa-circle-info"></i><span>Detail</span></button>
+      <button class="theme-toggle" id="themeToggle" title="Toggle theme"><i class="fas fa-sun"></i></button>
+    </div></div>
   <div class="slides-viewport"><div class="slides-stage">
 
     <!-- Slide 0 — the round trip -->
@@ -271,7 +281,7 @@ body{background-image:radial-gradient(circle at 50% 40%, rgba(231,60,23,.04) 0%,
           </div>
         </div>
       </div>
-      <div class="cat-foot">Same <b>4 messages</b> move any tree — createSurface · updateComponents · updateDataModel · deleteSurface. This one screen draws on <b>12 of the 18</b>, zero bespoke React. <b>Can't:</b> no Table/Chart in Basic — compose List+Row or ship a custom catalog · <span style="font-family:var(--mono)">@a2ui/web_core 0.9.1-alpha</span>.
+      <div class="cat-foot">Same <b>4 messages</b> move any tree — this screen draws on <b>12 of 18</b>, zero bespoke React.<span class="detail"> createSurface · updateComponents · updateDataModel · deleteSurface. <b>Can't:</b> no Table/Chart in Basic — compose List+Row or ship a custom catalog · <span style="font-family:var(--mono)">@a2ui/web_core 0.9.1-alpha</span>.</span>
         <span class="legend"><span class="swatch"></span> drawn on the right &rarr;</span></div>
     </section>
 
@@ -317,7 +327,7 @@ body{background-image:radial-gradient(circle at 50% 40%, rgba(231,60,23,.04) 0%,
           </div>
         </div>
       </div>
-      <div class="cat-foot"><b>Same JSON, three renderers</b> — each themes the identical tree. <span style="font-family:var(--mono)">Tokens read from the installed packages: @a2ui/react &amp; CopilotKit ship near-identical plain-blue defaults; @a2ui-sdk/react adopts shadcn tokens (shown dark). All React · alpha.</span></div>
+      <div class="cat-foot"><b>Same JSON, three renderers</b> — each themes the identical tree.<span class="detail"> <span style="font-family:var(--mono)">Tokens read from the installed packages: @a2ui/react &amp; CopilotKit ship near-identical plain-blue defaults; @a2ui-sdk/react adopts shadcn tokens (shown dark). All React · alpha.</span></span></div>
     </section>
 
     <!-- Slide 3 — the boundary: A2UI ceiling → MCP Apps -->
@@ -350,7 +360,7 @@ body{background-image:radial-gradient(circle at 50% 40%, rgba(231,60,23,.04) 0%,
           </div>
         </div>
       </div>
-      <div class="cat-foot">Rule of thumb: pick the <b>lowest-openness</b> pattern that does the job — A2UI until it can&rsquo;t, then MCP Apps (the sandbox is real overhead). <span style="font-family:var(--mono)">* Table = compose List+Row · A2UI v0.9 is alpha — pin versions</span></div>
+      <div class="cat-foot">Rule of thumb: pick the <b>lowest-openness</b> pattern that does the job — A2UI until it can&rsquo;t, then MCP Apps (the sandbox is real overhead).<span class="detail"> <span style="font-family:var(--mono)">* Table = compose List+Row · A2UI v0.9 is alpha — pin versions</span></span></div>
     </section>
 
   </div></div>
@@ -431,11 +441,18 @@ body{background-image:radial-gradient(circle at 50% 40%, rgba(231,60,23,.04) 0%,
     else if(e.key==='ArrowLeft'){e.preventDefault();retreat();}
     else if(e.key==='ArrowDown'){e.preventDefault();window.parent.postMessage({type:'deck-nav',dir:'next'},'*');}
     else if(e.key==='ArrowUp'){e.preventDefault();window.parent.postMessage({type:'deck-nav',dir:'prev'},'*');}
+    else if(e.key==='d'||e.key==='D'){e.preventDefault();toggleDens();}
   });
-  window.addEventListener('message',e=>{if(!e.data||typeof e.data!=='object')return;if(e.data.action==='go-first')showSlide(0,false);if(e.data.action==='go-last')showSlide(TOTAL-1,true);if(e.data.action==='set-theme')setTheme(e.data.theme);});
+  window.addEventListener('message',e=>{if(!e.data||typeof e.data!=='object')return;if(e.data.action==='go-first')showSlide(0,false);if(e.data.action==='go-last')showSlide(TOTAL-1,true);if(e.data.action==='set-theme')setTheme(e.data.theme);if(e.data.action==='set-density')setDens(e.data.density);});
   const themeToggle=document.getElementById('themeToggle');
   function setTheme(t){document.documentElement.setAttribute('data-theme',t);themeToggle.innerHTML=t==='light'?'<i class="fas fa-moon"></i>':'<i class="fas fa-sun"></i>';window.parent.postMessage({type:'deck-theme',theme:t},'*');}
   themeToggle.addEventListener('click',()=>setTheme(document.documentElement.getAttribute('data-theme')==='light'?'dark':'light'));
+  const densEl=document.getElementById('densityToggle');
+  function reflectDens(){ if(densEl) densEl.classList.toggle('guide', document.documentElement.getAttribute('data-density')==='guide'); }
+  function setDens(d){ document.documentElement.setAttribute('data-density', d==='guide'?'guide':'stage'); reflectDens(); }
+  function toggleDens(){ setDens(document.documentElement.getAttribute('data-density')==='guide'?'stage':'guide'); }
+  if(densEl) densEl.addEventListener('click',toggleDens);
+  reflectDens();
   showSlide(0,false);
 })();
 </script>

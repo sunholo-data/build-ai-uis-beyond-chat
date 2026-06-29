@@ -179,25 +179,35 @@ body{
 .kbd{display:inline-block;padding:1px 6px;border-radius:3px;font-family:var(--mono);font-size:10px;background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.1);color:var(--text-dim)}
 [data-theme="light"] .kbd{background:rgba(0,0,0,.05);border-color:rgba(0,0,0,.1)}
 
+/* ── density: Stage (big screen) hides .detail; Guide (laptop) reveals it ── */
+html[data-density="stage"] .detail{display:none}
+.bar-tools{display:flex;align-items:center;gap:10px}
+.dtoggle{display:flex;align-items:center;gap:.5em;height:32px;padding:0 13px;border-radius:999px;border:1px solid var(--ghost);background:transparent;color:var(--text-dim);cursor:pointer;font-family:var(--mono);font-size:11px;letter-spacing:.05em;transition:all .25s}
+.dtoggle:hover{border-color:var(--orange);color:var(--orange)}
+.dtoggle.guide{border-color:var(--orange-dim);color:var(--orange)}
+.dtoggle i{font-size:12px}
 /* ─── Embedded-in-presenter mode ─── */
 .in-iframe .top-bar{display:none}
 .in-iframe .bottom-bar{display:none}
 </style>
 </head>
 <body>
-<script>if(window!==window.top)document.body.classList.add('in-iframe');</script>
+<script>(function(){var e=window!==window.top;if(e)document.body.classList.add('in-iframe');document.documentElement.setAttribute('data-density',e?'stage':'guide');})();</script>
 <div id="app">
   <div class="top-bar">
     <div class="top-bar-left">
       <img src="images/logos/sunholo-logo.svg" alt="Sunholo" class="top-logo">
       <span class="deck-title">Round A · <span class="accent">Explore a live skill</span></span>
     </div>
-    <button class="theme-toggle" id="themeToggle" title="Toggle theme"><i class="fas fa-sun"></i></button>
+    <div class="bar-tools">
+      <button class="dtoggle" id="densityToggle" title="Toggle detail (D)"><i class="fa-solid fa-circle-info"></i><span>Detail</span></button>
+      <button class="theme-toggle" id="themeToggle" title="Toggle theme"><i class="fas fa-sun"></i></button>
+    </div>
   </div>
   <div class="slides-viewport">
     <div class="slides-stage">
       <section class="slide active" data-slide="0">
-<div class="act"><div class="act-head"><span class="act-badge">ROUND A</span><span class="act-title">Explore a live skill</span><span class="act-meta"><span class="chip accent">&#9201; 20 min</span><span class="chip">&#128101; your table</span><span class="chip">&#129504; explore</span></span></div><div class="act-body"><div class="act-col"><p class="goal">&#127919; Poke ONE running demo skill and pin down what the protocol actually buys you over plain chat.</p><ol><li>Pick one demo skill: AG-UI (<code>demo-researcher</code>), A2UI (<code>demo-form-builder</code>) or MCP (<code>demo-map-explorer</code>)</li><li>Try 3–4 prompts; push on it — make it render, update, misbehave</li><li>AG-UI? Open DevTools &rarr; Network &rarr; <code>stream</code> to watch the events</li><li>As a table, list 3 things this protocol enables that a plain chatbot can&rsquo;t</li><li>Note one thing that surprised you</li></ol></div><div class="act-col side"><div class="block done"><div class="lbl">&#9989; Done when</div><p>Your table can name 3 things the protocol enables that plain chat can&rsquo;t.</p></div><div class="block"><div class="lbl">&#128161; Hints</div><p>Stuck? Ask the helper agent, or skim <a href="../protocol-gotchas.md" target="_blank">protocol-gotchas.md</a>.</p></div><div class="block"><div class="lbl">&#128275; Solution</div><p>No single answer — compare lists across tables in the share-back.</p></div></div></div></div>
+<div class="act"><div class="act-head"><span class="act-badge">ROUND A</span><span class="act-title">Explore a live skill</span><span class="act-meta"><span class="chip accent">&#9201; 20 min</span><span class="chip">&#128101; your table</span><span class="chip">&#129504; explore</span></span></div><div class="act-body"><div class="act-col"><p class="goal">&#127919; Poke ONE running demo skill and pin down what the protocol actually buys you over plain chat.</p><ol><li>Pick one demo skill: AG-UI (<code>demo-researcher</code>), A2UI (<code>demo-form-builder</code>) or MCP (<code>demo-map-explorer</code>)</li><li>Try 3–4 prompts; push on it — make it render, update, misbehave</li><li>AG-UI? Open DevTools &rarr; Network &rarr; <code>stream</code> to watch the events</li><li>As a table, list 3 things this protocol enables that a plain chatbot can&rsquo;t</li><li>Note one thing that surprised you</li></ol></div><div class="act-col side"><div class="block done"><div class="lbl">&#9989; Done when</div><p>Your table can name 3 things the protocol enables that plain chat can&rsquo;t.</p></div><div class="block detail"><div class="lbl">&#128161; Hints</div><p>Stuck? Ask the helper agent, or skim <a href="../protocol-gotchas.md" target="_blank">protocol-gotchas.md</a>.</p></div><div class="block detail"><div class="lbl">&#128275; Solution</div><p>No single answer — compare lists across tables in the share-back.</p></div></div></div></div>
       </section>
     </div>
   </div>
@@ -260,6 +270,7 @@ body{
     if(e.key==='ArrowLeft') goTo(current-1);
     if(e.key==='ArrowDown'){ e.preventDefault(); window.parent.postMessage({type:'deck-nav',dir:'next'},'*'); }
     if(e.key==='ArrowUp'){ e.preventDefault(); window.parent.postMessage({type:'deck-nav',dir:'prev'},'*'); }
+    if(e.key==='d'||e.key==='D'){ e.preventDefault(); toggleDens(); }
   });
 
   window.addEventListener('message', e=>{
@@ -267,6 +278,7 @@ body{
       if(e.data.action==='go-first') goTo(0);
       if(e.data.action==='go-last'){ current=-1; goTo(TOTAL-1); }
       if(e.data.action==='set-theme') setTheme(e.data.theme);
+      if(e.data.action==='set-density') setDens(e.data.density);
     }
   });
   window.parent.postMessage({type:'deck-ready',total:TOTAL},'*');
@@ -283,6 +295,14 @@ body{
   });
   const saved = localStorage.getItem('slides-theme');
   if(saved) setTheme(saved);
+
+  /* density (Stage vs Guide) */
+  const densEl=document.getElementById('densityToggle');
+  function reflectDens(){ if(densEl) densEl.classList.toggle('guide', document.documentElement.getAttribute('data-density')==='guide'); }
+  function setDens(d){ document.documentElement.setAttribute('data-density', d==='guide'?'guide':'stage'); reflectDens(); }
+  function toggleDens(){ setDens(document.documentElement.getAttribute('data-density')==='guide'?'stage':'guide'); }
+  if(densEl) densEl.addEventListener('click',toggleDens);
+  reflectDens();
 })();
 </script>
 </body>

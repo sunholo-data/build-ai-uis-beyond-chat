@@ -62,6 +62,7 @@ html,body{height:100%;overflow:hidden;background:var(--bg);color:var(--text);fon
   font-size:12px;transition:all .25s;display:flex;align-items:center;justify-content:center;
 }
 .theme-toggle:hover{border-color:var(--orange);color:var(--orange)}
+#densityToggle.guide{border-color:var(--orange);color:var(--orange)}
 
 /* ─── Clock & timer ─── */
 .clock{
@@ -124,6 +125,7 @@ html,body{height:100%;overflow:hidden;background:var(--bg);color:var(--text);fon
         <span class="dot"></span>
         <span id="clockTime">--:--</span>
       </div>
+      <button class="theme-toggle" id="densityToggle" title="Detail notes — stage vs guide (broadcasts to all decks)"><i class="far fa-circle"></i></button>
       <button class="theme-toggle" id="themeToggle" title="Toggle theme"><i class="fas fa-sun"></i></button>
     </div>
   </div>
@@ -268,10 +270,26 @@ html,body{height:100%;overflow:hidden;background:var(--bg);color:var(--text);fon
   const saved = localStorage.getItem('presenter-theme');
   if (saved) setTheme(saved, true);
 
+  // ── Detail density (stage vs guide) — one switch broadcasts to every deck ──
+  const densityToggle = document.getElementById('densityToggle');
+  function setDensity(d, broadcast) {
+    densityToggle.classList.toggle('guide', d === 'guide');
+    densityToggle.innerHTML = d === 'guide' ? '<i class="fas fa-circle-info"></i>' : '<i class="far fa-circle"></i>';
+    densityToggle.title = d === 'guide'
+      ? 'Detail ON — guide notes shown on every deck (click for stage view)'
+      : 'Detail OFF — stage view (click to reveal guide notes on every deck)';
+    localStorage.setItem('presenter-density', d);
+    if (broadcast !== false) frames.forEach(f => f.contentWindow.postMessage({ type: 'deck-command', action: 'set-density', density: d }, '*'));
+  }
+  densityToggle.addEventListener('click', () => setDensity(densityToggle.classList.contains('guide') ? 'stage' : 'guide', true));
+  setDensity(localStorage.getItem('presenter-density') || 'stage', false);
+
   frames.forEach(f => {
     f.addEventListener('load', () => {
       const theme = document.documentElement.getAttribute('data-theme') || 'dark';
       f.contentWindow.postMessage({ type: 'deck-command', action: 'set-theme', theme: theme }, '*');
+      const density = localStorage.getItem('presenter-density') || 'stage';
+      f.contentWindow.postMessage({ type: 'deck-command', action: 'set-density', density: density }, '*');
     });
   });
 

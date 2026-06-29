@@ -176,16 +176,26 @@ body{background-image:radial-gradient(circle at 50% 40%, rgba(231,60,23,.04) 0%,
   .rail.flow,.packet.fly-down,.packet.fly-up,.toolbadge.on,.caret,.slide.active .cat{animation:none}
   .packet.show{opacity:1}.cat{opacity:1}
 }
+/* ── density: Stage (big screen) hides .detail; Guide (laptop) reveals it ── */
+html[data-density="stage"] .detail{display:none}
+.bar-tools{display:flex;align-items:center;gap:10px}
+.dtoggle{display:flex;align-items:center;gap:.5em;height:32px;padding:0 13px;border-radius:999px;border:1px solid var(--ghost);background:transparent;color:var(--text-dim);cursor:pointer;font-family:var(--mono);font-size:11px;letter-spacing:.05em;transition:all .25s}
+.dtoggle:hover{border-color:var(--orange);color:var(--orange)}
+.dtoggle.guide{border-color:var(--orange-dim);color:var(--orange)}
+.dtoggle i{font-size:12px}
 /* embedded-in-presenter: hide the deck's own chrome (the presenter provides title + theme) */
 .in-iframe .top-bar{display:none}
 </style>
 </head>
 <body>
-<script>if(window!==window.top)document.body.classList.add('in-iframe');</script>
+<script>(function(){var e=window!==window.top;if(e)document.body.classList.add('in-iframe');document.documentElement.setAttribute('data-density',e?'stage':'guide');})();</script>
 <div id="app">
   <div class="top-bar">
     <div class="deck-title">AG-UI <span class="accent">· on the wire</span></div>
-    <button class="theme-toggle" id="themeToggle" title="Toggle theme"><i class="fas fa-sun"></i></button>
+    <div class="bar-tools">
+      <button class="dtoggle" id="densityToggle" title="Toggle detail (D)"><i class="fa-solid fa-circle-info"></i><span>Detail</span></button>
+      <button class="theme-toggle" id="themeToggle" title="Toggle theme"><i class="fas fa-sun"></i></button>
+    </div>
   </div>
   <div class="slides-viewport">
     <div class="slides-stage">
@@ -238,7 +248,7 @@ body{background-image:radial-gradient(circle at 50% 40%, rgba(231,60,23,.04) 0%,
         </div>
         <div class="cat-grid" id="catGrid"></div>
         <div class="cat-foot">
-          <p class="cf-text">You used <b>5</b> in the trace; the <b>5 deprecated</b> <span style="font-family:var(--mono)">THINKING_*</span> events (&rarr; <span style="font-family:var(--mono)">REASONING_*</span>) aren't shown — 33 total. Source: installed <span style="font-family:var(--mono)">@ag-ui/core</span>.</p>
+          <p class="cf-text">Your whole trace used just <b>5</b> of these.<span class="detail"> 28 active · 5 deprecated <span style="font-family:var(--mono)">THINKING_*</span> (&rarr; <span style="font-family:var(--mono)">REASONING_*</span>) hidden · 33 total · installed <span style="font-family:var(--mono)">@ag-ui/core</span></span></p>
           <span class="legend"><span class="swatch"></span> seen in the trace</span>
         </div>
       </section>
@@ -259,17 +269,17 @@ body{background-image:radial-gradient(circle at 50% 40%, rgba(231,60,23,.04) 0%,
               <h3>A2UI</h3>
               <div class="rl"><span class="rk">out</span><span>tool <code>send_a2ui_json_to_client</code> — the <b>component tree</b> is the args</span></div>
               <div class="rl"><span class="rk">render</span><span>one renderer draws it to the workspace surface</span></div>
-              <div class="rl back"><span class="rk">back</span><span><code>forwardedProps.a2ui_surface_state</code> on the next request</span></div>
+              <div class="rl back detail"><span class="rk">back</span><span><code>forwardedProps.a2ui_surface_state</code> on the next request</span></div>
             </div>
             <div class="ride-card mcp">
               <h3>MCP Apps</h3>
               <div class="rl"><span class="rk">out</span><span>a tool whose def carries <code>_meta.ui.resourceUri = ui://…</code></span></div>
               <div class="rl"><span class="rk">render</span><span>the router fetches the HTML &amp; mounts a <b>sandboxed iframe</b></span></div>
-              <div class="rl back"><span class="rk">back</span><span><code>ui/update-model-context</code> &rarr; iframe-context</span></div>
+              <div class="rl back detail"><span class="rk">back</span><span><code>ui/update-model-context</code> &rarr; iframe-context</span></div>
             </div>
           </div>
         </div>
-        <div class="ride-foot">AG-UI is the <b>transport</b>; A2UI &amp; MCP Apps are payloads on its <b>Tool Call</b> events. <span style="font-family:var(--mono)">useSkillAgent.ts · MCPAppToolCallRouter.tsx</span></div>
+        <div class="ride-foot">AG-UI is the <b>transport</b>; A2UI &amp; MCP Apps are payloads on its <b>Tool Call</b> events.<span class="detail"> <span style="font-family:var(--mono)">useSkillAgent.ts · MCPAppToolCallRouter.tsx</span></span></div>
       </section>
 
     </div>
@@ -370,18 +380,28 @@ body{background-image:radial-gradient(circle at 50% 40%, rgba(231,60,23,.04) 0%,
     else if(e.key==='ArrowLeft'){ e.preventDefault(); retreat(); }
     else if(e.key==='ArrowDown'){ e.preventDefault(); window.parent.postMessage({type:'deck-nav',dir:'next'},'*'); }
     else if(e.key==='ArrowUp'){ e.preventDefault(); window.parent.postMessage({type:'deck-nav',dir:'prev'},'*'); }
+    else if(e.key==='d'||e.key==='D'){ e.preventDefault(); toggleDens(); }
   });
   window.addEventListener('message',e=>{
     if(!e.data||typeof e.data!=='object') return;
     if(e.data.action==='go-first') showSlide(0,false);
     if(e.data.action==='go-last') showSlide(TOTAL-1,true);
     if(e.data.action==='set-theme') setTheme(e.data.theme);
+    if(e.data.action==='set-density') setDens(e.data.density);
   });
 
   /* theme */
   const themeToggle=document.getElementById('themeToggle');
   function setTheme(t){ document.documentElement.setAttribute('data-theme',t); themeToggle.innerHTML=t==='light'?'<i class="fas fa-moon"></i>':'<i class="fas fa-sun"></i>'; window.parent.postMessage({type:'deck-theme',theme:t},'*'); }
   themeToggle.addEventListener('click',()=> setTheme(document.documentElement.getAttribute('data-theme')==='light'?'dark':'light'));
+
+  /* density (Stage vs Guide) */
+  const densEl=document.getElementById('densityToggle');
+  function reflectDens(){ if(densEl) densEl.classList.toggle('guide', document.documentElement.getAttribute('data-density')==='guide'); }
+  function setDens(d){ document.documentElement.setAttribute('data-density', d==='guide'?'guide':'stage'); reflectDens(); }
+  function toggleDens(){ setDens(document.documentElement.getAttribute('data-density')==='guide'?'stage':'guide'); }
+  if(densEl) densEl.addEventListener('click',toggleDens);
+  reflectDens();
 
   showSlide(0,false);
 })();
