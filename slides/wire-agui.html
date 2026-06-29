@@ -145,6 +145,31 @@ body{background-image:radial-gradient(circle at 50% 40%, rgba(231,60,23,.04) 0%,
 .cat-foot .legend{font-family:var(--mono);font-size:clamp(8px,1.1cqi,13px);margin-left:auto;display:flex;align-items:center;gap:.6cqi}
 .cat-foot .swatch{width:11px;height:11px;border-radius:3px;border:1px solid var(--orange-dim);background:var(--orange-dim)}
 
+/* ── "where A2UI & MCP Apps sit" slide ── */
+.ride{flex:1;min-height:0;display:flex;flex-direction:column;justify-content:center;gap:2.4cqb}
+.tc-rail{display:flex;align-items:center;justify-content:center;gap:1cqi;flex-wrap:wrap;opacity:0}
+.slide.active .tc-rail{animation:fadeSlideUp .5s ease both}
+.tc{font-family:var(--mono);font-weight:700;font-size:clamp(8px,1.2cqi,15px);color:#fff;background:var(--orange);border-radius:6px;padding:.5cqb 1.1cqi;box-shadow:0 4px 16px var(--orange-glow)}
+.tc-arrow{color:var(--orange);font-weight:700;font-family:var(--mono)}
+.tc-cap{width:100%;text-align:center;font-family:var(--mono);font-size:clamp(8px,1.05cqi,13px);color:var(--text-dim);margin-top:.5cqb;letter-spacing:.04em}
+.tc-cap b{color:var(--orange)}
+.ride-cols{display:grid;grid-template-columns:1fr 1fr;gap:2cqi}
+.ride-card{background:var(--surface);border:1px solid var(--ghost);border-radius:11px;padding:1.7cqb 1.8cqi;display:flex;flex-direction:column;gap:1cqb;opacity:0}
+.slide.active .ride-card{animation:fadeSlideUp .5s ease both}
+.slide.active .ride-card:nth-child(1){animation-delay:.12s}
+.slide.active .ride-card:nth-child(2){animation-delay:.22s}
+.ride-card.a2ui{border-top:2px solid var(--green)}
+.ride-card.mcp{border-top:2px solid var(--blue)}
+.ride-card h3{font-weight:800;font-size:clamp(13px,1.85cqi,23px)}
+.rl{display:flex;gap:1cqi;font-size:clamp(9px,1.3cqi,16px);line-height:1.4}
+.rl .rk{color:var(--orange);font-weight:700;flex-shrink:0;font-family:var(--mono);font-size:.82em;text-transform:uppercase;letter-spacing:.06em;min-width:6ch}
+.rl code{font-family:var(--mono);font-size:.9em;background:var(--code-bg);border:1px solid var(--code-border);border-radius:4px;padding:.03em .35em;color:var(--text)}
+.rl.back{margin-top:auto;padding-top:1cqb;border-top:1px solid var(--bar-border)}
+.rl.back .rk{color:var(--text-dim)}
+.ride-foot{flex-shrink:0;text-align:center;font-size:clamp(10px,1.35cqi,16px);color:var(--text-dim);margin-top:1.8cqb;padding-top:1.4cqb;border-top:1px solid var(--bar-border)}
+.ride-foot b{color:var(--orange)}
+@media (prefers-reduced-motion: reduce){.slide.active .tc-rail,.slide.active .ride-card{animation:none}.tc-rail,.ride-card{opacity:1}}
+
 @media (prefers-reduced-motion: reduce){
   .rail.flow,.packet.fly-down,.packet.fly-up,.toolbadge.on,.caret,.slide.active .cat{animation:none}
   .packet.show{opacity:1}.cat{opacity:1}
@@ -204,13 +229,42 @@ body{background-image:radial-gradient(circle at 50% 40%, rgba(231,60,23,.04) 0%,
       <section class="slide">
         <div class="wire-head">
           <div class="eyebrow">AG-UI · the full set</div>
-          <h2 class="wtitle">The full set: <span class="accent">33 typed events</span></h2>
+          <h2 class="wtitle">The active set: <span class="accent">28 of 33</span></h2>
         </div>
         <div class="cat-grid" id="catGrid"></div>
         <div class="cat-foot">
-          You used <b>5 of 33</b> in the trace — most turns touch a handful. <span style="font-family:var(--mono)">THINKING_*</span> is deprecated (&rarr; <span style="font-family:var(--mono)">REASONING_*</span>). Source: installed <span style="font-family:var(--mono)">@ag-ui/core</span>.
+          You used <b>5</b> in the trace; the <b>5 deprecated</b> <span style="font-family:var(--mono)">THINKING_*</span> events (&rarr; <span style="font-family:var(--mono)">REASONING_*</span>) aren't shown — 33 total. Source: installed <span style="font-family:var(--mono)">@ag-ui/core</span>.
           <span class="legend"><span class="swatch"></span> seen in the trace</span>
         </div>
+      </section>
+
+      <!-- Slide 2 — where A2UI & MCP Apps sit -->
+      <section class="slide">
+        <div class="wire-head">
+          <div class="eyebrow">the same events, reused</div>
+          <h2 class="wtitle">A2UI &amp; MCP Apps <span class="accent">ride the Tool Call events</span></h2>
+        </div>
+        <div class="ride">
+          <div class="tc-rail">
+            <span class="tc">TOOL_CALL_START</span><span class="tc-arrow">&rarr;</span><span class="tc">TOOL_CALL_ARGS</span><span class="tc-arrow">&rarr;</span><span class="tc">TOOL_CALL_END</span><span class="tc-arrow">&rarr;</span><span class="tc">TOOL_CALL_RESULT</span>
+            <span class="tc-cap">the <b>Tool Call</b> group from the catalog — the carrier for both</span>
+          </div>
+          <div class="ride-cols">
+            <div class="ride-card a2ui">
+              <h3>A2UI</h3>
+              <div class="rl"><span class="rk">out</span><span>tool <code>send_a2ui_json_to_client</code> — the <b>component tree</b> is the args</span></div>
+              <div class="rl"><span class="rk">render</span><span>one renderer draws it to the workspace surface</span></div>
+              <div class="rl back"><span class="rk">back</span><span><code>forwardedProps.a2ui_surface_state</code> on the next request</span></div>
+            </div>
+            <div class="ride-card mcp">
+              <h3>MCP Apps</h3>
+              <div class="rl"><span class="rk">out</span><span>a tool whose def carries <code>_meta.ui.resourceUri = ui://…</code></span></div>
+              <div class="rl"><span class="rk">render</span><span>the router fetches the HTML &amp; mounts a <b>sandboxed iframe</b></span></div>
+              <div class="rl back"><span class="rk">back</span><span><code>ui/update-model-context</code> &rarr; iframe-context</span></div>
+            </div>
+          </div>
+        </div>
+        <div class="ride-foot">AG-UI is the <b>transport</b>; A2UI &amp; MCP Apps are payloads on its <b>Tool Call</b> events. <span style="font-family:var(--mono)">useSkillAgent.ts · MCPAppToolCallRouter.tsx</span></div>
       </section>
 
     </div>
@@ -245,7 +299,6 @@ body{background-image:radial-gradient(circle at 50% 40%, rgba(231,60,23,.04) 0%,
     { name:'Activity', events:['ACTIVITY_SNAPSHOT','ACTIVITY_DELTA'] },
     { name:'Reasoning', events:['REASONING_START','REASONING_MESSAGE_START','REASONING_MESSAGE_CONTENT','REASONING_MESSAGE_END','REASONING_MESSAGE_CHUNK','REASONING_END','REASONING_ENCRYPTED_VALUE'] },
     { name:'Special', events:['RAW','CUSTOM'] },
-    { name:'Thinking · deprecated', events:['THINKING_START','THINKING_END','THINKING_TEXT_MESSAGE_START','THINKING_TEXT_MESSAGE_CONTENT','THINKING_TEXT_MESSAGE_END'] },
   ];
   const USED = new Set(['RUN_STARTED','TEXT_MESSAGE_START','TEXT_MESSAGE_CONTENT','TOOL_CALL_START','RUN_FINISHED']);
 
