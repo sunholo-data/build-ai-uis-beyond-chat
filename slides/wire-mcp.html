@@ -127,9 +127,12 @@ body{background-image:radial-gradient(circle at 50% 40%, rgba(231,60,23,.04) 0%,
 .r-body b{color:var(--orange);font-weight:700}
 .cat-foot{flex-shrink:0;margin-top:2cqb;padding-top:1.6cqb;border-top:1px solid var(--bar-border);font-size:clamp(10px,1.4cqi,17px);color:var(--text-dim)}.cat-foot b{color:var(--orange)}
 @media (prefers-reduced-motion: reduce){.rail.flow,.packet.fly-down,.packet.fly-up,.widget.on,.bubble.agent.on,.slide.active .reason,.slide.active .app-stage{animation:none}.packet.show{opacity:1}.reason,.app-stage{opacity:1}}
+/* embedded-in-presenter: hide the deck's own chrome (the presenter provides title + theme) */
+.in-iframe .top-bar{display:none}
 </style>
 </head>
 <body>
+<script>if(window!==window.top)document.body.classList.add('in-iframe');</script>
 <div id="app">
   <div class="top-bar"><div class="deck-title">MCP Apps <span class="accent">· on the wire</span></div>
     <button class="theme-toggle" id="themeToggle" title="Toggle theme"><i class="fas fa-sun"></i></button></div>

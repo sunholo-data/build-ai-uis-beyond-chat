@@ -131,12 +131,59 @@ to submitted code). Detailed build in [`helper-agent-design.md`](helper-agent-de
 > **Integrity note:** the reference solution lives on `main`; don't ship the
 > rubric's expected answers in the client. Grade server-side in the helper skill.
 
+## Cross-tool agent support — skills that work beyond Claude Code
+
+Attendees bring different coding agents (Claude Code, Codex, Gemini CLI, Antigravity).
+Good news: **skills are now an open standard**, not a Claude-Code lock-in. Anthropic
+published the `SKILL.md` spec (Dec 2025) and Codex, Gemini CLI, and Antigravity all read
+the same format. The fork ships **one** set of skills that fires in all of them — the only
+difference between tools is *which directory* they scan.
+
+**Layout — one source of truth, every tool reads it:**
+
+```
+build-ai-uis-workshop-app/
+├── AGENTS.md                       # always-on project instructions (Codex, Cursor, Gemini CLI)
+├── CLAUDE.md                       # one line — @AGENTS.md — so Claude Code reads the same
+├── .agents/
+│   └── skills/                     # canonical SKILL.md skills (Codex + Gemini CLI scan here)
+│       ├── workshop-helper/SKILL.md
+│       └── …
+└── .claude/
+    └── skills  ->  ../.agents/skills    # symlink: Claude Code sees the identical files
+```
+
+Create the bridge once:
+```bash
+mkdir -p .claude
+ln -s ../.agents/skills .claude/skills    # relative symlink → resolves to .agents/skills
+```
+
+**Who reads what** (from each tool's own docs):
+- **Claude Code** → `.claude/skills/`
+- **Codex** → `.agents/skills/` (repo, parent, root) + `~/.agents/skills`
+- **Gemini CLI** → `.agents/skills/` or `.gemini/skills/` — its docs call `.agents/skills`
+  the "interoperable path"
+- **Antigravity** → same `SKILL.md` open format; confirm its scan path against its docs and
+  add a third symlink if it differs.
+
+Two layers — don't conflate them:
+- **`AGENTS.md` / `CLAUDE.md`** = *always-loaded* instructions (project conventions, how to run it).
+- **`SKILL.md`** = *on-demand* capabilities, surfaced only when their description matches the task.
+
+> Symlinks resolve on macOS/Linux/WSL/Codespaces — the only environments
+> [`pre-work.md`](pre-work.md) supports (Windows-native is already out of scope). If you'd
+> rather not rely on a symlink, commit a copy in both dirs and add a CI check that the two
+> stay identical.
+
 ## What ships in the fork (asset checklist)
 
 - [x] Repo created + seeded + `workshop-start` branch with 3 blanked spots
 - [x] `docs/exercises/{README,agui,a2ui,mcp}.md` (homespun-vs-protocol + playgrounds)
 - [x] Verified `make dev-local` green path (drives [`pre-work.md`](pre-work.md))
 - [x] Codespaces devcontainer (one-click, any OS — see [`pre-work.md`](pre-work.md))
+- [ ] Cross-tool skill layout: canonical `.agents/skills/` + `.claude/skills` symlink (Claude Code / Codex / Gemini CLI)
+- [ ] `AGENTS.md` (always-on instructions) + `CLAUDE.md` `@AGENTS.md` pointer
 - [ ] Round-C skeleton skill + a worked example
 - [ ] Helper-agent skill (RAG corpus + `submit_for_show_and_tell` + `rate_submission`)
 - [ ] Anonymous-group join pre-configured (printable code for the slide)

@@ -95,11 +95,12 @@ body{
 
 /* ─── Cards (intro/showcase) ─── */
 .cards{display:flex;gap:2.2cqi;width:90%;margin:0 auto;justify-content:center}
-.card{flex:1;background:var(--surface);border:1px solid var(--ghost);border-radius:12px;padding:3cqb 2.2cqi;display:flex;flex-direction:column;gap:1.2cqb;opacity:0}
+.card{flex:1;background:var(--surface);border:1px solid var(--ghost);border-radius:12px;padding:1.6cqb 1.6cqi 1.9cqb;display:flex;flex-direction:column;gap:1cqb;opacity:0}
+.card .shot{width:100%;aspect-ratio:16/10;object-fit:cover;border-radius:8px;border:1px solid var(--ghost);background:#fff;display:block;box-shadow:0 3px 12px rgba(0,0,0,.28)}
 .card i{font-size:clamp(20px,3cqi,38px);color:var(--orange)}
 .card .badge{font-family:var(--mono);font-size:clamp(10px,1.3cqi,16px);color:var(--orange);font-weight:700;letter-spacing:.04em}
-.card h3{font-size:clamp(15px,2cqi,26px);font-weight:700}
-.card p{font-size:clamp(11px,1.5cqi,19px);color:var(--text-dim);line-height:1.45}
+.card h3{font-size:clamp(15px,2cqi,26px);font-weight:700;line-height:1.1}
+.card p{font-size:clamp(11px,1.45cqi,18px);color:var(--text-dim);line-height:1.4}
 .card .url{margin-top:auto;font-family:var(--mono);font-size:clamp(10px,1.3cqi,16px);color:var(--orange);text-decoration:none;word-break:break-all;border-bottom:1px solid var(--orange-dim);align-self:flex-start}
 .card .url:hover{border-bottom-color:var(--orange)}
 
@@ -209,7 +210,7 @@ body{
       </section>
       <section class="slide" data-slide="2">
 <h2 class="slide-title">Two real apps — <span class="accent">demoed throughout</span></h2>
-<div class="cards"><div class="card"><i class="fas fa-atom"></i><span class="badge">EDUCATION</span><h3>AIPLA — AI in Physics</h3><p>Teacher classroom app for physics: multi-surface A2UI, an MCP-App simulation, anonymous group-ID join.</p><a class="url" href="https://aipla-v01-frontend-wgwhd7mspa-lz.a.run.app/teacher/classes/0b99f4e04792" target="_blank" rel="noopener">aipla &middot; teacher view &nearr;</a></div><div class="card"><i class="fas fa-file-invoice-dollar"></i><span class="badge">FINANCE &middot; AP</span><h3>GDE AP Agent — Invoices</h3><p>Accounts-payable pipeline: A2UI invoice card + two MCP Apps, deterministic ADK SequentialAgent.</p><a class="url" href="https://gde-ap-agent-blqtqfexwa-ew.a.run.app/" target="_blank" rel="noopener">gde-ap-agent &middot; live &nearr;</a></div></div>
+<div class="cards"><div class="card"><img class="shot" src="images/case-studies/aipla.png" alt="AIPLA — AI in Physics Learning and Assessment app"><span class="badge">EDUCATION</span><h3>AIPLA — AI in Physics</h3><p>Teacher classroom app for physics: multi-surface A2UI, an MCP-App simulation, anonymous group-ID join.</p><a class="url" href="https://aipla-v01-frontend-wgwhd7mspa-lz.a.run.app/teacher/classes/0b99f4e04792" target="_blank" rel="noopener">aipla &middot; teacher view &nearr;</a></div><div class="card"><img class="shot" src="images/case-studies/gde-ap-agent.png" alt="GDE AP Agent — invoice processing showcase app"><span class="badge">FINANCE &middot; AP</span><h3>GDE AP Agent — Invoices</h3><p>Accounts-payable pipeline: A2UI invoice card + two MCP Apps, deterministic ADK SequentialAgent.</p><a class="url" href="https://gde-ap-agent-blqtqfexwa-ew.a.run.app/" target="_blank" rel="noopener">gde-ap-agent &middot; live &nearr;</a></div></div>
 <p class="note"><i class="fas fa-circle-info"></i>You&rsquo;ll meet both again at each protocol — and rebuild parts of them.</p>
       </section>
     </div>

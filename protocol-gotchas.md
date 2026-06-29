@@ -418,6 +418,46 @@ speaks the protocol for *tools* but is not an Apps *host*.
 
 ---
 
+## The back-channel transport gap (block 3 + 4)
+
+> The deepest "young protocol" tell. The *render* path converged across the
+> ecosystem; the *interaction → model* back-channel did not — so the two
+> protocols we ship reach the agent over **different transports**.
+
+### 20. A2UI rides AG-UI; MCP Apps **can't** — and that's not a bug
+
+**Symptom:** A2UI surface state reaches the agent via AG-UI
+`forwardedProps.a2ui_surface_state` (and it works). You assume an MCP App
+widget's state arrives the same way, go looking for it on the AG-UI run
+input — and it's never there. The agent reads it from
+`session.state["mcp_app_context.*"]` instead.
+
+**Why:** the renderer's **owner** dictates the transport.
+- **A2UI** surfaces are **host-rendered, same-origin** — the host owns the
+  `SurfaceModel`, so it snapshots the live `dataModel` at `sendMessage` and
+  attaches it to AG-UI `forwardedProps`. Rides the AG-UI run input.
+- **MCP Apps** widgets are **sandboxed, cross-origin iframes** (`:3457`, no
+  `allow-same-origin`). They speak **MCP-UI postMessage (JSON-RPC)**, not
+  AG-UI, and the host can't read inside them. The widget must *push* state
+  via the spec method `ui/update-model-context`; the host stashes it
+  (`POST /api/sessions/{id}/iframe-context` → `session.state`) for the next
+  turn. It never touches AG-UI — **by design**, because MCP Apps must run in
+  hosts that have no AG-UI at all (Claude Desktop, ChatGPT, …).
+
+Both then converge: an ADK `InstructionProvider` injects a namespaced,
+framed block into the **next system prompt** (`a2ui_surface_context.*` /
+`mcp_app_context.*`) — read as context, never a tool call.
+
+**Fix / implication:** Don't try to force MCP App context onto
+`forwardedProps` — the sandbox makes it impossible, and host-portability is
+the whole point. This asymmetry is **protocol immaturity, not a template
+bug**: the View standardized faster than the interaction loop (see #18).
+Same destination (the prompt), two roads — dictated by who owns the
+renderer. Source: the two `wrap_with_*` InstructionProviders
+(`backend/adk/a2ui_surface_context.py`, `backend/adk/iframe_context.py`).
+
+---
+
 ## Where these came from
 
 - [`docs/talks/ai-ui-protocol-stack.md`](https://github.com/sunholo-data/ai-protocol-platform/blob/main/docs/talks/ai-ui-protocol-stack.md) — the living
@@ -431,6 +471,10 @@ speaks the protocol for *tools* but is not an Apps *host*.
   the [client matrix](https://modelcontextprotocol.io/extensions/client-matrix),
   [OpenAI Apps SDK docs](https://developers.openai.com/apps-sdk/), Slack's
   developer docs, and ext-apps issues #671 / #615 / openai-apps-sdk-examples #221.
+- **#20 (back-channel transport)** — the two `wrap_with_*` InstructionProviders
+  (`backend/adk/a2ui_surface_context.py`, `backend/adk/iframe_context.py`) and the
+  sprint docs `a2ui-surface-context.md` (v6.2.0) / `mcp-app-update-model-context.md`
+  (v6.1.0), cross-checked against the talk-doc verification log.
 
 The talk doc is the **source of truth**. This page is the workshop
 distillation — protocol traps only, no IaC/deploy gotchas, mapped to

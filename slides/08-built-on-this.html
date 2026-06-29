@@ -95,11 +95,12 @@ body{
 
 /* ─── Cards (intro/showcase) ─── */
 .cards{display:flex;gap:2.2cqi;width:90%;margin:0 auto;justify-content:center}
-.card{flex:1;background:var(--surface);border:1px solid var(--ghost);border-radius:12px;padding:3cqb 2.2cqi;display:flex;flex-direction:column;gap:1.2cqb;opacity:0}
+.card{flex:1;background:var(--surface);border:1px solid var(--ghost);border-radius:12px;padding:1.6cqb 1.6cqi 1.9cqb;display:flex;flex-direction:column;gap:1cqb;opacity:0}
+.card .shot{width:100%;aspect-ratio:16/10;object-fit:cover;border-radius:8px;border:1px solid var(--ghost);background:#fff;display:block;box-shadow:0 3px 12px rgba(0,0,0,.28)}
 .card i{font-size:clamp(20px,3cqi,38px);color:var(--orange)}
 .card .badge{font-family:var(--mono);font-size:clamp(10px,1.3cqi,16px);color:var(--orange);font-weight:700;letter-spacing:.04em}
-.card h3{font-size:clamp(15px,2cqi,26px);font-weight:700}
-.card p{font-size:clamp(11px,1.5cqi,19px);color:var(--text-dim);line-height:1.45}
+.card h3{font-size:clamp(15px,2cqi,26px);font-weight:700;line-height:1.1}
+.card p{font-size:clamp(11px,1.45cqi,18px);color:var(--text-dim);line-height:1.4}
 .card .url{margin-top:auto;font-family:var(--mono);font-size:clamp(10px,1.3cqi,16px);color:var(--orange);text-decoration:none;word-break:break-all;border-bottom:1px solid var(--orange-dim);align-self:flex-start}
 .card .url:hover{border-bottom-color:var(--orange)}
 
@@ -110,6 +111,15 @@ body{
 .bullets li code,.act code{font-family:var(--mono);font-size:.9em;background:var(--code-bg);border:1px solid var(--code-border);border-radius:4px;padding:.05em .4em}
 .note{margin-top:3cqb;text-align:center;font-family:var(--mono);font-size:clamp(11px,1.4cqi,17px);color:var(--text-dim);opacity:.8}
 .note i{color:var(--orange);margin-right:.6em}
+
+/* ─── Split: bullets beside a screenshot (deep-dive slides) ─── */
+.split{display:flex;gap:3.4cqi;width:90%;margin:0 auto;align-items:center}
+.split .bullets{width:auto;flex:1.18;margin:0;gap:1.2cqb}
+.split-shot{flex:1;min-width:0}
+.split-shot img{width:100%;aspect-ratio:16/10;object-fit:cover;border-radius:10px;border:1px solid var(--ghost);background:#fff;box-shadow:0 4px 18px rgba(0,0,0,.32);display:block;opacity:0}
+.split-shot .cap{margin-top:1cqb;text-align:center;font-family:var(--mono);font-size:clamp(9px,1.2cqi,15px);color:var(--text-dim)}
+.split-shot .cap a{color:var(--orange);text-decoration:none;border-bottom:1px solid var(--orange-dim)}
+.split-shot .cap a:hover{border-bottom-color:var(--orange)}
 
 /* ─── Activity card (the course-guide slide type) ─── */
 .act{display:flex;flex-direction:column;height:100%;gap:2.2cqb}
@@ -153,6 +163,7 @@ body{
 .slide.active .bullets li:nth-child(3){animation:fadeSlideUp .5s ease .36s both}
 .slide.active .bullets li:nth-child(4){animation:fadeSlideUp .5s ease .48s both}
 .slide.active .bullets li:nth-child(5){animation:fadeSlideUp .5s ease .60s both}
+.slide.active .split-shot img{animation:fadeSlideUp .6s ease .28s both}
 .slide.active .act-head{animation:fadeSlideUp .5s ease .05s both}
 .slide.active .act .goal{animation:fadeSlideUp .5s ease .14s both}
 .slide.active .act ol li:nth-child(1){animation:fadeSlideUp .45s ease .2s both}
@@ -198,16 +209,16 @@ body{
     <div class="slides-stage">
       <section class="slide active" data-slide="0">
 <h2 class="slide-title">Built on <span class="accent">this exact template</span></h2>
-<div class="cards"><div class="card"><i class="fas fa-atom"></i><span class="badge">EDUCATION</span><h3>AIPLA — AI in Physics</h3><p>Teacher classroom app for physics — tutor + class-management skills, anonymous group-ID join, per-cohort budgets. Teacher pilot Aug 2026.</p><a class="url" href="https://aipla-v01-frontend-wgwhd7mspa-lz.a.run.app/teacher/classes/0b99f4e04792" target="_blank" rel="noopener">aipla &middot; teacher view &nearr;</a></div><div class="card"><i class="fas fa-file-invoice-dollar"></i><span class="badge">FINANCE &middot; AP</span><h3>GDE AP Agent — Invoices</h3><p>Drop an invoice &rarr; Extract &rarr; Validate &rarr; Post. ADK SequentialAgent, no LLM in the workflow layer. A2UI hero card + two MCP Apps.</p><a class="url" href="https://gde-ap-agent-blqtqfexwa-ew.a.run.app/" target="_blank" rel="noopener">gde-ap-agent &middot; live &nearr;</a></div></div>
+<div class="cards"><div class="card"><img class="shot" src="images/case-studies/aipla.png" alt="AIPLA — AI in Physics Learning and Assessment app"><span class="badge">EDUCATION</span><h3>AIPLA — AI in Physics</h3><p>Teacher classroom app for physics — tutor + class-management skills, anonymous group-ID join, per-cohort budgets. Teacher pilot Aug 2026.</p><a class="url" href="https://aipla-v01-frontend-wgwhd7mspa-lz.a.run.app/teacher/classes/0b99f4e04792" target="_blank" rel="noopener">aipla &middot; teacher view &nearr;</a></div><div class="card"><img class="shot" src="images/case-studies/gde-ap-agent.png" alt="GDE AP Agent — invoice processing showcase app"><span class="badge">FINANCE &middot; AP</span><h3>GDE AP Agent — Invoices</h3><p>Drop an invoice &rarr; Extract &rarr; Validate &rarr; Post. ADK SequentialAgent, no LLM in the workflow layer. A2UI hero card + two MCP Apps.</p><a class="url" href="https://gde-ap-agent-blqtqfexwa-ew.a.run.app/" target="_blank" rel="noopener">gde-ap-agent &middot; live &nearr;</a></div></div>
 <p class="note"><i class="fas fa-circle-info"></i>Two independent forks of the platform you just learned — same Skills + AG-UI + A2UI + MCP Apps + A2A.</p>
       </section>
       <section class="slide" data-slide="1">
 <h2 class="slide-title">AIPLA <span class="dim">— where the advanced patterns came from</span></h2>
-<ul class="bullets"><li>The 4 template-extensions (sprints 2.11–2.14) were built FOR this deployment:</li><li>Anonymous group-ID auth — students join with a code, no accounts</li><li>Per-cohort budget — typed <code>RUN_ERROR{BUDGET_EXCEEDED}</code> with retry-after</li><li>Artefact review — defence-in-depth above the iframe sandbox</li><li>Tenant attribution on every span — <code>tenant.uid_hash</code>, never raw email</li></ul>
+<div class="split"><ul class="bullets"><li>The 4 template-extensions (sprints 2.11–2.14) were built FOR this deployment:</li><li>Anonymous group-ID auth — students join with a code, no accounts</li><li>Per-cohort budget — typed <code>RUN_ERROR{BUDGET_EXCEEDED}</code> with retry-after</li><li>Artefact review — defence-in-depth above the iframe sandbox</li><li>Tenant attribution on every span — <code>tenant.uid_hash</code>, never raw email</li></ul><div class="split-shot"><img src="images/case-studies/aipla.png" alt="AIPLA — AI in Physics Learning and Assessment app"><div class="cap"><a href="https://aipla-v01-frontend-wgwhd7mspa-lz.a.run.app/teacher/classes/0b99f4e04792" target="_blank" rel="noopener">aipla &middot; teacher view &nearr;</a></div></div></div>
       </section>
       <section class="slide" data-slide="2">
 <h2 class="slide-title">GDE AP Agent <span class="dim">— the whole stack, one business domain</span></h2>
-<ul class="bullets"><li><code>SequentialAgent</code> pipeline: routing is <strong>code, not prose</strong> — injection-safe</li><li><code>ailang-parse</code> deterministic extraction — no Gemini Pro tokens anywhere</li><li>A2UI <code>InvoiceHeroCard</code> + two MCP Apps (Analytics Dashboard, Vendor Knowledge Graph)</li><li>Five <code>SKILL.md</code> files, ~80 lines of wiring — that&rsquo;s the whole app</li><li>Live demo + 2-min video — Google for Startups AI Agents Challenge</li></ul>
+<div class="split"><ul class="bullets"><li><code>SequentialAgent</code> pipeline: routing is <strong>code, not prose</strong> — injection-safe</li><li><code>ailang-parse</code> deterministic extraction — no Gemini Pro tokens anywhere</li><li>A2UI <code>InvoiceHeroCard</code> + two MCP Apps (Analytics Dashboard, Vendor Knowledge Graph)</li><li>Five <code>SKILL.md</code> files, ~80 lines of wiring — that&rsquo;s the whole app</li><li>Live demo + 2-min video — Google for Startups AI Agents Challenge</li></ul><div class="split-shot"><img src="images/case-studies/gde-ap-agent.png" alt="GDE AP Agent — invoice processing showcase app"><div class="cap"><a href="https://gde-ap-agent-blqtqfexwa-ew.a.run.app/" target="_blank" rel="noopener">gde-ap-agent &middot; live &nearr;</a></div></div></div>
       </section>
     </div>
   </div>
