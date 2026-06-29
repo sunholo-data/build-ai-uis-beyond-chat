@@ -199,12 +199,16 @@ body{background-image:radial-gradient(circle at 50% 40%, rgba(231,60,23,.04) 0%,
 .rf-btn{margin-top:auto;text-align:center;background:var(--rc-accent);color:var(--rc-acctext);border-radius:var(--rc-frad);padding:.75cqb 0;font-weight:600;font-size:clamp(8px,1.18cqi,15px)}
 /* theme tokens — @a2ui/react read from the installed package CSS; the other two indicative of each lib's design language */
 .r-ref{--rc-accent:#3b82f6;--rc-rad:8px;--rc-frad:8px;--rc-border:#e5e7eb;--rc-fill:#f5f5f5;--rc-muted:#6b7280;box-shadow:0 4px 14px rgba(59,130,246,.15)}
-.r-copilot{--rc-accent:#6366f1;--rc-rad:18px;--rc-frad:12px;--rc-border:#e5e7eb;--rc-fill:#f9fafb;--rc-muted:#6b7280;box-shadow:0 10px 30px rgba(99,102,241,.20)}
+.r-copilot{--rc-accent:#007bff;--rc-rad:8px;--rc-frad:8px;--rc-border:#cccccc;--rc-fill:#f3f4f6;--rc-muted:#666666;box-shadow:0 6px 20px rgba(0,0,0,.10)}
+.r-copilot .rf-btn{font-weight:700}
 .r-shad{--rc-bg:#09090b;--rc-text:#fafafa;--rc-border:#27272a;--rc-fill:#18181b;--rc-accent:#fafafa;--rc-acctext:#18181b;--rc-muted:#a1a1aa;--rc-rad:8px;--rc-frad:6px;box-shadow:0 1px 2px rgba(0,0,0,.4)}
 @media (prefers-reduced-motion: reduce){.rail.flow,.packet.fly-down,.packet.fly-up,.form.on,.form-ok.on,.slide.active .cat,.slide.active .surface,.slide.active .zone,.slide.active .rcol{animation:none}.packet.show{opacity:1}.cat,.surface,.zone,.rcol{opacity:1}}
+/* embedded-in-presenter: hide the deck's own chrome (the presenter provides title + theme) */
+.in-iframe .top-bar{display:none}
 </style>
 </head>
 <body>
+<script>if(window!==window.top)document.body.classList.add('in-iframe');</script>
 <div id="app">
   <div class="top-bar"><div class="deck-title">A2UI <span class="accent">· on the wire</span></div>
     <button class="theme-toggle" id="themeToggle" title="Toggle theme"><i class="fas fa-sun"></i></button></div>
@@ -292,9 +296,9 @@ body{background-image:radial-gradient(circle at 50% 40%, rgba(231,60,23,.04) 0%,
             </div>
           </div>
           <div class="rcol">
-            <div class="rcap"><div class="rname">CopilotKit</div><div class="rpkg">@copilotkit/a2ui-renderer</div><div class="rtheme">CopilotKit theme · indicative</div></div>
+            <div class="rcap"><div class="rname">CopilotKit</div><div class="rpkg">@copilotkit/a2ui-renderer</div><div class="rtheme">default theme · read from package</div></div>
             <div class="rform r-copilot">
-              <div class="rf-title"><i class="fa-solid fa-wand-magic-sparkles" style="color:#6366f1"></i> Contact</div>
+              <div class="rf-title">Contact</div>
               <div class="rf-field"><span class="rf-label">Name</span><div class="rf-input">Mark</div></div>
               <div class="rf-field"><span class="rf-label">Email</span><div class="rf-input">mark@…</div></div>
               <div class="rf-check"><span class="rf-box"><i class="fa-solid fa-check"></i></span> Subscribe to updates</div>
@@ -302,7 +306,7 @@ body{background-image:radial-gradient(circle at 50% 40%, rgba(231,60,23,.04) 0%,
             </div>
           </div>
           <div class="rcol">
-            <div class="rcap"><div class="rname">Community</div><div class="rpkg">@a2ui-sdk/react</div><div class="rtheme">shadcn / Tailwind · indicative</div></div>
+            <div class="rcap"><div class="rname">Community</div><div class="rpkg">@a2ui-sdk/react</div><div class="rtheme">shadcn tokens · dark default</div></div>
             <div class="rform r-shad">
               <div class="rf-title">Contact</div>
               <div class="rf-field"><span class="rf-label">Name</span><div class="rf-input">Mark</div></div>
@@ -313,7 +317,7 @@ body{background-image:radial-gradient(circle at 50% 40%, rgba(231,60,23,.04) 0%,
           </div>
         </div>
       </div>
-      <div class="cat-foot"><b>Same JSON, three house styles</b> — only theme tokens differ (colour · radius · density); the structure is identical. <span style="font-family:var(--mono)">@a2ui/react read from the installed package · CopilotKit &amp; shadcn indicative (not installed) · all React · alpha</span></div>
+      <div class="cat-foot"><b>Same JSON, three renderers</b> — each themes the identical tree. <span style="font-family:var(--mono)">Tokens read from the installed packages: @a2ui/react &amp; CopilotKit ship near-identical plain-blue defaults; @a2ui-sdk/react adopts shadcn tokens (shown dark). All React · alpha.</span></div>
     </section>
 
     <!-- Slide 3 — the boundary: A2UI ceiling → MCP Apps -->
