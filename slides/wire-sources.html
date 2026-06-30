@@ -54,8 +54,9 @@ body{background-image:radial-gradient(circle at 50% 40%, rgba(231,60,23,.04) 0%,
 .phead{display:flex;align-items:baseline;justify-content:space-between;gap:1cqi;padding-bottom:1cqb;border-bottom:1px solid var(--bar-border)}
 .pname{font-weight:800;font-size:clamp(13px,1.9cqi,24px)}
 .prole{font-family:var(--mono);font-size:clamp(8px,1.05cqi,13px);color:var(--text-dim)}
+.fbody{flex:1;min-height:0;display:flex;flex-direction:column;justify-content:space-around;gap:1cqb}
 .fact{display:flex;flex-direction:column;gap:.3cqb}
-.fact .claim{font-size:clamp(9px,1.32cqi,16px);line-height:1.35}
+.fact .claim{font-size:clamp(10px,1.5cqi,19px);line-height:1.4}
 .fact .claim b{color:var(--orange);font-weight:700}
 .fact code{font-family:var(--mono);font-size:.88em;background:var(--code-bg);border:1px solid var(--code-border);border-radius:4px;padding:.03em .35em;color:var(--text)}
 .src{display:inline-flex;align-items:center;gap:.5cqi;font-family:var(--mono);font-size:clamp(7px,.95cqi,12px);color:var(--text-dim);border-left:2px solid var(--orange-dim);padding-left:.7cqi;width:fit-content}
@@ -76,7 +77,7 @@ body{background-image:radial-gradient(circle at 50% 40%, rgba(231,60,23,.04) 0%,
 .arow .a-k{font-weight:700;font-size:clamp(10px,1.35cqi,16px)}
 .arow .a-v{font-family:var(--mono);font-size:clamp(8px,1.1cqi,13px);color:var(--text-dim);line-height:1.45}
 .arow .a-v a{color:var(--blue);text-decoration:none}
-.foot{flex-shrink:0;margin-top:2cqb;padding-top:1.5cqb;border-top:1px solid var(--bar-border);font-size:clamp(9px,1.3cqi,16px);color:var(--text-dim)}.foot b{color:var(--orange)}
+.foot{flex-shrink:0;margin-top:2cqb;padding-top:1.5cqb;border-top:1px solid var(--bar-border);font-size:clamp(9px,1.3cqi,16px);color:var(--text-dim);line-height:1.5}.foot b{color:var(--orange)}.foot .mono{font-family:var(--mono);font-size:.9em}
 .nav{position:absolute;bottom:3.4cqb;right:6cqi;display:flex;gap:1cqi;align-items:center}
 .nav .counter{font-family:var(--mono);font-size:clamp(8px,1.1cqi,13px);color:var(--text-dim)}
 .step-btn{width:clamp(28px,3.4cqi,40px);height:clamp(28px,3.4cqi,40px);border-radius:9px;border:1px solid var(--ghost);background:var(--surface);color:var(--text);font-size:clamp(12px,1.6cqi,18px);cursor:pointer;display:flex;align-items:center;justify-content:center;transition:all .2s}
@@ -96,66 +97,45 @@ html[data-density="stage"] .detail{display:none}
 <body>
 <script>(function(){var e=window!==window.top;if(e)document.body.classList.add('in-iframe');document.documentElement.setAttribute('data-density',e?'stage':'guide');})();</script>
 <div id="app">
-  <div class="top-bar"><div class="deck-title">Protocol facts <span class="accent">· validated sources</span></div>
+  <div class="top-bar"><div class="deck-title">Appendix <span class="accent">· validated sources</span></div>
     <div class="bar-tools">
       <button class="dtoggle" id="densityToggle" title="Toggle detail (D)"><i class="fa-solid fa-circle-info"></i><span>Detail</span></button>
       <button class="theme-toggle" id="themeToggle" title="Toggle theme"><i class="fas fa-moon"></i></button>
     </div></div>
   <div class="slides-viewport"><div class="slides-stage">
 
-    <!-- Slide 0 — the facts, each with its receipt -->
+    <!-- Single appendix slide — the verified facts + one consolidated audit trail -->
     <section class="slide active">
-      <div class="wire-head"><div class="eyebrow">reference · verified against installed SDKs + specs</div>
-        <h2 class="wtitle">Every claim, <span class="accent">with its receipt</span></h2></div>
+      <div class="wire-head"><div class="eyebrow">appendix · verified against installed SDKs + specs</div>
+        <h2 class="wtitle">Protocol facts, <span class="accent">with receipts</span></h2></div>
       <div class="facts">
         <div class="pcol agui">
           <div class="phead"><span class="pname">AG-UI</span><span class="prole">agent &rarr; user</span></div>
-          <div class="fact"><div class="claim"><b>33</b> typed events, 8 groups (Lifecycle · Text · Tool · State · Activity · Reasoning · Special · deprecated Thinking)</div><span class="src detail">@ag-ui/core (installed)</span></div>
-          <div class="fact"><div class="claim">Run boundary: <code>RUN_STARTED</code> … <code>RUN_FINISHED</code> / <code>RUN_ERROR</code></div><span class="src detail">docs.ag-ui.com/concepts/events</span></div>
-          <div class="fact"><div class="claim">Surface state rides back on <code>forwardedProps.a2ui_surface_state</code></div><span class="src detail">useSkillAgent.ts · fast_api_app.py</span></div>
+          <div class="fbody">
+            <div class="fact"><div class="claim"><b>33</b> typed events in 8 groups — Lifecycle · Text · Tool · State · Activity · Reasoning · Special</div></div>
+            <div class="fact"><div class="claim">Run boundary: <code>RUN_STARTED</code> … <code>RUN_FINISHED</code> / <code>RUN_ERROR</code></div></div>
+            <div class="fact"><div class="claim">Surface state rides back on <code>forwardedProps.a2ui_surface_state</code></div></div>
+          </div>
         </div>
         <div class="pcol a2ui">
           <div class="phead"><span class="pname">A2UI</span><span class="prole">agent &#8644; ui</span></div>
-          <div class="fact"><div class="claim">Installed <b>v0.9.1-alpha</b></div><span class="src detail">@a2ui/web_core/package.json</span></div>
-          <div class="fact"><div class="claim"><b>4</b> server messages: <code>createSurface</code> · <code>updateComponents</code> · <code>updateDataModel</code> · <code>deleteSurface</code> (+ <code>actionResponse</code>)</div><span class="src detail">@a2ui/web_core/src/v0_9</span></div>
-          <div class="fact"><div class="claim">Basic catalog · 18 components (Row, Column, Card, TextField, ChoicePicker, …)</div><span class="src detail">a2ui.org spec · Basic catalog</span></div>
+          <div class="fbody">
+            <div class="fact"><div class="claim">Installed <b>v0.9.1-alpha</b> — React, alpha (pin it)</div></div>
+            <div class="fact"><div class="claim"><b>4</b> server messages: <code>createSurface</code> · <code>updateComponents</code> · <code>updateDataModel</code> · <code>deleteSurface</code></div></div>
+            <div class="fact"><div class="claim"><b>18</b>-component Basic catalog (Row, Column, Card, TextField, ChoicePicker, …)</div></div>
+          </div>
         </div>
         <div class="pcol mcp">
           <div class="phead"><span class="pname">MCP Apps</span><span class="prole">host &#8644; widget</span></div>
-          <div class="fact"><div class="claim"><b>SEP-1865</b> · <code>io.modelcontextprotocol/ui</code> · launched 26 Jan 2026</div><span class="src detail">blog.modelcontextprotocol.io</span></div>
-          <div class="fact"><div class="claim">By reference: <code>_meta.ui.resourceUri</code> &rarr; <code>resources/read</code> &rarr; <code>text/html;profile=mcp-app</code></div><span class="src detail">SEP-1865 spec</span></div>
-          <div class="fact"><div class="claim">Two channels back: <code>ui/message</code> · <code>ui/update-model-context</code></div><span class="src detail">SEP-1865 · OpenAI Apps SDK</span></div>
-          <div class="fact"><div class="claim"><b>11</b> hosts render MCP Apps; <b>Slack does not</b> (Block Kit)</div><span class="src detail">modelcontextprotocol.io/extensions/client-matrix</span></div>
-        </div>
-      </div>
-    </section>
-
-    <!-- Slide 1 — the map + how to verify it yourself -->
-    <section class="slide">
-      <div class="wire-head"><div class="eyebrow">how they fit · and where to check</div>
-        <h2 class="wtitle">Three roles, <span class="accent">one audit trail</span></h2></div>
-      <div class="two">
-        <div class="panel">
-          <h3><i class="fa-solid fa-diagram-project"></i>Distinct roles, often all at once</h3>
-          <div class="role"><span class="k">MCP</span><span>agent &#8644; <b>tools</b> &amp; context</span></div>
-          <div class="role"><span class="k">A2A</span><span>agent &#8644; <b>agent</b> (discovery)</span></div>
-          <div class="role"><span class="k">AG-UI</span><span>agent &#8644; <b>user</b> (the UI)</span></div>
-          <div class="role"><span class="k dim">A2UI</span><span>UI <b>as data</b> — carried over AG-UI</span></div>
-          <div class="role"><span class="k dim">MCP&nbsp;Apps</span><span>sandboxed <b>widgets</b> — carried over MCP</span></div>
-          <p class="note">"A single agent can and often does use all three simultaneously." AG-UI = agents&#8594;users · MCP = agents&#8594;tools · A2A = agents&#8594;agents. <span style="font-family:var(--mono)">docs.ag-ui.com</span></p>
-        </div>
-        <div class="panel">
-          <h3><i class="fa-solid fa-magnifying-glass"></i>Verify it yourself</h3>
-          <div class="audit">
-            <div class="arow"><span class="a-k">AG-UI events (33)</span><span class="a-v">node_modules/@ag-ui/core · docs.ag-ui.com/concepts/events</span></div>
-            <div class="arow"><span class="a-k">A2UI v0.9.1-alpha</span><span class="a-v">@a2ui/web_core/package.json · a2ui.org spec</span></div>
-            <div class="arow"><span class="a-k">MCP Apps spec</span><span class="a-v">SEP-1865 · blog.modelcontextprotocol.io/posts/2026-01-26-mcp-apps · /extensions/client-matrix</span></div>
-            <div class="arow"><span class="a-k">Platform bindings</span><span class="a-v">ai-protocol-platform: useSkillAgent.ts · fast_api_app.py · infrastructure/mcp-sandbox/</span></div>
-            <div class="arow"><span class="a-k">Cross-client findings</span><span class="a-v">protocol-gotchas.md #14–19 (live-tested, June 2026)</span></div>
+          <div class="fbody">
+            <div class="fact"><div class="claim"><b>SEP-1865</b> · <code>io.modelcontextprotocol/ui</code> · launched 26 Jan 2026</div></div>
+            <div class="fact"><div class="claim">UI by reference: <code>_meta.ui.resourceUri</code> &rarr; <code>resources/read</code></div></div>
+            <div class="fact"><div class="claim">Two channels back: <code>ui/message</code> · <code>ui/update-model-context</code></div></div>
+            <div class="fact"><div class="claim"><b>11</b> hosts render them; <b>Slack does not</b> (Block Kit)</div></div>
           </div>
         </div>
       </div>
-      <div class="foot">Numbers reflect the <b>installed</b> SDK versions + specs as of <b>June 2026</b> — re-check when you bump dependencies.</div>
+      <div class="foot"><b>Verify:</b> <span class="mono">node_modules/@ag-ui/core · @a2ui/web_core/package.json · SEP-1865 (blog.modelcontextprotocol.io) · /extensions/client-matrix · platform: useSkillAgent.ts, fast_api_app.py, infrastructure/mcp-sandbox/ · protocol-gotchas.md #14–19</span> — installed versions as of June 2026; re-check on bump.</div>
     </section>
 
   </div></div>

@@ -51,7 +51,7 @@ The presenter ([slides/outline.md](slides/outline.md) describes it; it's
 
 - **Click the wall clock (top-right) to start/pause.** Start it at "Welcome."
 - **Bottom bar** shows `Block M:SS / budget` (green → amber at 80% → orange
-  over), `Total / 145:00`, and a **±delta pill**: green = ahead, orange =
+  over), `Total / 142:00`, and a **±delta pill**: green = ahead, orange =
   behind. Glance at the pill, not the wall.
 - **PAUSE for the full 30-min coffee break.** Click the clock when groups stand
   up at the end of Block 1; click again when Block 2 starts. The break is
@@ -87,13 +87,16 @@ brain break: **"turn to your neighbour — which non-chat AI tools would help in
 *your* work?"** Give it the full 2 minutes; harvest 2–3 answers out loud.
 This is the hook for the whole day, not filler.
 
-### Guided tour: AG-UI / A2UI / MCP — 25 min · instructor + brain breaks
-**You** walk the **on-the-wire explainer decks** (`wire-overview` → `wire-agui`
-→ `wire-a2ui` → `wire-mcp` → `wire-sources` — animated, step through with
-→/Space), showing each protocol's with/without contrast; groups do **not** run
-two versions (too heavy to set up per table). ~6 min per protocol, each capped by
-a 2-min pair talk so no passive stretch runs long. End on **Brain break #2:
-"explain the difference between AG-UI, A2UI & MCP Apps to your neighbour."**
+### Guided tour: AG-UI / A2UI / MCP — 22 min · instructor + brain breaks
+Open on the **protocol stack** (`02-three-protocols`, one glance), then **walk
+the on-the-wire explainer decks** (`wire-overview` → `wire-agui` → `wire-a2ui`
+→ `wire-mcp` — animated, step through with →/Space), showing each protocol's
+with/without contrast; groups do **not** run two versions (too heavy to set up
+per table). ~6 min per protocol, each capped by a 2-min pair talk so no passive
+stretch runs long. The tour **closes on Brain break #2** (the last slide of
+`wire-mcp`): **"explain the difference between AG-UI, A2UI & MCP Apps to your
+neighbour."** (`wire-sources` is an **appendix** at the very end — flip to it only
+if someone wants receipts.)
 That teach-back is the pre-load for the Round B jigsaw — if they can't do it
 here, slow down before you turn them loose.
 
@@ -124,11 +127,13 @@ way, then the real thing in its **dev playground**; advanced groups can
 reconstruct the blanked code, §5), then regroup for 15-min teach-backs (~3 min
 each). Protect this block.
 
-### Round C — Plan/prototype your own — 15 min · groups
-Groups sketch a protocol app for *their own* context (lesson tool, intake
-form, dashboard) and reflect. Hand them the skeleton skill
-([workshop-fork.md](workshop-fork.md) → Round C) — fork, change the
-instruction + one tool, run. **This is the round you protect hardest** (§9):
+### Round C — Design an app, together — 15 min · groups
+Keep the **mixed jigsaw groups** from the teach-back (one AG-UI + one A2UI + one
+MCP expert each) and have them design **one** app that uses all three — a real
+task someone in the group owns (lesson tool, intake form, dashboard) — then
+reflect. Hand them the skeleton skill ([workshop-fork.md](workshop-fork.md) →
+Round C) — fork, change the instruction + one tool, run. **This is the round you
+protect hardest** (§9):
 it's where the day pays off.
 
 ### Show & tell — 15 min · groups present
@@ -158,8 +163,8 @@ into **roughly equal thirds**: ~⅓ on AG-UI (B1), ~⅓ on A2UI (B2), ~⅓ on MC
 (B3). Write the assignment on the board at the handoff so nobody drifts. Project
 that track's card (`B1`/`B2`/`B3`) for the assigned tables.
 
-**Phase 2 — regroup + teach-back (15 min).** Re-mix so **each new group has
-one expert per protocol.** Easiest way to do it live:
+**Phase 2 — regroup + teach-back (15 min).** Project `B4-teach-back`. Re-mix so
+**each new group has one expert per protocol.** Easiest way to do it live:
 
 1. Within each Phase-1 table, **number off** 1, 2, 3, …
 2. Call: *"all the 1s to that corner, 2s here, 3s there."*
@@ -312,7 +317,7 @@ a **hard 75-min ceiling** you can't borrow against — if Block 1 runs long, cut
 
 **Compress / cut, in order (do these first):**
 1. **Showcase** (AIPLA + GDE at the end) — drop to a single slide or skip.
-2. **The guided tour** — trim a with/without contrast; 25 min → 18 is fine if
+2. **The guided tour** — trim a with/without contrast; 22 min → 16 is fine if
    Brain break #2 still works.
 3. **Round A share-out** — keep the poking, cut the cross-table readout.
 4. **Show & tell** — fewer groups present live; the rest still get a scorecard

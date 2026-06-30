@@ -49,11 +49,11 @@ The audience is education specialists, so the structure is intentional:
 | # | Min | Mode | What happens | Deck / card |
 |---|---|---|---|---|
 | 0 | 15 | Instructor + pair | Welcome · the chat wall · the protocol stack. **Brain break #1:** "where does text-only AI hit a wall in *your* work?" | `00-welcome`, `about-mark`, `01-chat-wall` |
-| 1 | 25 | Instructor + brain breaks | Guided tour of the 3 protocols — walk the **on-the-wire explainer decks**, ~6 min each (AG-UI · A2UI · MCP Apps), each followed by a 2-min pair talk "how could you use this?". Real apps (AIPLA, GDE) flashed as "this ships." | `02-three-protocols` → `wire-overview` / `wire-agui` / `wire-a2ui` / `wire-mcp` / `wire-sources` |
+| 1 | 22 | Instructor + brain breaks | Guided tour — open on the **protocol stack** (one glance), then walk the **on-the-wire explainer decks**, ~6 min each (AG-UI · A2UI · MCP Apps) + a 2-min pair talk "how could you use this?". Real apps (AIPLA, GDE) flashed as "this ships." Closes on **Brain break #2** (explain the three). | `02-three-protocols` → `wire-overview` / `wire-agui` / `wire-a2ui` / `wire-mcp` |
 | 2 | 20 | Groups | **Round A — Explore a live skill.** Each table picks ONE running demo, pokes it, and lists 3 things the protocol enables that plain chat can't. (The instructor shows the with/without contrast in the tour — groups don't run two versions.) Share across tables. | `A1-explore-a-skill` |
 | 3a | 10 | Instructor → groups | **Round B handoff.** Explain the jigsaw, **assign each group its ONE protocol**, and have them open & read their exercise. Nothing to build yet — they carry the question into coffee. | `B0-how-it-works` |
 
-*Block 1 on-clock ≈ 70 min; the spare ~5 absorbs intro/AV/latecomer overrun.*
+*Block 1 on-clock ≈ 67 min; the spare ~8 absorbs intro/AV/latecomer overrun.*
 
 ### ☕ Hard break · 11:15–11:45 (30, off-clock)
 
@@ -63,12 +63,12 @@ Room empties for coffee. Groups already know their protocol — coffee chat is "
 
 | # | Min | Mode | What happens | Deck / card |
 |---|---|---|---|---|
-| 3b | 35 | Groups (jigsaw) | **Round B — build + teach-back.** In your protocol's expert group: see the homespun way, then play with the real thing in its dev playground (A2UI `/dev/a2ui`, MCP `/dev/mcp-apps/active`, AG-UI in DevTools). Regroup so each new group has one expert per protocol; teach back *what it does + what it replaces*. (Optional advanced: restore the blanked code on `workshop-start`.) | `B1-agui`, `B2-a2ui`, `B3-mcp` |
-| 4 | 15 | Groups + reflect | **Round C — Plan your own.** Sketch a protocol app for your context (lesson tool, intake form, dashboard…). Reflection prompts. AIPLA/GDE as worked examples. | `C1-plan-your-app` |
-| 5 | 15 | Groups present | **Show & tell.** 2–3 min per group: what your protocol does + what you built/planned. Submit via the helper agent; workspace pane updates live. | `show-and-tell` |
-| 6 | 10 | Instructor + Q&A | **Wrap-up.** Synthesis · the 4 advanced patterns (AIPLA extensions) · where-next · Q&A. | `07-wrap-up`, `08-built-on-this`, `contact-mark` |
+| 3b | 35 | Groups (jigsaw) | **Round B — build + teach-back.** *Phase 1 (20):* in your protocol's expert group, see the homespun way then play with the real thing in its dev playground (A2UI `/dev/a2ui`, MCP `/dev/mcp-apps/active`, AG-UI in DevTools). *Phase 2 (15):* regroup so each new group has one expert per protocol; teach back *what it does + what it replaces*. (Optional advanced: restore the blanked code on `workshop-start`.) | `B1-agui`, `B2-a2ui`, `B3-mcp`, `B4-teach-back` |
+| 4 | 15 | Groups + reflect | **Round C — Design an app, together.** Stay in your jigsaw group (one expert per protocol) and design **one** app that uses all three (lesson tool, intake form, dashboard…). Reflection prompts; AIPLA/GDE as worked examples. | `C1-plan-your-app` |
+| 5 | 15 | Groups present | **Show & tell.** 2–3 min per group: the **app your jigsaw group designed** (which protocols, why). Submit via the helper agent; workspace pane updates live. | `show-and-tell` |
+| 6 | 10 | Instructor + Q&A | **Wrap-up.** Synthesis · the **meta-reveal** (the helper agent you used is built on all three) · the 4 advanced patterns · where-next · Q&A. | `07-wrap-up`, `08-built-on-this`, `contact-mark` |
 
-**Total:** ~145 min on the clock across the two 75-min blocks (~5 min slack), + 30-min hard break off-clock.
+**Total:** ~142 min on the clock across the two 75-min blocks (~8 min slack), + 30-min hard break off-clock.
 
 ## How the deck doubles as a course guide
 

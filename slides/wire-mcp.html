@@ -127,6 +127,12 @@ body{background-image:radial-gradient(circle at 50% 40%, rgba(231,60,23,.04) 0%,
 .r-body b{color:var(--orange);font-weight:700}
 .cat-foot{flex-shrink:0;margin-top:2cqb;padding-top:1.6cqb;border-top:1px solid var(--bar-border);font-size:clamp(10px,1.4cqi,17px);color:var(--text-dim)}.cat-foot b{color:var(--orange)}
 @media (prefers-reduced-motion: reduce){.rail.flow,.packet.fly-down,.packet.fly-up,.widget.on,.bubble.agent.on,.slide.active .reason,.slide.active .app-stage{animation:none}.packet.show{opacity:1}.reason,.app-stage{opacity:1}}
+/* closing brain break — teach-back that ends the protocol tour */
+.brainbreak{flex:1;min-height:0;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;gap:2.4cqb;padding:0 4cqi}
+.bb-eyebrow{font-family:var(--mono);font-size:clamp(11px,1.6cqi,18px);text-transform:uppercase;letter-spacing:.18em;color:var(--text-dim)}
+.bb-title{font-size:clamp(24px,4.2cqi,52px);font-weight:800;line-height:1.12;letter-spacing:-.02em;max-width:92%}
+.bb-title .accent{color:var(--orange)}
+.bb-sub{font-size:clamp(14px,2cqi,24px);color:var(--text-dim);max-width:72%;line-height:1.4}
 /* ── density: Stage (big screen) hides .detail; Guide (laptop) reveals it ── */
 html[data-density="stage"] .detail{display:none}
 .bar-tools{display:flex;align-items:center;gap:10px}
@@ -202,6 +208,15 @@ html[data-density="stage"] .detail{display:none}
         </div>
       </div>
       <div class="cat-foot"><b>Portable UI today, portable context tomorrow.</b><span class="detail"> MCP Apps standardized the <b>render</b> — UI by reference, sandboxed, portable across 11 hosts. The <b>interaction &rarr; model</b> back-channel hasn't: each host wires it differently.</span></div>
+    </section>
+
+    <!-- Slide 2 — closing brain break (teach-back that ends the protocol tour) -->
+    <section class="slide">
+      <div class="brainbreak">
+        <div class="bb-eyebrow">&#129504; Brain break &middot; 2 min</div>
+        <h2 class="bb-title">In your own words — the difference between <span class="accent">AG-UI, A2UI &amp; MCP&nbsp;Apps</span>?</h2>
+        <p class="bb-sub">Explain it to your neighbour — then we go explore one live.</p>
+      </div>
     </section>
 
   </div></div>

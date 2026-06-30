@@ -19,32 +19,33 @@ closes Block 1; **build + teach-back** (`B1`–`B3`) opens Block 2.
 | 1 | [`00-welcome.html`](00-welcome.html) | Intro — framing | 5 | 🟡 draft |
 | 2 | [`about-mark/about-mark.html`](about-mark/about-mark.html) | Intro — standard | 2 | ✅ reused |
 | 3 | [`01-chat-wall.html`](01-chat-wall.html) | Intro — the problem + brain break | 8 | 🟡 draft |
-| 4 | [`02-three-protocols.html`](02-three-protocols.html) | Guided tour — framing + the stack | 4 | 🟡 draft |
+| 4 | [`02-three-protocols.html`](02-three-protocols.html) | Guided tour — the **protocol stack** (cold-open framer) | 2 | 🟡 draft |
 | | ↳ [`wire-overview.html`](wire-overview.html) | Tour · animated **handoff map** (5 protocols, 3 we build) | 5 | 🟢 built |
 | | ↳ [`wire-agui.html`](wire-agui.html) | Tour · **AG-UI** on the wire + the 33-event catalog | 5 | 🟢 built |
 | | ↳ [`wire-a2ui.html`](wire-a2ui.html) | Tour · **A2UI** round-trip → catalog/rendered surface → 3 renderers → the A2UI⇄MCP boundary | 4 | 🟢 built |
-| | ↳ [`wire-mcp.html`](wire-mcp.html) | Tour · **MCP Apps** by-ref + sandbox + bridge | 4 | 🟢 built |
-| | ↳ [`wire-sources.html`](wire-sources.html) | Tour · **validated-sources** reference sheet | 3 | 🟢 built |
+| | ↳ [`wire-mcp.html`](wire-mcp.html) | Tour · **MCP Apps** by-ref + sandbox + bridge · **closes on Brain break #2** | 6 | 🟢 built |
 | 5 | [`A1-explore-a-skill.html`](A1-explore-a-skill.html) | **Round A** — group explore (one live demo) | 20 | 🟢 activity |
 | 6 | [`B0-how-it-works.html`](B0-how-it-works.html) | **Round B handoff** — assign protocol + read exercise (pre-break) | 10 | 🟢 activity |
 | — | ☕ **hard break** — room empties; **pause the clock** | 11:15–11:45 | 30 | — |
 | | **— Block 2 · 11:45–13:00 —** | | | |
-| 7 | [`B1-agui.html`](B1-agui.html) | **Round B build + teach-back** (jigsaw budget banks here) | 35\* | 🟢 activity |
+| 7 | [`B1-agui.html`](B1-agui.html) | **Round B build** (jigsaw budget banks here) · Phase 1 expert groups | 35\* | 🟢 activity |
 | 8 | [`B2-a2ui.html`](B2-a2ui.html) | Round B card · A2UI | 0\* | 🟢 activity |
 | 9 | [`B3-mcp.html`](B3-mcp.html) | Round B card · MCP Apps | 0\* | 🟢 activity |
-| 10 | [`C1-plan-your-app.html`](C1-plan-your-app.html) | **Round C** — plan + reflect | 15 | 🟢 activity |
-| 11 | [`show-and-tell.html`](show-and-tell.html) | Share | 15 | 🟡 draft |
-| 12 | [`07-wrap-up.html`](07-wrap-up.html) | Wrap-up + Q&A | 6 | 🟡 draft |
-| 13 | [`08-built-on-this.html`](08-built-on-this.html) | Showcase (AIPLA + GDE) | 3 | 🟢 drafted |
-| 14 | [`contact-mark/contact-mark.html`](contact-mark/contact-mark.html) | Close — standard | 1 | ✅ reused |
+| 10 | [`B4-teach-back.html`](B4-teach-back.html) | **Round B teach-back** — regroup, one expert per protocol (Phase 2) | 0\* | 🟢 activity |
+| 11 | [`C1-plan-your-app.html`](C1-plan-your-app.html) | **Round C** — mixed groups **design one app** + reflect | 15 | 🟢 activity |
+| 12 | [`show-and-tell.html`](show-and-tell.html) | Share | 15 | 🟡 draft |
+| 13 | [`07-wrap-up.html`](07-wrap-up.html) | Wrap-up + meta-reveal + Q&A | 6 | 🟡 draft |
+| 14 | [`08-built-on-this.html`](08-built-on-this.html) | Showcase (AIPLA + GDE) | 3 | 🟢 drafted |
+| 15 | [`contact-mark/contact-mark.html`](contact-mark/contact-mark.html) | Close — standard | 1 | ✅ reused |
+| — | [`wire-sources.html`](wire-sources.html) | **Appendix** — validated sources (off-clock reference) | 0 | 🟢 built |
 
-**Budget:** ~145 min on the clock across the two 75-min blocks (Block 1 ≈ 70 +
-~5 slack · Block 2 = 75) + the 30-min hard break off-clock.
+**Budget:** ~142 min on the clock across the two 75-min blocks (Block 1 ≈ 67 +
+~8 slack · Block 2 = 75) + the 30-min hard break off-clock.
 
-\* Round B is a **jigsaw**: the handoff is `B0` (10 min, pre-break); after the
-break each group builds *one* protocol in parallel, so the 35-min build budget
-sits on `B1` while `B2`/`B3` are the parallel track cards (0 min) the facilitator
-projects per group.
+\* Round B is a **jigsaw**: handoff `B0` (10 min, pre-break); after the break the
+35-min budget banks on `B1`, while `B2`/`B3` are the parallel expert-group cards
+(Phase 1) and `B4` is the regroup + teach-back (Phase 2) — all 0-budget tracks the
+facilitator projects per group.
 
 ## Timekeeping (the organising tool)
 
