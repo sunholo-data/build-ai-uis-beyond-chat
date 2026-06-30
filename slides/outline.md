@@ -22,7 +22,7 @@ closes Block 1; **build + teach-back** (`B1`–`B3`) opens Block 2.
 | 4 | [`02-three-protocols.html`](02-three-protocols.html) | Guided tour — framing + the stack | 4 | 🟡 draft |
 | | ↳ [`wire-overview.html`](wire-overview.html) | Tour · animated **handoff map** (5 protocols, 3 we build) | 5 | 🟢 built |
 | | ↳ [`wire-agui.html`](wire-agui.html) | Tour · **AG-UI** on the wire + the 33-event catalog | 5 | 🟢 built |
-| | ↳ [`wire-a2ui.html`](wire-a2ui.html) | Tour · **A2UI** round-trip → catalog/rendered surface → 3 renderers → the A2UI⇄MCP boundary | 6 | 🟢 built |
+| | ↳ [`wire-a2ui.html`](wire-a2ui.html) | Tour · **A2UI** round-trip → catalog/rendered surface → 3 renderers → the A2UI⇄MCP boundary | 4 | 🟢 built |
 | | ↳ [`wire-mcp.html`](wire-mcp.html) | Tour · **MCP Apps** by-ref + sandbox + bridge | 4 | 🟢 built |
 | | ↳ [`wire-sources.html`](wire-sources.html) | Tour · **validated-sources** reference sheet | 3 | 🟢 built |
 | 5 | [`A1-explore-a-skill.html`](A1-explore-a-skill.html) | **Round A** — group explore (one live demo) | 20 | 🟢 activity |

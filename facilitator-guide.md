@@ -34,7 +34,7 @@ and all cost you the first 20 minutes.
 | **Room layout** | Tables of 3–5, each with power + a screen they can share | Solo rows kill the jigsaw. |
 | **AV** | Presenter on the big screen, your laptop free to circulate | You'll be walking the room in the rounds — don't tether yourself to the podium. |
 
-**The cloud demo that will bite you:** the AIPLA teacher view ($link$ in
+**The cloud demo that will bite you:** the AIPLA teacher view (linked in
 [slides/outline.md](slides/outline.md)) gates behind sign-in — have a capture.
 The MCP Apps demo is now **local** (MCP Inspector against the AIPLA sims — see
 [slides/outline.md](slides/outline.md)), so it's no longer a network risk; the
@@ -88,8 +88,10 @@ brain break: **"turn to your neighbour — which non-chat AI tools would help in
 This is the hook for the whole day, not filler.
 
 ### Guided tour: AG-UI / A2UI / MCP — 25 min · instructor + brain breaks
-**You** show each protocol's with/without contrast — groups do **not** run two
-versions (too heavy to set up per table). ~6 min per protocol, each capped by
+**You** walk the **on-the-wire explainer decks** (`wire-overview` → `wire-agui`
+→ `wire-a2ui` → `wire-mcp` → `wire-sources` — animated, step through with
+→/Space), showing each protocol's with/without contrast; groups do **not** run
+two versions (too heavy to set up per table). ~6 min per protocol, each capped by
 a 2-min pair talk so no passive stretch runs long. End on **Brain break #2:
 "explain the difference between AG-UI, A2UI & MCP Apps to your neighbour."**
 That teach-back is the pre-load for the Round B jigsaw — if they can't do it
@@ -183,8 +185,8 @@ don't solve. Reveal of last resort: `git diff workshop-start main -- <file>`.
 
 ### B1 · AG-UI — restore the event stream
 - **File:** `frontend/src/hooks/useSkillAgent.ts` (the `agent.subscribe({…})`
-  block). **Restore** the `onTextMessageContent` handler that appends each
-  delta to the in-progress assistant message.
+  block). **Restore** the `onMessagesChanged: () => sync()` handler so streamed
+  deltas mirror into React state as they land.
 - **✅ Done when:** messages stream **token-by-token**; events visible in
   **DevTools → Network → `stream`**.
 - **Stuck on:** "nothing streams" usually = the handler is restored but they
@@ -196,12 +198,13 @@ don't solve. Reveal of last resort: `git diff workshop-start main -- <file>`.
 
 ### B2 · A2UI — send UI to the workspace surface
 - **File:** the demo skill config (`tool_configs.a2ui`). **Restore**
-  `surface_id = "workspace"` so the UI declares a surface instead of falling
-  back to the chat bubble.
+  `default_surface = "workspace"` so the UI declares a surface instead of
+  falling back to the chat bubble. (`default_surface` is the config knob;
+  `surface_id` is the key it stamps onto the result dict.)
 - **✅ Done when:** *"make me a contact form"* renders in the **workspace
   pane**, not inline in the chat bubble.
-- **Stuck on:** form renders in the chat bubble = `surface_id` still missing
-  or misspelled. If it renders **nowhere**, that's the v0.9-vs-v0.8 import
+- **Stuck on:** form renders in the chat bubble = `default_surface` still
+  missing or misspelled. If it renders **nowhere**, that's the v0.9-vs-v0.8 import
   trap ([protocol-gotchas.md](protocol-gotchas.md) #5) — a good stretch for a
   fast group, but flag it so they don't chase a phantom.
 - **Reveal:** `git diff workshop-start main -- <skill-config file>` (confirm
