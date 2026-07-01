@@ -217,6 +217,10 @@ body{
 <div class="split"><ul class="bullets"><li>The 4 template-extensions (sprints 2.11–2.14) were built FOR this deployment:</li><li>Anonymous group-ID auth — students join with a code, no accounts</li><li>Per-cohort budget — typed <code>RUN_ERROR{BUDGET_EXCEEDED}</code> with retry-after</li><li>Artefact review — defence-in-depth above the iframe sandbox</li><li>Tenant attribution on every span — <code>tenant.uid_hash</code>, never raw email</li></ul><div class="split-shot"><img src="images/case-studies/aipla.png" alt="AIPLA — AI in Physics Learning and Assessment app"><div class="cap"><a href="https://aipla-v01-frontend-wgwhd7mspa-lz.a.run.app/teacher/classes/0b99f4e04792" target="_blank" rel="noopener">aipla &middot; teacher view &nearr;</a></div></div></div>
       </section>
       <section class="slide" data-slide="2">
+<h2 class="slide-title">Same widget, <span class="dim">any MCP host</span></h2>
+<div class="split"><ul class="bullets"><li>The AIPLA physics sims are <strong>MCP Apps</strong> — sandboxed widgets, loaded by reference</li><li>So the <em>same</em> sim renders in the tutor, in MCP Inspector, and — via a No-Auth connector — <strong>live in ChatGPT</strong></li><li>Ask <em>&ldquo;show me the boldkast simulation&rdquo;</em> &rarr; the interactive widget, drag v&#8320; / &theta; / g</li><li>The protocol payoff: <strong>build once, runs in any MCP host</strong> — no per-client rebuild</li></ul><div class="split-shot"><img src="images/mcp-chatgpt/boldkast-in-chatgpt.png" alt="AIPLA boldkast physics sim rendered as an MCP App inside ChatGPT"><div class="cap">boldkast &middot; MCP App live in ChatGPT</div></div></div>
+      </section>
+      <section class="slide" data-slide="3">
 <h2 class="slide-title">GDE AP Agent <span class="dim">— the whole stack, one business domain</span></h2>
 <div class="split"><ul class="bullets"><li><code>SequentialAgent</code> pipeline: routing is <strong>code, not prose</strong> — injection-safe</li><li><code>ailang-parse</code> deterministic extraction — no Gemini Pro tokens anywhere</li><li>A2UI <code>InvoiceHeroCard</code> + two MCP Apps (Analytics Dashboard, Vendor Knowledge Graph)</li><li>Five <code>SKILL.md</code> files, ~80 lines of wiring — that&rsquo;s the whole app</li><li>Live demo + 2-min video — Google for Startups AI Agents Challenge</li></ul><div class="split-shot"><img src="images/case-studies/gde-ap-agent.png" alt="GDE AP Agent — invoice processing showcase app"><div class="cap"><a href="https://gde-ap-agent-blqtqfexwa-ew.a.run.app/" target="_blank" rel="noopener">gde-ap-agent &middot; live &nearr;</a></div></div></div>
       </section>
@@ -225,7 +229,7 @@ body{
   <div class="bottom-bar">
     <div class="transport">
       <button class="transport-btn" id="btnPrev" title="Previous slide"><i class="fas fa-chevron-left"></i></button>
-      <span class="step-indicator"><span class="current" id="slideNum">1</span> / <span id="slideTotal">3</span></span>
+      <span class="step-indicator"><span class="current" id="slideNum">1</span> / <span id="slideTotal">4</span></span>
       <button class="transport-btn" id="btnNext" title="Next slide"><i class="fas fa-chevron-right"></i></button>
     </div>
     <div class="slide-dots" id="slideDots"></div>
@@ -234,7 +238,7 @@ body{
 </div>
 <script>
 (function(){
-  const TOTAL = 3;
+  const TOTAL = 4;
   let current = 0;
   let transitioning = false;
 
