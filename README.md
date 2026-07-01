@@ -2,7 +2,7 @@
 
 > The new agent UI protocols let AI generate real interfaces, not just text. Build with all three in one session: **MCP Apps**, **A2UI**, **AG-UI**.
 
-This repo contains the **materials** for the workshop. The **code** lives separately at [sunholo-data/ai-protocol-platform](https://github.com/sunholo-data/ai-protocol-platform).
+This repo contains the **materials** for the workshop. The **runnable app** attendees clone lives separately at [sunholo-data/build-ai-uis-workshop-app](https://github.com/sunholo-data/build-ai-uis-workshop-app) — a workshop fork of the public [ai-protocol-platform](https://github.com/sunholo-data/ai-protocol-platform) template.
 
 > 📝 This repo is the **source of truth** for the workshop materials — edit them here. (They were originally generated from the platform repo's `docs/workshop/`, but that one-way sync is retired.)
 
@@ -10,10 +10,10 @@ This repo contains the **materials** for the workshop. The **code** lives separa
 
 | Repo | What it contains |
 |---|---|
-| [sunholo-data/ai-protocol-platform](https://github.com/sunholo-data/ai-protocol-platform) | The platform code — clone this, run `make dev-local`, build skills on it. |
+| [sunholo-data/build-ai-uis-workshop-app](https://github.com/sunholo-data/build-ai-uis-workshop-app) | The **runnable app** — clone this, run `make dev-local`, do the exercises + build skills on it. A workshop fork of the [ai-protocol-platform](https://github.com/sunholo-data/ai-protocol-platform) template. |
 | **This repo** | The workshop materials — agenda, code tour, skeleton skills, helper-agent design, slides. |
 
-You'll clone both for the workshop. The platform repo is the canonical source-of-truth code; this repo is the curriculum that wraps around it.
+You'll clone the **workshop app** for the hands-on rounds; **this** repo is the curriculum that wraps around it.
 
 ## Workshop at a glance
 
@@ -77,7 +77,7 @@ per-cohort budget, artefact review, tenant-id span attribution).
 Before the workshop:
 
 1. Install Node 20+ and Python 3.11+
-2. Clone the platform repo: `git clone https://github.com/sunholo-data/ai-protocol-platform.git`
+2. Clone the workshop app: `git clone https://github.com/sunholo-data/build-ai-uis-workshop-app.git`
 3. Run `make dev-local` — confirm the chat UI works at `http://localhost:3456`
 4. Bring a laptop with a GitHub account ready
 

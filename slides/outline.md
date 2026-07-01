@@ -76,38 +76,48 @@ via the dev playgrounds).
 |---|---|---|---|---|
 | AG-UI | `demo-researcher` | GDE pipeline visualizer · AIPLA tutor | read the live SSE stream in DevTools *(needs a reply)* | restore `onMessagesChanged` (`B1`) |
 | A2UI | `demo-form-builder` → `demo-workspace` | GDE `InvoiceHeroCard` · AIPLA workspace | `/dev/a2ui` — edit the A2UI JSON, watch it render | restore `default_surface` (`B2`) |
-| MCP Apps | **AIPLA sims via MCP Inspector** (`show_boldkast`/`kinebot`/`led-planck`) | GDE dashboards (bidirectional) · the same AIPLA sims inside the tutor | `/dev/mcp-apps/active` — fire both channels through the bridge | restore the `update-model-context` POST (`B3`) |
+| MCP Apps | **AIPLA sims in ChatGPT** (or local MCP Inspector) — `show_boldkast`/`kinebot`/`led-planck` | GDE dashboards (bidirectional) · the same AIPLA sims inside the tutor | `/dev/mcp-apps/active` — fire both channels through the bridge | restore the `update-model-context` POST (`B3`) |
 
 > **Live-demo caveat:** demo skills run locally (`LOCAL_MODE=1`); the real apps
 > are on Cloud Run and the AIPLA teacher link may need sign-in. Decide per moment
 > whether to click through live or show a capture.
 
-### MCP Apps demo — run it locally via MCP Inspector (no key, no cloud)
+### MCP Apps demo — the AIPLA sims, live in ChatGPT (primary) + local backup
 
-The clean MCP Apps demo is the **portable AIPLA physics sims** — the same widgets
-that ship in the AIPLA tutor, mounted in the reference renderer. Local, no auth,
-no tunnel, so it's reliable on conference wifi:
+The clean MCP Apps demo is the **portable AIPLA physics sims**. The punchline is
+portability: the *same* sim renders in our tutor, in MCP Inspector, **and in
+ChatGPT** — which is exactly the "protocol over custom" sell.
+
+**Primary — online, in ChatGPT** (the "it runs anywhere" wow). The deployed AIPLA
+app now serves the sims over MCP at
+`https://aipla-v01-frontend-wgwhd7mspa-lz.a.run.app/api/mcp` (this resolves the old
+"cloud in progress" caveat — the `show_*` apps are served in the backend now). Add
+it once as a custom connector:
+
+1. ChatGPT → **Settings → Connectors → Advanced → New App** (developer mode on).
+2. **Name:** `AIPLA Simulations` · **Server URL:** the `/api/mcp` URL above ·
+   **Authentication:** No Auth · tick *"I understand and want to continue"* → **Create**.
+3. In a chat, enable the connector and ask **"show me the boldkast simulation"** —
+   the interactive projectile-motion widget renders inline; drag v₀ / θ / g and it
+   recomputes live.
+
+| Connector setup | Rendered in ChatGPT |
+|---|---|
+| ![ChatGPT connector setup](images/mcp-chatgpt/connector-setup.png) | ![Boldkast sim in ChatGPT](images/mcp-chatgpt/boldkast-in-chatgpt.png) |
+
+**Backup — local MCP Inspector** (no cloud, no wifi, always works). If ChatGPT
+flakes on the day (connector, cold-start, wifi), fall straight to this:
 
 ```bash
 npx @modelcontextprotocol/inspector uv run --script \
   /Users/mark/dev/sunholo/cphu-aipla-app/infrastructure/mcp-sandbox/external-host-demo/server.py
 ```
 
-Inspector shows the wire (`tools/list`, the `ui://` resource) *and* mounts the
-live sim — call `show_led_planck`, drag a slider, watch the structured update flow
-back as model context. That round trip (show UI → student action → model sees it)
-is the whole point. The portability punchline (same sim in our tutor, Inspector,
-ChatGPT) sells "protocol over custom" — but **demo it via Inspector, not Claude
-Desktop** (early-2026 Claude Desktop builds mount only the text fallback). Source +
-full runbook: `cphu-aipla-app/infrastructure/mcp-sandbox/external-host-demo/`.
-
-> **No-laptop route (in progress):** the deployed `/api/proxy/mcp` endpoint does
-> *not* yet serve these sims — it exposes the marketplace skills as text-returning
-> tools, not the `show_*` MCP Apps with `ui://` resources (that registration lives
-> only in the standalone `server.py`). Once it's folded into the backend, redeployed,
-> and the auth question is settled, point Inspector (or a remote connector) at the
-> cloud URL instead. **Until then, local Inspector is the reliable path** — and it's
-> the safer one for a live room regardless (no Cloud Run cold-start, no wifi).
+Inspector shows the wire (`tools/list`, the `ui://` resource) *and* mounts the live
+sim — call `show_boldkast` / `show_led_planck`, drag a slider, watch the structured
+update flow back as model context. **Demo via Inspector, not Claude Desktop**
+(early-2026 Claude Desktop builds mount only the text fallback). Source + runbook:
+`cphu-aipla-app/infrastructure/mcp-sandbox/external-host-demo/`.
 
 ## Status legend
 

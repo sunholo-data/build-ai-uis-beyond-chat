@@ -8,15 +8,16 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 It holds **materials, not code**: agenda, facilitator guide, code-tour, protocol-gotchas, pre-work, helper-agent design, the workshop-fork guide, and slides. The runnable code attendees clone and build on lives in a *different* repo (see lineage below). There is no build, no test suite, no app to run here — every file is Markdown, except the self-contained HTML slide decks under `slides/`.
 
-## The three-repo lineage (read this first)
+## The repo lineage (read this first)
 
-This repo is the public, downstream tip of a three-stage chain. Knowing where a fact's source-of-truth lives is the single most important thing when working here.
+The workshop spans **four repos**: a three-stage *code* chain (`platform` → sanitized `ai-protocol-platform` template → the `build-ai-uis-workshop-app` fork attendees actually clone) plus **this** curriculum repo wrapping around it. Knowing where a fact's source-of-truth lives is the single most important thing when working here.
 
 | Repo | Visibility | Role | Local path |
 |---|---|---|---|
 | **`Aitana-Labs/platform`** | private | **Source of truth.** The internal platform: ~13k backend LOC + ~9k frontend LOC, all design docs, customer/NDA bits, the Agents CLI, and the workshop source under `docs/workshop/`. | `/Users/mark/dev/aitana-labs/platform` |
-| **`sunholo-data/ai-protocol-platform`** | public | The **sanitized code template** derived from the platform (customer content, NDA refs, and Agents CLI stripped by `scripts/sanitize-for-template.sh` + `refresh-public-template.sh`). This is the codebase attendees clone and run with `LOCAL_MODE=1`. | not cloned locally |
-| **`sunholo-data/build-ai-uis-beyond-chat`** (this repo) | public | The **workshop curriculum** that wraps around the public template. | this directory |
+| **`sunholo-data/ai-protocol-platform`** | public | The **sanitized code template** derived from the platform (customer content, NDA refs, and Agents CLI stripped by `scripts/sanitize-for-template.sh` + `refresh-public-template.sh`). *Not* what attendees clone directly — it's the upstream the workshop app is forked from. | not cloned locally |
+| **`sunholo-data/build-ai-uis-workshop-app`** | public | 🎯 **The runnable app attendees clone.** A workshop fork/copy of the template, adding the blanked Round-B exercises on the **`workshop-start`** branch (each anchored by a test) and the `/dev/*` playgrounds. Run with `make dev-local` (`LOCAL_MODE=1`). | `/Users/mark/dev/sunholo/build-ai-uis-workshop-app` |
+| **`sunholo-data/build-ai-uis-beyond-chat`** (this repo) | public | The **workshop curriculum** (slides, agenda, guides) wrapping around the app — materials, not code. | this directory |
 
 Two generators live in the platform repo, both historically force-push (fresh `git init` → single squashed commit → `git push --force`):
 - `scripts/refresh-public-template.sh` → publishes the code template (`ai-protocol-platform`). **Still active.**

@@ -36,11 +36,14 @@ and all cost you the first 20 minutes.
 
 **The cloud demo that will bite you:** the AIPLA teacher view (linked in
 [slides/outline.md](slides/outline.md)) gates behind sign-in — have a capture.
-The MCP Apps demo is now **local** (MCP Inspector against the AIPLA sims — see
-[slides/outline.md](slides/outline.md)), so it's no longer a network risk; the
-only rule is **don't demo it through Claude Desktop** (text-only on early builds —
-use Inspector). Use captures without apology if a live cloud click is risky — the
-point is the *protocol behaviour*, not your network.
+The MCP Apps demo now runs two ways (setup + screenshots in
+[slides/outline.md](slides/outline.md)): **primary** = the AIPLA sims live in
+**ChatGPT** via a custom connector (the "runs anywhere" wow); **backup** = local
+**MCP Inspector** against the same sims (no cloud, no wifi). If ChatGPT flakes,
+fall to Inspector — same widgets. The one hard rule either way: **don't demo
+through Claude Desktop** (text-only on early-2026 builds). Use captures without
+apology if a live click is risky — the point is the *protocol behaviour*, not
+your network.
 
 ---
 
