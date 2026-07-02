@@ -15,6 +15,7 @@ closes Block 1; **build + teach-back** (`B1`–`B3`) opens Block 2.
 
 | # | Deck | Phase | Min | Status |
 |---|---|---|---|---|
+| — | [`pre-welcome.html`](pre-welcome.html) | **Pre-roll** — holding screen: self-serve get-ready steps (off-clock, left up as the room fills) | 0 | 🟢 built |
 | | **— Block 1 · 10:00–11:15 —** | | | |
 | 1 | [`00-welcome.html`](00-welcome.html) | Intro — framing | 5 | 🟡 draft |
 | 2 | [`about-mark/about-mark.html`](about-mark/about-mark.html) | Intro — standard | 2 | ✅ reused |
@@ -68,19 +69,20 @@ a real fork of the platform; in Round B groups play with one (homespun vs protoc
 via the dev playgrounds).
 
 - **AIPLA** — *AI in Physics Learning & Assessment* ([cphu-aipla-app](https://github.com/sunholo-data/cphu-aipla-app)) ·
-  `https://aipla-v01-frontend-wgwhd7mspa-lz.a.run.app/teacher/classes/0b99f4e04792`
+  `https://aipla-v01-frontend-wgwhd7mspa-lz.a.run.app/` (home page — the teacher
+  view needs sign-in and 404s otherwise)
 - **GDE AP Agent** — *invoice / accounts-payable* ([gde-ap-agent](https://github.com/sunholo-data/gde-ap-agent)) ·
   `https://gde-ap-agent-blqtqfexwa-ew.a.run.app/`
 
 | Protocol | Clean demo skill | Real app | Round B — play with it (key-free unless noted) | Advanced reconstruct |
 |---|---|---|---|---|
-| AG-UI | `demo-researcher` | GDE pipeline visualizer · AIPLA tutor | read the live SSE stream in DevTools *(needs a reply)* | restore `onMessagesChanged` (`B1`) |
+| AG-UI | `demo-researcher` | GDE pipeline visualizer · AIPLA tutor | `/dev/a2ui` — click, read the annotated AG-UI event stream in the wire log *(no key; DevTools Network is the live alt)* | restore `onMessagesChanged` (`B1`) |
 | A2UI | `demo-form-builder` → `demo-workspace` | GDE `InvoiceHeroCard` · AIPLA workspace | `/dev/a2ui` — edit the A2UI JSON, watch it render | restore `default_surface` (`B2`) |
 | MCP Apps | **AIPLA sims in ChatGPT** (or local MCP Inspector) — `show_boldkast`/`kinebot`/`led-planck` | GDE dashboards (bidirectional) · the same AIPLA sims inside the tutor | `/dev/mcp-apps/active` — fire both channels through the bridge | restore the `update-model-context` POST (`B3`) |
 
 > **Live-demo caveat:** demo skills run locally (`LOCAL_MODE=1`); the real apps
-> are on Cloud Run and the AIPLA teacher link may need sign-in. Decide per moment
-> whether to click through live or show a capture.
+> are on Cloud Run. The AIPLA card links to the home page (the teacher view needs
+> sign-in). Decide per moment whether to click through live or show a capture.
 
 ### MCP Apps demo — the AIPLA sims, live in ChatGPT (primary) + local backup
 
