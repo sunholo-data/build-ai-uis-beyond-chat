@@ -20,8 +20,7 @@ closes Block 1; **build + teach-back** (`B1`–`B3`) opens Block 2.
 | 1 | [`00-welcome.html`](00-welcome.html) | Intro — framing | 5 | 🟡 draft |
 | 2 | [`about-mark/about-mark.html`](about-mark/about-mark.html) | Intro — standard | 2 | ✅ reused |
 | 3 | [`01-chat-wall.html`](01-chat-wall.html) | Intro — the problem + brain break | 8 | 🟡 draft |
-| 4 | [`02-three-protocols.html`](02-three-protocols.html) | Guided tour — the **protocol stack** (cold-open framer) | 2 | 🟡 draft |
-| | ↳ [`wire-overview.html`](wire-overview.html) | Tour · animated **handoff map** (5 protocols, 3 we build) | 5 | 🟢 built |
+| 4 | [`wire-overview.html`](wire-overview.html) | Guided tour · opens on the **4-layer stack** framer, then the animated **handoff map** + two-worlds split (5 protocols, 3 we build) | 7 | 🟢 built |
 | | ↳ [`wire-agui.html`](wire-agui.html) | Tour · **AG-UI** on the wire + the 33-event catalog | 5 | 🟢 built |
 | | ↳ [`wire-a2ui.html`](wire-a2ui.html) | Tour · **A2UI** round-trip → catalog/rendered surface → 3 renderers → the A2UI⇄MCP boundary | 4 | 🟢 built |
 | | ↳ [`wire-mcp.html`](wire-mcp.html) | Tour · **MCP Apps** by-ref + sandbox + bridge · **closes on Brain break #2** | 6 | 🟢 built |

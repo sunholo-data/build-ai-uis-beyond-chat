@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>The Three Protocols — guided tour</title>
+<title>Build AI UIs Beyond Chat — Get Ready</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;700&family=Montserrat:wght@400;500;600;700;800&display=swap" rel="stylesheet">
@@ -71,80 +71,38 @@ body{
 .slide{position:absolute;inset:0;display:flex;flex-direction:column;justify-content:center;padding:6cqb 7cqi;opacity:0;visibility:hidden;transform:translateX(40px);transition:opacity .45s ease,transform .45s ease}
 .slide.active{opacity:1;visibility:visible;transform:translateX(0)}
 .slide.exit-left{transform:translateX(-40px);opacity:0}
-.slide-title{font-size:clamp(24px,4cqi,52px);font-weight:800;letter-spacing:-.02em;text-align:center;margin-bottom:4cqb}
+.slide-title{font-size:clamp(24px,4cqi,52px);font-weight:800;letter-spacing:-.02em;text-align:center;margin-bottom:3.4cqb}
 .slide-title .dim{color:var(--text-dim);font-weight:500}
 
-/* ─── Hero / brain-break ─── */
-.hero{align-items:center;text-align:center;gap:2cqb}
-.eyebrow{font-family:var(--mono);font-size:clamp(11px,1.5cqi,17px);text-transform:uppercase;letter-spacing:.2em;color:var(--text-dim);opacity:0}
-.hero-title{font-size:clamp(30px,6.5cqi,76px);font-weight:800;line-height:1.04;letter-spacing:-.025em;max-width:92%;opacity:0}
-.hero-title.small{font-size:clamp(24px,4.6cqi,56px)}
-.hero-title .accent{color:var(--orange)}
-.hero-sub{font-size:clamp(14px,2.2cqi,26px);color:var(--text-dim);max-width:70%;line-height:1.4;opacity:0}
-.pill-row{display:flex;gap:1.6cqi;margin-top:2cqb;flex-wrap:wrap;justify-content:center;opacity:0}
-.pill{font-family:var(--mono);font-size:clamp(12px,1.7cqi,20px);font-weight:700;padding:1cqb 2.2cqi;border-radius:999px;border:1px solid var(--orange);color:var(--orange);background:transparent}
-
-/* ─── Protocol stack ─── */
-.stack{display:flex;flex-direction:column;gap:1.2cqb;width:80%;margin:0 auto}
-.layer{display:flex;align-items:center;gap:2cqi;padding:1.6cqb 2.4cqi;border-radius:10px;background:var(--surface);border:1px solid var(--ghost);opacity:0}
-.layer .tag{font-family:var(--mono);font-size:clamp(9px,1.2cqi,15px);color:var(--text-dim);min-width:14cqi;text-transform:uppercase;letter-spacing:.06em}
-.layer .name{font-weight:700;font-size:clamp(14px,2.1cqi,26px)}
-.layer .desc{margin-left:auto;color:var(--text-dim);font-size:clamp(11px,1.5cqi,19px);text-align:right}
-.layer.ui{border-color:var(--orange-dim)}
-.layer.ui .name{color:var(--orange)}
-
-/* ─── Cards (intro/showcase) ─── */
-.cards{display:flex;gap:2.2cqi;width:90%;margin:0 auto;justify-content:center}
-.card{flex:1;background:var(--surface);border:1px solid var(--ghost);border-radius:12px;padding:3cqb 2.2cqi;display:flex;flex-direction:column;gap:1.2cqb;opacity:0}
+/* ─── Cards ─── */
+.cards{display:flex;gap:2.2cqi;width:92%;margin:0 auto;justify-content:center;align-items:stretch}
+.card{flex:1;background:var(--surface);border:1px solid var(--ghost);border-radius:12px;padding:1.9cqb 1.7cqi;display:flex;flex-direction:column;gap:1cqb;opacity:0}
 .card i{font-size:clamp(20px,3cqi,38px);color:var(--orange)}
-.card .badge{font-family:var(--mono);font-size:clamp(10px,1.3cqi,16px);color:var(--orange);font-weight:700;letter-spacing:.04em}
-.card h3{font-size:clamp(15px,2cqi,26px);font-weight:700}
-.card p{font-size:clamp(11px,1.5cqi,19px);color:var(--text-dim);line-height:1.45}
-.card .url{margin-top:auto;font-family:var(--mono);font-size:clamp(10px,1.3cqi,16px);color:var(--orange);text-decoration:none;word-break:break-all;border-bottom:1px solid var(--orange-dim);align-self:flex-start}
+.card .badge{font-family:var(--mono);font-size:clamp(10px,1.3cqi,16px);color:var(--orange);font-weight:700;letter-spacing:.05em}
+.card h3{font-size:clamp(15px,2.1cqi,28px);font-weight:700;line-height:1.1}
+.card p{font-size:clamp(11px,1.45cqi,18px);color:var(--text-dim);line-height:1.4}
+.card .url{margin-top:auto;font-family:var(--mono);font-size:clamp(10px,1.35cqi,16px);color:var(--orange);text-decoration:none;word-break:break-all;border-bottom:1px solid var(--orange-dim);align-self:flex-start}
 .card .url:hover{border-bottom-color:var(--orange)}
 
-/* ─── Bullets / note ─── */
-.bullets{list-style:none;width:80%;margin:0 auto;display:flex;flex-direction:column;gap:1.4cqb}
-.bullets li{position:relative;padding-left:3cqi;font-size:clamp(13px,1.9cqi,24px);color:var(--text);line-height:1.4;opacity:0}
-.bullets li::before{content:"\25B8";position:absolute;left:0;color:var(--orange);font-weight:700}
-.bullets li code,.act code{font-family:var(--mono);font-size:.9em;background:var(--code-bg);border:1px solid var(--code-border);border-radius:4px;padding:.05em .4em}
-.note{margin-top:3cqb;text-align:center;font-family:var(--mono);font-size:clamp(11px,1.4cqi,17px);color:var(--text-dim);opacity:.8}
-.note i{color:var(--orange);margin-right:.6em}
+/* ─── Scoped: step header row + command block ─── */
+.step-top{display:flex;align-items:center;gap:1.4cqi}
+.step-num{font-family:var(--mono);font-weight:700;color:var(--orange);font-size:clamp(20px,3.2cqi,42px);line-height:1;opacity:.85}
+.cmd{margin-top:auto;font-family:var(--mono);font-size:clamp(10px,1.4cqi,17px);background:var(--code-bg);border:1px solid var(--code-border);border-radius:7px;padding:.9cqb 1.1cqi;color:var(--text);align-self:stretch;white-space:pre-wrap;line-height:1.5}
+.cmd .c{color:var(--orange)}
 
-/* ─── Activity card (the course-guide slide type) ─── */
-.act{display:flex;flex-direction:column;height:100%;gap:2.2cqb}
-.act-head{display:flex;align-items:center;gap:1.5cqi;flex-wrap:wrap;opacity:0}
-.act-badge{font-family:var(--mono);font-size:clamp(10px,1.3cqi,16px);font-weight:700;color:#fff;background:var(--orange);border-radius:6px;padding:.5cqb 1.4cqi;letter-spacing:.04em}
-.act-title{font-size:clamp(19px,3cqi,40px);font-weight:800;letter-spacing:-.02em}
-.act-meta{display:flex;gap:1cqi;margin-left:auto;flex-wrap:wrap}
-.act-meta .chip{font-family:var(--mono);font-size:clamp(10px,1.35cqi,16px);color:var(--text-dim);border:1px solid var(--ghost);border-radius:999px;padding:.55cqb 1.4cqi}
-.act-meta .chip.accent{color:var(--orange);border-color:var(--orange-dim)}
-.act-body{display:flex;gap:3cqi;flex:1;min-height:0}
-.act-col{flex:1;display:flex;flex-direction:column;gap:1.6cqb;min-height:0}
-.act-col.side{flex:.82;justify-content:center}
-.act .goal{font-size:clamp(13px,1.95cqi,24px);font-weight:600;line-height:1.35;opacity:0}
-.act ol{list-style:none;counter-reset:step;display:flex;flex-direction:column;gap:1.1cqb}
-.act ol li{counter-increment:step;position:relative;padding-left:3.8cqi;font-size:clamp(12px,1.6cqi,21px);line-height:1.4;opacity:0}
-.act ol li::before{content:counter(step);position:absolute;left:0;top:0;min-width:2.4cqi;text-align:center;color:var(--orange);font-weight:700;font-family:var(--mono)}
-.act .block{background:var(--surface);border:1px solid var(--ghost);border-radius:9px;padding:1.4cqb 1.7cqi;opacity:0}
-.act .block.done{border-color:var(--green-dim)}
-.act .block .lbl{font-family:var(--mono);font-size:clamp(10px,1.3cqi,16px);font-weight:700;letter-spacing:.03em;margin-bottom:.6cqb}
-.act .block.done .lbl{color:var(--green)}
-.act .block p{font-size:clamp(11px,1.5cqi,18px);line-height:1.4;color:var(--text-dim)}
-.act .block a{color:var(--orange);text-decoration:none;border-bottom:1px solid var(--orange-dim);word-break:break-all}
-.act .block a:hover{border-bottom-color:var(--orange)}
+/* ─── Bullets / note ─── */
+.bullets{list-style:none;width:82%;margin:0 auto;display:flex;flex-direction:column;gap:1.4cqb}
+.bullets li{position:relative;padding-left:3.2cqi;font-size:clamp(13px,1.95cqi,25px);color:var(--text);line-height:1.4;opacity:0}
+.bullets li::before{content:"\25B8";position:absolute;left:0;color:var(--orange);font-weight:700}
+.bullets.check li::before{content:"\2713";color:var(--green)}
+.bullets li code,.bullets li strong{font-family:var(--mono);font-size:.9em;background:var(--code-bg);border:1px solid var(--code-border);border-radius:4px;padding:.05em .4em;font-weight:400}
+.bullets li strong.plain{background:none;border:none;padding:0;font-family:var(--sans);font-weight:700;font-size:1em;color:var(--text)}
+.note{margin-top:3.2cqb;text-align:center;font-family:var(--mono);font-size:clamp(11px,1.5cqi,18px);color:var(--text-dim);opacity:.85;line-height:1.5}
+.note i{color:var(--orange);margin-right:.5em}
+.note code{background:var(--code-bg);border:1px solid var(--code-border);border-radius:4px;padding:.05em .4em;color:var(--text)}
 
 /* ─── Animations ─── */
 @keyframes fadeSlideUp{from{opacity:0;transform:translateY(20px)}to{opacity:1;transform:translateY(0)}}
-@keyframes fadeSlideIn{from{opacity:0;transform:translateX(-16px)}to{opacity:1;transform:translateX(0)}}
-.slide.active .eyebrow{animation:fadeSlideUp .5s ease .05s both}
-.slide.active .hero-title{animation:fadeSlideUp .6s ease .18s both}
-.slide.active .hero-sub{animation:fadeSlideUp .6s ease .34s both}
-.slide.active .pill-row{animation:fadeSlideUp .6s ease .5s both}
-.slide.active .layer:nth-child(1){animation:fadeSlideUp .5s ease .1s both}
-.slide.active .layer:nth-child(2){animation:fadeSlideUp .5s ease .22s both}
-.slide.active .layer:nth-child(3){animation:fadeSlideUp .5s ease .34s both}
-.slide.active .layer:nth-child(4){animation:fadeSlideUp .5s ease .46s both}
 .slide.active .card:nth-child(1){animation:fadeSlideUp .55s ease .12s both}
 .slide.active .card:nth-child(2){animation:fadeSlideUp .55s ease .28s both}
 .slide.active .card:nth-child(3){animation:fadeSlideUp .55s ease .44s both}
@@ -153,16 +111,6 @@ body{
 .slide.active .bullets li:nth-child(3){animation:fadeSlideUp .5s ease .36s both}
 .slide.active .bullets li:nth-child(4){animation:fadeSlideUp .5s ease .48s both}
 .slide.active .bullets li:nth-child(5){animation:fadeSlideUp .5s ease .60s both}
-.slide.active .act-head{animation:fadeSlideUp .5s ease .05s both}
-.slide.active .act .goal{animation:fadeSlideUp .5s ease .14s both}
-.slide.active .act ol li:nth-child(1){animation:fadeSlideUp .45s ease .2s both}
-.slide.active .act ol li:nth-child(2){animation:fadeSlideUp .45s ease .3s both}
-.slide.active .act ol li:nth-child(3){animation:fadeSlideUp .45s ease .4s both}
-.slide.active .act ol li:nth-child(4){animation:fadeSlideUp .45s ease .5s both}
-.slide.active .act ol li:nth-child(5){animation:fadeSlideUp .45s ease .6s both}
-.slide.active .act .block:nth-child(1){animation:fadeSlideUp .5s ease .28s both}
-.slide.active .act .block:nth-child(2){animation:fadeSlideUp .5s ease .42s both}
-.slide.active .act .block:nth-child(3){animation:fadeSlideUp .5s ease .56s both}
 
 /* ─── Bottom bar ─── */
 .bottom-bar{display:flex;align-items:center;justify-content:space-between;padding:8px 18px;border-top:1px solid var(--bar-border);background:var(--bar-bg);backdrop-filter:blur(8px);flex-shrink:0}
@@ -190,22 +138,81 @@ body{
   <div class="top-bar">
     <div class="top-bar-left">
       <img src="images/logos/sunholo-logo.svg" alt="Sunholo" class="top-logo">
-      <span class="deck-title">The protocol stack <span class="accent">— the lay of the land</span></span>
+      <span class="deck-title">Build AI UIs <span class="accent">Beyond Chat</span></span>
     </div>
     <button class="theme-toggle" id="themeToggle" title="Toggle theme"><i class="fas fa-moon"></i></button>
   </div>
   <div class="slides-viewport">
     <div class="slides-stage">
+
+      <!-- Slide 0 — the holding screen: what to do while the room fills up -->
       <section class="slide active" data-slide="0">
-<h2 class="slide-title">The protocol stack <span class="dim">— four layers</span></h2>
-<div class="stack"><div class="layer ui"><span class="tag">Layer 4 · UI</span><span class="name">A2UI&nbsp;+&nbsp;MCP Apps</span><span class="desc">Declarative JSON UI · sandboxed iframes</span></div><div class="layer"><span class="tag">Layer 3 · Transport</span><span class="name">AG-UI</span><span class="desc">Event streaming — 33 typed events</span></div><div class="layer"><span class="tag">Layer 2 · Coordination</span><span class="name">A2A&nbsp;+&nbsp;MCP</span><span class="desc">Discovery · tools</span></div><div class="layer"><span class="tag">Layer 1 · Framework</span><span class="name">Google ADK</span><span class="desc">Agents, sessions, models</span></div></div>
+<h2 class="slide-title">Not set up yet? <span class="dim">Do this now &mdash; ~15 min.</span></h2>
+<div class="cards">
+  <div class="card">
+    <div class="step-top"><span class="step-num">1</span><i class="fas fa-code-branch"></i></div>
+    <span class="badge">CLONE THE APP</span>
+    <p>One public repo &mdash; everything you build on today is in it.</p>
+    <a class="url" href="https://github.com/sunholo-data/build-ai-uis-workshop-app" target="_blank" rel="noopener">github.com/sunholo-data/build-ai-uis-workshop-app &nearr;</a>
+  </div>
+  <div class="card">
+    <div class="step-top"><span class="step-num">2</span><i class="fas fa-key"></i></div>
+    <span class="badge">FREE GEMINI KEY</span>
+    <p>2 min &middot; free tier &middot; <em>not</em> a GCP project. Without it the chat won&rsquo;t reply.</p>
+    <a class="url" href="https://aistudio.google.com/apikey" target="_blank" rel="noopener">aistudio.google.com/apikey &nearr;</a>
+  </div>
+  <div class="card">
+    <div class="step-top"><span class="step-num">3</span><i class="fas fa-play"></i></div>
+    <span class="badge">RUN IT &amp; CHECK</span>
+    <p>Codespaces (any OS, zero install) or local. Then send a message.</p>
+    <div class="cmd"><span class="c">$</span> make dev-local</div>
+  </div>
+</div>
+<p class="note"><i class="fas fa-circle-check"></i>Ready = <code>localhost:3456</code> &rarr; yellow <strong style="color:var(--amber)">LOCAL_MODE</strong> banner &rarr; a chat reply <strong>streams</strong> back. &nbsp;Not there yet? Grab an instructor &mdash; we&rsquo;ll triage while the room fills up.</p>
       </section>
+
+      <!-- Slide 1 — the two ways to run it + what to install -->
+      <section class="slide" data-slide="1">
+<h2 class="slide-title">Two ways to run it &mdash; <span class="dim">pick one</span></h2>
+<div class="cards">
+  <div class="card">
+    <div class="step-top"><i class="fas fa-cloud"></i></div>
+    <span class="badge">A &middot; CODESPACES &mdash; ANY OS, ZERO INSTALL</span>
+    <h3>In the browser</h3>
+    <p>On the repo: green <strong style="color:var(--text)">Code</strong> &#9656; <strong style="color:var(--text)">Codespaces</strong> &#9656; <strong style="color:var(--text)">Create</strong>. Wait ~3&ndash;5 min, add your key, then:</p>
+    <div class="cmd"><span class="c">$</span> echo "GEMINI_API_KEY=&hellip;" &gt; backend/.env
+<span class="c">$</span> make dev-local</div>
+  </div>
+  <div class="card">
+    <div class="step-top"><i class="fas fa-laptop-code"></i></div>
+    <span class="badge">B &middot; LOCAL &mdash; macOS / LINUX / WSL2</span>
+    <h3>On your machine</h3>
+    <p>Install <strong style="color:var(--text)">Node 20+</strong>, <strong style="color:var(--text)">Python 3.11&ndash;3.13</strong>, <strong style="color:var(--text)">git</strong>, <strong style="color:var(--text)">make</strong>. Windows &rarr; use Codespaces or WSL2.</p>
+    <div class="cmd"><span class="c">$</span> git clone &hellip;/build-ai-uis-workshop-app
+<span class="c">$</span> make install && make dev-local</div>
+  </div>
+</div>
+<p class="note"><i class="fas fa-book-open"></i>Full step-by-step (per-OS notes, secrets, troubleshooting) is in <code>pre-work.md</code> in the repo.</p>
+      </section>
+
+      <!-- Slide 2 — the readiness checklist + optional coding agent -->
+      <section class="slide" data-slide="2">
+<h2 class="slide-title">You&rsquo;re ready when&hellip;</h2>
+<ul class="bullets check">
+  <li>The app loads with the yellow <strong class="plain" style="color:var(--amber)">LOCAL_MODE</strong> banner</li>
+  <li><code>backend/.env</code> has your <code>GEMINI_API_KEY</code> (or the Codespaces secret is set)</li>
+  <li>A chat message <strong class="plain">streams</strong> back token-by-token</li>
+  <li><strong class="plain">Optional, for Round C:</strong> a coding agent logged in &mdash; Claude Code, Codex, Gemini CLI, or Antigravity</li>
+</ul>
+<p class="note"><i class="fas fa-robot"></i>The coding agent is a <strong style="color:var(--text)">separate</strong> login from the Gemini key. Prefer a subscription / OAuth login over a metered key for a 3-hour session &mdash; Gemini CLI &amp; Antigravity have genuinely free tiers.</p>
+      </section>
+
     </div>
   </div>
   <div class="bottom-bar">
     <div class="transport">
       <button class="transport-btn" id="btnPrev" title="Previous slide"><i class="fas fa-chevron-left"></i></button>
-      <span class="step-indicator"><span class="current" id="slideNum">1</span> / <span id="slideTotal">1</span></span>
+      <span class="step-indicator"><span class="current" id="slideNum">1</span> / <span id="slideTotal">3</span></span>
       <button class="transport-btn" id="btnNext" title="Next slide"><i class="fas fa-chevron-right"></i></button>
     </div>
     <div class="slide-dots" id="slideDots"></div>
@@ -214,7 +221,7 @@ body{
 </div>
 <script>
 (function(){
-  const TOTAL = 1;
+  const TOTAL = 3;
   let current = 0;
   let transitioning = false;
 
@@ -228,7 +235,7 @@ body{
   for(let i=0;i<TOTAL;i++){
     const d = document.createElement('button');
     d.className = 'slide-dot' + (i===0?' active':'');
-    d.addEventListener('click', ()=> goTo(i));
+    d.addEventListener('click', ()=>{ stopAuto(); goTo(i); });
     dotsContainer.appendChild(d);
   }
 
@@ -238,7 +245,7 @@ body{
     const dir = n > current ? 1 : -1;
     slides.forEach(s=>{
       s.classList.remove('active','exit-left');
-      s.querySelectorAll('.eyebrow,.hero-title,.hero-sub,.pill-row,.layer,.card,.bullets li,.act-head,.act .goal,.act ol li,.act .block').forEach(el=>{
+      s.querySelectorAll('.card,.bullets li').forEach(el=>{
         el.style.opacity='0'; el.style.transform='';
       });
     });
@@ -252,16 +259,27 @@ body{
     setTimeout(()=>{ transitioning = false; }, 500);
   }
 
-  btnPrev.addEventListener('click', ()=> goTo(current-1));
-  btnNext.addEventListener('click', ()=> goTo(current+1));
+  btnPrev.addEventListener('click', ()=>{ stopAuto(); goTo(current-1); });
+  btnNext.addEventListener('click', ()=>{ stopAuto(); goTo(current+1); });
   btnPrev.disabled = true;
 
   document.addEventListener('keydown', e=>{
-    if(e.key==='ArrowRight'||e.key===' ') goTo(current+1);
-    if(e.key==='ArrowLeft') goTo(current-1);
+    if(e.key==='ArrowRight'||e.key===' '){ stopAuto(); goTo(current+1); }
+    if(e.key==='ArrowLeft'){ stopAuto(); goTo(current-1); }
     if(e.key==='ArrowDown'){ e.preventDefault(); window.parent.postMessage({type:'deck-nav',dir:'next'},'*'); }
     if(e.key==='ArrowUp'){ e.preventDefault(); window.parent.postMessage({type:'deck-nav',dir:'prev'},'*'); }
   });
+
+  // ── Auto-rotate (holding-screen behaviour) ──────────────────────────────
+  // This deck is the pre-roll shown as the room fills, so it cycles its slides
+  // unattended. Any manual navigation (arrows / space / buttons / dots) stops
+  // the rotation for good, handing control to the presenter. Tune the dwell
+  // per slide with AUTO_MS.
+  const AUTO_MS = 11000;
+  let autoTimer = null;
+  function startAuto(){ if(!autoTimer) autoTimer = setInterval(()=> goTo((current+1)%TOTAL), AUTO_MS); }
+  function stopAuto(){ if(autoTimer){ clearInterval(autoTimer); autoTimer = null; } }
+  startAuto();
 
   window.addEventListener('message', e=>{
     if(e.data && e.data.type==='deck-command'){

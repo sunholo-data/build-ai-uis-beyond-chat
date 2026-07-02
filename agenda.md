@@ -49,7 +49,7 @@ The audience is education specialists, so the structure is intentional:
 | # | Min | Mode | What happens | Deck / card |
 |---|---|---|---|---|
 | 0 | 15 | Instructor + pair | Welcome · the chat wall · the protocol stack. **Brain break #1:** "where does text-only AI hit a wall in *your* work?" | `00-welcome`, `about-mark`, `01-chat-wall` |
-| 1 | 22 | Instructor + brain breaks | Guided tour — open on the **protocol stack** (one glance), then walk the **on-the-wire explainer decks**, ~6 min each (AG-UI · A2UI · MCP Apps) + a 2-min pair talk "how could you use this?". Real apps (AIPLA, GDE) flashed as "this ships." Closes on **Brain break #2** (explain the three). | `02-three-protocols` → `wire-overview` / `wire-agui` / `wire-a2ui` / `wire-mcp` |
+| 1 | 22 | Instructor + brain breaks | Guided tour — open on the **protocol stack** (one glance), then walk the **on-the-wire explainer decks**, ~6 min each (AG-UI · A2UI · MCP Apps) + a 2-min pair talk "how could you use this?". Real apps (AIPLA, GDE) flashed as "this ships." Closes on **Brain break #2** (explain the three). | `wire-overview` (opens on the stack) / `wire-agui` / `wire-a2ui` / `wire-mcp` |
 | 2 | 20 | Groups | **Round A — Explore a live skill.** Each table picks ONE running demo, pokes it, and lists 3 things the protocol enables that plain chat can't. (The instructor shows the with/without contrast in the tour — groups don't run two versions.) Share across tables. | `A1-explore-a-skill` |
 | 3a | 10 | Instructor → groups | **Round B handoff.** Explain the jigsaw, **assign each group its ONE protocol**, and have them open & read their exercise. Nothing to build yet — they carry the question into coffee. | `B0-how-it-works` |
 

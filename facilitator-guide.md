@@ -91,8 +91,8 @@ brain break: **"turn to your neighbour — which non-chat AI tools would help in
 This is the hook for the whole day, not filler.
 
 ### Guided tour: AG-UI / A2UI / MCP — 22 min · instructor + brain breaks
-Open on the **protocol stack** (`02-three-protocols`, one glance), then **walk
-the on-the-wire explainer decks** (`wire-overview` → `wire-agui` → `wire-a2ui`
+Open on the **protocol stack** (the first slide of `wire-overview`, one glance),
+then **walk the on-the-wire explainer decks** (`wire-overview` → `wire-agui` → `wire-a2ui`
 → `wire-mcp` — animated, step through with →/Space), showing each protocol's
 with/without contrast; groups do **not** run two versions (too heavy to set up
 per table). ~6 min per protocol, each capped by a 2-min pair talk so no passive

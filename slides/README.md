@@ -26,9 +26,10 @@ python3 -m http.server 8000
 slides/
   presenter.html          # playlist navigator + per-deck timer — open this for the talk
   outline.md              # deck order, minutes, demo thread (source of truth for the playlist)
+  pre-welcome.html        # pre-roll holding screen: self-serve get-ready steps (clone / key / run / check)
   00-welcome.html         # intro: framing + how-today-works + real-apps teaser
   01-chat-wall.html       # intro: the problem + a brain-break (think-pair-share)
-  02-three-protocols.html # instructor guided tour (AG-UI / A2UI / MCP) with brain breaks
+  wire-overview.html      # instructor guided tour: opens on the 4-layer stack, then the handoff map + two-worlds split
   A1-explore-a-skill.html       # Round A activity card (group explore one live demo)
   B0-how-it-works.html …  # Round B jigsaw: controller + B1/B2/B3 per-protocol cards
   C1-plan-your-app.html   # Round C activity card (plan + reflect)

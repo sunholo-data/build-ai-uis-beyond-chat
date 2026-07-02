@@ -42,6 +42,22 @@ body{background-image:radial-gradient(circle at 50% 45%, rgba(231,60,23,.05) 0%,
 .eyebrow{font-family:var(--mono);font-size:clamp(10px,1.4cqi,16px);text-transform:uppercase;letter-spacing:.24em;color:var(--orange)}
 .wtitle{font-size:clamp(21px,3.4cqi,44px);font-weight:800;letter-spacing:-.02em;line-height:1.05;margin-top:.5cqb}.wtitle .accent{color:var(--orange)}
 
+/* ── the stack (folded-in framer) ── */
+.stack{flex:1;min-height:0;display:flex;flex-direction:column;justify-content:center;gap:1.3cqb;width:84%;margin:0 auto}
+.layer{display:flex;align-items:center;gap:2cqi;padding:1.7cqb 2.4cqi;border-radius:11px;background:var(--surface);border:1px solid var(--ghost);opacity:0}
+.layer .tag{font-family:var(--mono);font-size:clamp(9px,1.2cqi,15px);color:var(--text-dim);min-width:16cqi;text-transform:uppercase;letter-spacing:.06em}
+.layer .name{font-weight:700;font-size:clamp(14px,2.1cqi,26px)}
+.layer .desc{margin-left:auto;color:var(--text-dim);font-size:clamp(11px,1.5cqi,19px);text-align:right}
+.layer.ui{border-color:var(--orange-dim)}
+.layer.ui .name{color:var(--orange)}
+.slide.active .layer{animation:rise .5s ease both}
+.slide.active .layer:nth-child(1){animation-delay:.06s}
+.slide.active .layer:nth-child(2){animation-delay:.16s}
+.slide.active .layer:nth-child(3){animation-delay:.26s}
+.slide.active .layer:nth-child(4){animation-delay:.36s}
+.stack-foot{flex-shrink:0;margin-top:1.4cqb;padding-top:1.1cqb;border-top:1px solid var(--bar-border);text-align:center;font-size:clamp(9px,1.2cqi,15px);color:var(--text-dim);line-height:1.4}
+.stack-foot b{color:var(--orange);font-weight:700}
+
 /* ── the map ── */
 .mapwrap{flex:1;min-height:0;display:grid;grid-template-columns:1fr 28%;gap:3cqi;align-items:center}
 .map{position:relative;display:flex;flex-direction:column;align-items:center;height:100%;justify-content:center;gap:.4cqb}
@@ -139,7 +155,7 @@ body{background-image:radial-gradient(circle at 50% 45%, rgba(231,60,23,.05) 0%,
 .hub-node small{font-family:var(--mono);font-size:clamp(6px,.95cqi,11px);color:var(--text-dim)}
 .hub-dirs{display:flex;gap:1.4cqi;font-family:var(--mono);font-size:clamp(7px,1.05cqi,13px);color:var(--text-dim);white-space:nowrap}
 .hub-dirs .o{color:var(--orange)}
-@media (prefers-reduced-motion: reduce){.chan.on .cwire.v .dot,.chan.h.on .cwire.h .dot,.slide.active .wld,.slide.active .hub,.rail .hero.flash{animation:none}.wld,.hub{opacity:1}}
+@media (prefers-reduced-motion: reduce){.chan.on .cwire.v .dot,.chan.h.on .cwire.h .dot,.slide.active .wld,.slide.active .hub,.slide.active .layer,.rail .hero.flash{animation:none}.wld,.hub,.layer{opacity:1}}
 /* ── density: Stage (big screen) hides .detail; Guide (laptop) reveals it ── */
 html[data-density="stage"] .detail{display:none}
 .bar-tools{display:flex;align-items:center;gap:10px}
@@ -161,8 +177,21 @@ html[data-density="stage"] .detail{display:none}
     </div></div>
   <div class="slides-viewport"><div class="slides-stage">
 
-    <!-- Slide 0 — the handoff map -->
-    <section class="slide active" data-viz="map" data-steps="7">
+    <!-- Slide 0 — the protocol stack (folded-in framer: the lay of the land) -->
+    <section class="slide active">
+      <div class="wire-head"><div class="eyebrow">the lay of the land · four layers</div>
+        <h2 class="wtitle">The protocol <span class="accent">stack</span></h2></div>
+      <div class="stack">
+        <div class="layer ui"><span class="tag">Layer 4 · UI</span><span class="name">A2UI&nbsp;+&nbsp;MCP Apps</span><span class="desc">Declarative JSON UI · sandboxed iframes</span></div>
+        <div class="layer"><span class="tag">Layer 3 · Transport</span><span class="name">AG-UI</span><span class="desc">Event streaming — 33 typed events</span></div>
+        <div class="layer"><span class="tag">Layer 2 · Coordination</span><span class="name">A2A&nbsp;+&nbsp;MCP</span><span class="desc">Discovery · tools</span></div>
+        <div class="layer"><span class="tag">Layer 1 · Framework</span><span class="name">Google ADK</span><span class="desc">Agents, sessions, models</span></div>
+      </div>
+      <div class="stack-foot">Top layer is <b>the last mile</b> — what the user sees, and what we build. The rest you already run.</div>
+    </section>
+
+    <!-- Slide 1 — the handoff map -->
+    <section class="slide" data-viz="map" data-steps="7">
       <div class="wire-head"><div class="eyebrow">five protocols · one request</div>
         <h2 class="wtitle">How they <span class="accent">hand off</span></h2></div>
       <div class="mapwrap">
@@ -197,7 +226,7 @@ html[data-density="stage"] .detail{display:none}
       </div>
     </section>
 
-    <!-- Slide 1 — two worlds -->
+    <!-- Slide 2 — two worlds -->
     <section class="slide">
       <div class="wire-head"><div class="eyebrow">the split</div>
         <h2 class="wtitle">Two worlds, <span class="accent">one agent</span></h2></div>
@@ -264,7 +293,7 @@ html[data-density="stage"] .detail{display:none}
 
   const slidesEl=[...document.querySelectorAll('.slide')];const TOTAL=slidesEl.length;let curSlide=0,step=0;
   const hasSteps=i=>!!slidesEl[i].dataset.steps;const maxStep=i=>hasSteps(i)?(+slidesEl[i].dataset.steps-1):0;
-  function renderStep(a){const v=slidesEl[curSlide].dataset.viz;if(v&&RENDERERS[v])RENDERERS[v](slidesEl[curSlide],step,a);}
+  function renderStep(a){const v=slidesEl[curSlide].dataset.viz;if(v&&RENDERERS[v])RENDERERS[v](slidesEl[curSlide],step,a);document.getElementById('prev').disabled=(curSlide===0&&step===0);}
   function showSlide(i,atLast){slidesEl.forEach(s=>s.classList.remove('active'));curSlide=i;step=(atLast&&hasSteps(i))?maxStep(i):0;slidesEl[i].classList.add('active');renderStep(false);}
   function advance(){if(hasSteps(curSlide)&&step<maxStep(curSlide)){step++;renderStep(true);}else if(curSlide<TOTAL-1){showSlide(curSlide+1,false);}}
   function retreat(){if(step>0){step--;renderStep(true);}else if(curSlide>0){showSlide(curSlide-1,true);}}

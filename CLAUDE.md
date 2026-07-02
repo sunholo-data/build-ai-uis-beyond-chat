@@ -69,7 +69,7 @@ patterns, boilerplate, and a stage-safe linter). The skill originates from the
   The only allowed viewport unit is the single `#app{…;height:100vh}` shell line.
   Verify with `node .claude/skills/presentation-slides/scripts/lint-slides.mjs slides/*.html`.
 - The deck is **activity-led** (see `agenda.md`): instructor intro
-  (`00-welcome`, `01-chat-wall`, `02-three-protocols`) → student activity rounds
+  (`00-welcome`, `01-chat-wall`, `wire-overview`…`wire-mcp` tour) → student activity rounds
   (`A1`, `B0`+`B1`/`B2`/`B3` jigsaw, `C1`) → `show-and-tell` → `07-wrap-up` →
   `08-built-on-this` showcase, wrapped in reused `about-mark`/`contact-mark`.
   The `B0` handoff closes Block 1 (pre-break); the `B1`–`B3` build opens Block 2.
