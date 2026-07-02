@@ -123,8 +123,8 @@ body{background-image:radial-gradient(circle at 50% 40%, rgba(231,60,23,.04) 0%,
 .counter{font-family:var(--mono);font-size:clamp(9px,1.15cqi,14px);color:var(--text-dim);align-self:center}
 
 /* ─── Catalog slide ─── */
-.cat-grid{flex:1;min-height:0;display:grid;grid-template-columns:repeat(4,1fr);grid-auto-rows:1fr;gap:1.2cqi}
-.cat{background:var(--surface);border:1px solid var(--ghost);border-radius:10px;padding:1.1cqb 1.2cqi;display:flex;flex-direction:column;gap:.55cqb;opacity:0}
+.cat-grid{flex:1;min-height:0;display:flex;flex-direction:column;justify-content:space-between;gap:.9cqb}
+.cat{background:var(--surface);border:1px solid var(--ghost);border-radius:10px;padding:1cqb 1.8cqi;display:flex;align-items:center;gap:2cqi;flex:0 0 auto;opacity:0}
 .slide.active .cat{animation:fadeSlideUp .5s ease both}
 .slide.active .cat:nth-child(1){animation-delay:.04s}
 .slide.active .cat:nth-child(2){animation-delay:.10s}
@@ -135,17 +135,17 @@ body{background-image:radial-gradient(circle at 50% 40%, rgba(231,60,23,.04) 0%,
 .slide.active .cat:nth-child(7){animation-delay:.40s}
 .slide.active .cat:nth-child(8){animation-delay:.46s}
 @keyframes fadeSlideUp{from{opacity:0;transform:translateY(16px)}to{opacity:1;transform:none}}
-.cat-head{display:flex;align-items:baseline;justify-content:space-between;gap:.8cqi}
-.cat-name{font-weight:700;font-size:clamp(9px,1.35cqi,16px);line-height:1.1}
-.cat-count{font-family:var(--mono);font-size:clamp(8px,1.1cqi,13px);color:var(--text-dim)}
-.cat-events{display:flex;flex-wrap:wrap;gap:.5cqi}
-.chip{font-family:var(--mono);font-size:clamp(7px,.9cqi,11px);padding:.32cqb .7cqi;border-radius:5px;border:1px solid var(--code-border);background:var(--code-bg);color:var(--text-dim);line-height:1.3}
-.chip.used{border-color:var(--orange-dim);background:var(--orange-dim);color:var(--text)}
+.cat-head{flex-shrink:0;width:15cqi;display:flex;align-items:baseline;gap:.7cqi}
+.cat-name{font-weight:700;font-size:clamp(13px,2cqi,24px);line-height:1.1}
+.cat-count{font-family:var(--mono);font-size:clamp(10px,1.3cqi,16px);color:var(--text-dim)}
+.cat-events{flex:1;min-width:0;display:flex;flex-wrap:wrap;align-content:center;gap:.6cqi}
+.chip{font-family:var(--mono);font-size:clamp(9px,1.3cqi,16px);padding:.45cqb 1cqi;border-radius:6px;border:1px solid var(--code-border);background:var(--code-bg);color:var(--text-dim);line-height:1.3;white-space:nowrap}
+.chip.used{border-color:var(--orange);background:var(--orange);color:#fff;font-weight:600}
 .cat-foot{flex-shrink:0;display:flex;align-items:center;gap:1.2cqi;margin-top:2cqb;padding-top:1.6cqb;border-top:1px solid var(--bar-border);font-size:clamp(10px,1.4cqi,17px);color:var(--text-dim)}
 .cat-foot b{color:var(--orange)}
 .cat-foot .cf-text{flex:1;min-width:0;line-height:1.45}
 .cat-foot .legend{flex-shrink:0;font-family:var(--mono);font-size:clamp(8px,1.1cqi,13px);margin-left:auto;display:flex;align-items:center;gap:.6cqi}
-.cat-foot .swatch{width:11px;height:11px;border-radius:3px;border:1px solid var(--orange-dim);background:var(--orange-dim)}
+.cat-foot .swatch{width:12px;height:12px;border-radius:3px;border:1px solid var(--orange);background:var(--orange)}
 
 /* ── "where A2UI & MCP Apps sit" slide ── */
 .ride{flex:1;min-height:0;display:flex;flex-direction:column;justify-content:center;gap:2.4cqb}
@@ -170,6 +170,9 @@ body{background-image:radial-gradient(circle at 50% 40%, rgba(231,60,23,.04) 0%,
 .rl.back .rk{color:var(--text-dim)}
 .ride-foot{flex-shrink:0;text-align:center;font-size:clamp(10px,1.35cqi,16px);color:var(--text-dim);margin-top:1.8cqb;padding-top:1.4cqb;border-top:1px solid var(--bar-border)}
 .ride-foot b{color:var(--orange)}
+.ride-play{display:flex;width:max-content;max-width:100%;margin:1.4cqb auto 0;align-items:center;justify-content:center;flex-wrap:wrap;gap:1cqi;padding:.7cqb 1.5cqi;border-radius:999px;border:1px solid var(--orange);background:var(--orange-dim);color:var(--text);font-size:clamp(11px,1.5cqi,18px);font-weight:600}
+.ride-play .rp-tag{font-family:var(--mono);text-transform:uppercase;letter-spacing:.06em;color:var(--orange);font-weight:700;font-size:.82em}
+.ride-play .url{font-family:var(--mono);font-weight:700}
 @media (prefers-reduced-motion: reduce){.slide.active .tc-rail,.slide.active .ride-card{animation:none}.tc-rail,.ride-card{opacity:1}}
 
 @media (prefers-reduced-motion: reduce){
@@ -279,7 +282,8 @@ html[data-density="stage"] .detail{display:none}
             </div>
           </div>
         </div>
-        <div class="ride-foot">AG-UI is the <b>transport</b>; A2UI &amp; MCP Apps are payloads on its <b>Tool Call</b> events.<span class="detail"> <span style="font-family:var(--mono)">useSkillAgent.ts · MCPAppToolCallRouter.tsx</span></span></div>
+        <div class="ride-foot">AG-UI is the <b>transport</b>; A2UI &amp; MCP Apps are payloads on its <b>Tool Call</b> events.<span class="detail"> <span style="font-family:var(--mono)">useSkillAgent.ts · MCPAppToolCallRouter.tsx</span></span>
+          <div class="ride-play"><span class="rp-tag">&#9654; experiment</span><span class="url">http://localhost:3456/dev/a2ui</span></div></div>
       </section>
 
     </div>
