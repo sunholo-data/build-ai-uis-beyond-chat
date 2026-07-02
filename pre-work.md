@@ -8,9 +8,11 @@
 - **Easiest, any OS (Windows/Mac/Linux/Chromebook), nothing to install →** open the
   repo in **GitHub Codespaces**.
 - **Prefer it on your own machine →** local setup (macOS/Linux, or Windows via WSL2).
-- **Either way, get a free Gemini key** (2 min): <https://aistudio.google.com/apikey>
-  — the LLM isn't stubbed, so without it the chat won't reply. (Free tier; *not* a
-  GCP project.)
+- **Either way, get a Gemini key** (2 min): <https://aistudio.google.com/apikey>
+  — the LLM isn't stubbed, so without it the chat won't reply. **The free tier works
+  for light use but can hit rate limits in a busy session** — if you can, enable
+  billing on the key (paid tier is pennies and lifts the quota cap). No GCP project
+  needed for the free key.
 - **Bringing a coding agent for Round C?** Log it in *before* you arrive — a
   subscription/OAuth login beats a metered API key for a long session. See
   **Set up your AI coding assistant** below.
@@ -118,16 +120,13 @@ a different account and a different login.
 |---|---|---|---|
 | **Claude Code** | OAuth (Claude Pro/Max) **or** API key | subscription = flat; API key = metered | — (paid) |
 | **OpenAI Codex** | OAuth (ChatGPT Plus/Pro) **or** API key | subscription = flat; API key = metered | — (paid) |
-| **Gemini CLI** | Google account (OAuth) **or** API key | generous free tier on a personal login | ✅ free tier |
+| **Gemini CLI** | Google account (OAuth) **or** API key | free tier on a personal login | ✅ free tier |
 | **Antigravity** | Google account | free during preview | ✅ free |
 
 **Strongly prefer a subscription / OAuth login over a metered API key.** A 3-hour
 agentic session on per-token billing (especially on the biggest models) can quietly run
 into real money; a flat subscription removes the bill-shock. On an API key only? Set a
 spend cap and default to a cheaper model.
-
-**No subscription? You're not locked out.** Gemini CLI's free OAuth tier and Antigravity's
-free preview are genuinely zero-cost and plenty for the build rounds.
 
 ### The skills work across all of them
 
