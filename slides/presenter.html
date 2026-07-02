@@ -32,7 +32,7 @@ html,body{height:100%;overflow:hidden;background:var(--bg);color:var(--text);fon
 .top-bar{
   display:flex;align-items:center;justify-content:space-between;
   padding:8px 16px;border-bottom:1px solid var(--bar-border);
-  flex-shrink:0;background:var(--bar-bg);backdrop-filter:blur(8px);z-index:10;
+  flex-shrink:0;background:var(--bar-bg);backdrop-filter:blur(8px);position:relative;z-index:30;
 }
 .top-left{display:flex;align-items:center;gap:10px}
 .top-logo{height:20px;opacity:.7}
@@ -40,20 +40,53 @@ html,body{height:100%;overflow:hidden;background:var(--bg);color:var(--text);fon
 .presenter-title{font-size:12px;font-weight:600;color:var(--text-dim);letter-spacing:.02em}
 .presenter-title .accent{color:var(--orange)}
 
-/* ─── Deck tabs ─── */
-.deck-tabs{display:flex;gap:4px;align-items:center;flex-wrap:wrap;justify-content:center}
-.deck-tab{
-  padding:5px 12px;border-radius:16px;
-  font-size:11px;font-weight:600;letter-spacing:.02em;
-  cursor:pointer;border:1px solid var(--ghost);
-  background:transparent;color:var(--text-dim);
-  transition:all .25s;font-family:var(--mono);
+/* ─── Deck picker (compact, space-stable) ─── */
+.deck-picker{position:relative;display:flex;align-items:center;gap:6px}
+.picker-nav{
+  width:26px;height:26px;border-radius:50%;border:1px solid var(--ghost);
+  background:transparent;color:var(--text-dim);cursor:pointer;font-size:10px;
+  display:flex;align-items:center;justify-content:center;transition:all .2s;flex-shrink:0;
 }
-.deck-tab:hover{border-color:rgba(255,255,255,.2);color:var(--text)}
-.deck-tab.active{background:var(--orange);border-color:var(--orange);color:#fff}
-[data-theme="light"] .deck-tab{border-color:rgba(0,0,0,.1);color:var(--text-dim)}
-[data-theme="light"] .deck-tab:hover{border-color:rgba(0,0,0,.25);color:var(--text)}
-[data-theme="light"] .deck-tab.active{color:#fff}
+.picker-nav:hover{border-color:var(--orange);color:var(--orange)}
+.picker-nav:disabled{opacity:.3;cursor:default;border-color:var(--ghost);color:var(--text-dim)}
+.picker-current{
+  display:flex;align-items:center;gap:9px;
+  padding:5px 14px;border-radius:16px;border:1px solid var(--ghost);
+  background:transparent;color:var(--text);cursor:pointer;
+  font-family:var(--mono);font-size:11px;font-weight:600;letter-spacing:.02em;transition:all .2s;
+}
+.picker-current:hover{border-color:var(--orange)}
+.picker-pos{color:var(--text-dim);font-variant-numeric:tabular-nums}
+.picker-caret{font-size:9px;color:var(--text-dim);transition:transform .2s}
+.deck-picker.open .picker-current{border-color:var(--orange)}
+.deck-picker.open .picker-caret{transform:rotate(180deg);color:var(--orange)}
+
+/* popover jump-menu — overlays, never reflows the bar */
+.picker-menu{
+  position:absolute;top:calc(100% + 8px);left:50%;
+  transform:translateX(-50%) translateY(-6px);
+  min-width:250px;max-height:78vh;overflow-y:auto;
+  background:var(--surface);border:1px solid var(--bar-border);border-radius:12px;
+  box-shadow:0 14px 44px rgba(0,0,0,.35);padding:6px;z-index:50;
+  opacity:0;visibility:hidden;pointer-events:none;transition:opacity .16s,transform .16s;
+}
+.deck-picker.open .picker-menu{opacity:1;visibility:visible;pointer-events:auto;transform:translateX(-50%) translateY(0)}
+.picker-group{
+  padding:9px 10px 3px;font-family:var(--mono);font-size:9px;font-weight:700;
+  text-transform:uppercase;letter-spacing:.1em;color:var(--text-dim);opacity:.65;
+}
+.picker-item{
+  display:flex;align-items:center;gap:10px;width:100%;
+  padding:6px 10px;border-radius:7px;border:none;background:transparent;
+  color:var(--text);cursor:pointer;font-family:var(--mono);font-size:12px;text-align:left;
+  transition:background .15s;
+}
+.picker-item:hover{background:var(--orange-dim)}
+.picker-item.active{background:var(--orange);color:#fff}
+.picker-item .idx{font-size:10px;color:var(--text-dim);min-width:20px;font-variant-numeric:tabular-nums}
+.picker-item.active .idx{color:rgba(255,255,255,.75)}
+.picker-item .mins{margin-left:auto;font-size:9px;color:var(--text-dim);opacity:.7}
+.picker-item.active .mins{color:rgba(255,255,255,.75)}
 
 .top-right{display:flex;align-items:center;gap:8px}
 .theme-toggle{
@@ -119,7 +152,16 @@ html,body{height:100%;overflow:hidden;background:var(--bg);color:var(--text);fon
       <img src="images/logos/ailang-logo.svg" alt="AILANG" class="top-logo ailang">
       <span class="presenter-title">Build AI UIs <span class="accent">Beyond Chat</span> — Presenter</span>
     </div>
-    <div class="deck-tabs" id="deckTabs"></div>
+    <div class="deck-picker" id="deckPicker">
+      <button class="picker-nav" id="pickerPrev" title="Previous deck (↑)"><i class="fas fa-chevron-left"></i></button>
+      <button class="picker-current" id="pickerCurrent" aria-haspopup="true" title="Jump to deck">
+        <span class="picker-pos" id="pickerPos">1 / 1</span>
+        <span class="picker-label" id="pickerLabel">—</span>
+        <i class="fas fa-chevron-down picker-caret"></i>
+      </button>
+      <button class="picker-nav" id="pickerNext" title="Next deck (↓)"><i class="fas fa-chevron-right"></i></button>
+      <div class="picker-menu" id="pickerMenu"></div>
+    </div>
     <div class="top-right">
       <div class="clock" id="clock" title="Click: start/pause · Double-click: reset">
         <span class="dot"></span>
